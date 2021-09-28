@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.chen-yiting.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="文章介绍了PyTorch在win10+i7+3070配置电脑上的环境配置，以及关于PyTorch的一些基础概念。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PyTorch-EnvSetup&amp;BasicConcept">
+<meta property="og:url" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/index.html">
+<meta property="og:site_name" content="Robotics, ML &amp; Thug Life">
+<meta property="og:description" content="文章介绍了PyTorch在win10+i7+3070配置电脑上的环境配置，以及关于PyTorch的一些基础概念。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921151203907.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921151508628.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921152447031.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921155417638.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921155822943.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921163051863.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921163600998.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921164613808.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921164936568.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921165012519.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921165151658.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921165611232.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921165758777.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921170039498.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921170217035.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921170751238.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921171403037.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921171600585.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921171237469.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921171733876.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921171938510.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921172147889.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921172235710.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921172334929.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921193450329.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921193619709.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921194449301.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921195940743.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921200047221.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921200540590.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921200914186.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921201241414.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921201821510.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921202011330.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921202318278.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921202819633.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921202948318.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921203343226.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921203603682.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921203550310.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921204404418.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921212833057.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921213436761.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921213452525.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210922005408519.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210922010704023.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210922012147317.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210922012334999.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210922012729014.png">
+<meta property="article:published_time" content="2021-09-26T11:32:20.000Z">
+<meta property="article:modified_time" content="2021-09-26T12:12:18.376Z">
+<meta property="article:author" content="Yiting CHEN">
+<meta property="article:tag" content="PyTorch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921151203907.png">
+
+<link rel="canonical" href="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>PyTorch-EnvSetup&BasicConcept | Robotics, ML & Thug Life</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Robotics, ML & Thug Life</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">今天几号？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/projects/" rel="section"><i class="fa fa-flag fa-fw"></i>Projects</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yiting CHEN">
+      <meta itemprop="description" content="日拱一卒，功不唐捐">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Robotics, ML & Thug Life">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PyTorch-EnvSetup&BasicConcept
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-09-26 19:32:20 / Modified: 20:12:18" itemprop="dateCreated datePublished" datetime="2021-09-26T19:32:20+08:00">2021-09-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PyTorch%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">PyTorch框架学习</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">文章介绍了PyTorch在win10+i7+3070配置电脑上的环境配置，以及关于PyTorch的一些基础概念。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一-PyTorch基础概念"><a href="#一-PyTorch基础概念" class="headerlink" title="一. PyTorch基础概念"></a>一. PyTorch基础概念</h2><h3 id="A-环境搭建"><a href="#A-环境搭建" class="headerlink" title="A. 环境搭建"></a>A. 环境搭建</h3><h4 id="1-系统显卡驱动，CUDA和cudnn配置"><a href="#1-系统显卡驱动，CUDA和cudnn配置" class="headerlink" title="1. 系统显卡驱动，CUDA和cudnn配置"></a>1. 系统显卡驱动，CUDA和cudnn配置</h4><p>本机配置：Win10，Geforce 3070 140w 8GB显存，Intel 11th i7 八核十六线程</p>
+<p>当前Nvidia显卡驱动版本462.62，最高支持cuda版本11.2（安装cuda版本11.1）</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921151203907.png" alt="image-20210921151203907"></p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921151508628.png" alt="image-20210921151508628"></p>
+<p>本机目前安装CUDA版本11.1，可通过nvcc -V查看</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921152447031.png" alt="image-20210921152447031"></p>
+<p>对应cudnn版本为8.1.1</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921155417638.png" alt="image-20210921155417638"></p>
+<p>通过运行CUDA自带的deviceQuery.exe可知，</p>
+<p>当前cuda driver version为11.2，当前cuda runtime version为11.1。两者允许不一致，但是runtime version必须 &lt;= driver version</p>
+<h4 id="2-PyTorch安装"><a href="#2-PyTorch安装" class="headerlink" title="2. PyTorch安装"></a>2. PyTorch安装</h4><p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921155822943.png" alt="image-20210921155822943"></p>
+<p>CUDA版本应该与runtime version相对应。</p>
+<p>可以下载对应的torch，torchvision和torchaudio手动安装：</p>
+<p><a target="_blank" rel="noopener" href="https://download.pytorch.org/whl/torch_stable.html">https://download.pytorch.org/whl/torch_stable.html</a></p>
+<p>直接到conda 环境下运行辣个command/或者pip install 各个.whl文件。</p>
+<h3 id="B-张量简介与创建"><a href="#B-张量简介与创建" class="headerlink" title="B. 张量简介与创建"></a>B. 张量简介与创建</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>张量<strong>tensor</strong>就是<strong>多维数组</strong>，是标量、向量、矩阵的高维拓展。具备以下属性。</p>
+<ul>
+<li>卷积之类的处理之后，数据类型默认为32-bit floating point, torch.float/float32 ；</li>
+<li>图像的标签则默认为64-bit integer (signed) torch.int/torch.int64</li>
+</ul>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921163051863.png" alt="image-20210921163051863"></p>
+<h4 id="1-直接创建"><a href="#1-直接创建" class="headerlink" title="1. 直接创建"></a>1. 直接创建</h4><h5 id="torch-tensor"><a href="#torch-tensor" class="headerlink" title="torch.tensor()"></a>torch.tensor()</h5><p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921163600998.png" alt="image-20210921163600998"></p>
+<ul>
+<li>data：数据，可以是list，numpy</li>
+<li>dtype：数据类型，默认与data的一致</li>
+<li>device：所在设备，cuda/cpu</li>
+<li>requires_grad：是否需要梯度</li>
+<li>pin_memory：是否存于锁页内存（目前不懂作用，默认为false即可）</li>
+</ul>
+<h5 id="torch-from-numpy"><a href="#torch-from-numpy" class="headerlink" title="torch.from_numpy()"></a>torch.from_numpy()</h5><p>从ndarray创建</p>
+<p><em><strong><u><code>torch.from_numpy(ndarray)</code></u></strong></em></p>
+<p>从numpy创建tensor，<strong>注意：两者之间共享内存，改动其中一个另一个也会被更改。</strong></p>
+<h4 id="2-依据数值创建"><a href="#2-依据数值创建" class="headerlink" title="2. 依据数值创建"></a>2. 依据数值创建</h4><h5 id="torch-xxx-like-xxx"><a href="#torch-xxx-like-xxx" class="headerlink" title="torch.xxx_like()/xxx()"></a>torch.xxx_like()/xxx()</h5><p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921164613808.png" alt="image-20210921164613808"></p>
+<ul>
+<li>out: 输出的张量（给生成的数据打上新标签）</li>
+<li>layout: 内存中的布局形式，有strided, sparse_coo等（目前不懂作用，不过默认strided就好）</li>
+</ul>
+<p>根据input形状创建全零或全一张量</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921164936568.png" alt="image-20210921164936568"></p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921165012519.png" alt="image-20210921165012519"></p>
+<p><em><strong><u>torch.full( )</u><em><strong>和</strong></em><u>torch.full_like( )</u></strong></em></p>
+<p>依据input形状创建全（fill_value）值的向量</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921165151658.png" alt="image-20210921165151658"></p>
+<ul>
+<li>size：张量的形状，如（3，3）</li>
+<li>fill_value：张量的值</li>
+</ul>
+<h5 id="torch-arange"><a href="#torch-arange" class="headerlink" title="torch.arange( )"></a>torch.arange( )</h5><p>创建等差的1维张量，数值区间为[start, end)</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921165611232.png" alt="image-20210921165611232"></p>
+<ul>
+<li>start: 初始数值</li>
+<li>end: 结束数值</li>
+<li>step：数列公差</li>
+</ul>
+<h5 id="torch-linspace"><a href="#torch-linspace" class="headerlink" title="torch.linspace( )"></a>torch.linspace( )</h5><p>创建均分的1维张量，数值区间[start, end]</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921165758777.png" alt="image-20210921165758777"></p>
+<ul>
+<li>steps: 数列长度</li>
+</ul>
+<h5 id="torch-logspace"><a href="#torch-logspace" class="headerlink" title="torch.logspace( )"></a>torch.logspace( )</h5><p>创建对数均分的一维张量，长度为<em>steps</em>，底为<em>base</em>（默认为10）</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921170039498.png" alt="image-20210921170039498"></p>
+<h5 id="torch-eyes"><a href="#torch-eyes" class="headerlink" title="torch.eyes( )"></a>torch.eyes( )</h5><p>创建单位对角矩阵（2维），默认为方阵，n行数（方阵只需设置行数），m列数</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921170217035.png" alt="image-20210921170217035"></p>
+<h4 id="3-依概率分布创建"><a href="#3-依概率分布创建" class="headerlink" title="3.依概率分布创建"></a>3.依概率分布创建</h4><h5 id="torch-normal"><a href="#torch-normal" class="headerlink" title="torch.normal( )"></a>torch.normal( )</h5><p>生成正态分布（Gaussian）</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921170751238.png" alt="image-20210921170751238"></p>
+<ul>
+<li><p>mean：均值</p>
+</li>
+<li><p>std：标准差</p>
+</li>
+<li><p>四种模式：</p>
+<ul>
+<li><p>mean为<strong>标</strong>量，std为<strong>标</strong>量，例：torch.normal(0., 1., size=(4, ))；</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921171403037.png" alt="image-20210921171403037"></p>
+</li>
+<li><p>mean为<strong>标</strong>量，std为张量, 同下，</p>
+</li>
+<li><p>mean为张量，std为<strong>标</strong>量, 例如mean = torch.arrange(1, 5, dtype=torch.float), std = 1</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921171600585.png" alt="image-20210921171600585"></p>
+</li>
+<li><p>mean为张量，std为张量,例: mean = torch.arrange(1, 5, dypte=torch.float) , std = torch.arrange(1, 5, dypte=torch.float) <img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921171237469.png" alt="image-20210921171237469"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="torch-randn-randn-like"><a href="#torch-randn-randn-like" class="headerlink" title="torch.randn()/randn_like()"></a>torch.randn()/randn_like()</h5><p>生成<strong>标准正态分布</strong></p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921171733876.png" alt="image-20210921171733876"></p>
+<ul>
+<li>size：张量的形状</li>
+</ul>
+<h5 id="torch-rand-rand-like"><a href="#torch-rand-rand-like" class="headerlink" title="torch.rand()/rand_like()"></a>torch.rand()/rand_like()</h5><p>在区间**[0,1)**上，生成**均匀分布**<img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921171938510.png" alt="image-20210921171938510"></p>
+<h5 id="torch-randint-randint-like"><a href="#torch-randint-randint-like" class="headerlink" title="torch.randint()/randint_like()"></a>torch.randint()/randint_like()</h5><p>在区间[low, high)生成<strong>整数均匀分布</strong></p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921172147889.png" alt="image-20210921172147889"></p>
+<h5 id="torch-randperm"><a href="#torch-randperm" class="headerlink" title="torch.randperm()"></a>torch.randperm()</h5><p>生成从0到n-1的随机排列</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921172235710.png" alt="image-20210921172235710"></p>
+<h5 id="torch-bernoulli"><a href="#torch-bernoulli" class="headerlink" title="torch.bernoulli()"></a>torch.bernoulli()</h5><p>以input为概率，生成伯努利分布（0-1分布，两点分布），input为概率值</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921172334929.png" alt="image-20210921172334929"></p>
+<h3 id="C-张量的操作"><a href="#C-张量的操作" class="headerlink" title="C. 张量的操作"></a>C. 张量的操作</h3><h4 id="1-张量拼接与切分"><a href="#1-张量拼接与切分" class="headerlink" title="1.张量拼接与切分"></a>1.张量拼接与切分</h4><h5 id="torch-cat"><a href="#torch-cat" class="headerlink" title="torch.cat( )"></a>torch.cat( )</h5><p>将张量按维度dim进行拼接，**<u>cat()操作并不会拓展张量的维度</u>**</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921193450329.png" alt="image-20210921193450329"></p>
+<ul>
+<li>tensor：张量序列</li>
+<li>dim：要拼接的维度</li>
+</ul>
+<h5 id="torch-stack"><a href="#torch-stack" class="headerlink" title="torch.stack()"></a>torch.stack()</h5><p>在**<u>新创建</u>**的维度dim上进行拼接</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921193619709.png" alt="image-20210921193619709"></p>
+<ul>
+<li>tensor：张量序列</li>
+<li>dim：要拼接的维度</li>
+</ul>
+<h5 id="torch-chunk"><a href="#torch-chunk" class="headerlink" title="torch.chunk()"></a>torch.chunk()</h5><p>将张量按维度dim进行平均切分，返回张量列表。若不能整除，最后一份张量最小。</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921194449301.png" alt="image-20210921194449301"></p>
+<ul>
+<li>input：要切分的张量</li>
+<li>chunks：要切分的份数</li>
+<li>dim：要切分的维度</li>
+</ul>
+<p>例：</p>
+<p><code>a = torch.ones((2, 7))</code> </p>
+<p><code>list_of_tensors = torch.chunk(a, dim=1, chunk = 3)</code></p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921195940743.png" alt="image-20210921195940743"></p>
+<h5 id="torch-split"><a href="#torch-split" class="headerlink" title="torch.split()"></a>torch.split()</h5><p>将张量按维度dim进行切分，返回值是张量列表</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921200047221.png" alt="image-20210921200047221"></p>
+<ul>
+<li>tensor：要切分的张量</li>
+<li>split_size_or_sections：为int时，表示每一份的长度；为list时，按list元素切分</li>
+<li>dim：要切分的维度</li>
+</ul>
+<h4 id="2-张量索引"><a href="#2-张量索引" class="headerlink" title="2. 张量索引"></a>2. 张量索引</h4><h5 id="torch-index-select"><a href="#torch-index-select" class="headerlink" title="torch.index_select()"></a>torch.index_select()</h5><p>在维度dim上，按index索引数据，返回值为依index索引数据拼接而成的张量。注意，此函数中，index类型必须为torch.long。</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921200540590.png" alt="image-20210921200540590"></p>
+<ul>
+<li>input：要索引的张量</li>
+<li>dim：要索引的维度</li>
+<li>index：要索引数据的序号</li>
+</ul>
+<p>例：</p>
+<p><code>t = torch.randint(0, 9, size=(3,3))</code></p>
+<p><code>idx = torch.tensor([0, 2], dtype=torch.long)</code></p>
+<p><code>t_select = torch.index_select(t, dim=0, index=idx)</code></p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921200914186.png" alt="image-20210921200914186"></p>
+<h5 id="torch-masked-select"><a href="#torch-masked-select" class="headerlink" title="torch.masked_select()"></a>torch.masked_select()</h5><p>按mask中的True进行索引，返回值为一维张量。</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921201241414.png" alt="image-20210921201241414"></p>
+<ul>
+<li>input：要索引的张量</li>
+<li>mask：与input同形状的布尔类型张量</li>
+</ul>
+<p><code>热知识：t = torch.randint(0, 9, size=(3,3))</code></p>
+<p>​                <code>mask = t.ge(5) # ge means greater or equal</code>    </p>
+<p>​        <code>#        mask = t.gt(5) # ge means greater</code>    </p>
+<p>​        <code>#        mask = t.le(5) # ge means less or equal</code>    </p>
+<p>​        <code>#        mask = t.lt(5) # ge means less</code></p>
+<p>​        <code>t_select = torch.masked_select(t, mask)</code></p>
+<p>Output:</p>
+<p>​        <img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921201821510.png" alt="image-20210921201821510"></p>
+<h4 id="3-张量的变换"><a href="#3-张量的变换" class="headerlink" title="3. 张量的变换"></a>3. 张量的变换</h4><h5 id="torch-reshape"><a href="#torch-reshape" class="headerlink" title="torch.reshape()"></a>torch.reshape()</h5><p>变换张量的形状，<strong>注意</strong>：当张量在内存中是连续时，新张量与input<strong>共享数据内存</strong>。</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921202011330.png" alt="image-20210921202011330"></p>
+<p>新张量形状大小应该与input相匹配。若为某一维度长度由其他维度计算得知，<strong>可设置为-1</strong>。</p>
+<h5 id="torch-transpose-torch-t"><a href="#torch-transpose-torch-t" class="headerlink" title="torch.transpose()/torch.t()"></a>torch.transpose()/torch.t()</h5><p>交换张量的两个维度。**(torch.t()适用于二维张量，等于torch.transpose(input, 0, 1))**</p>
+<p><strong>图像处理时</strong>经常会用到，将channels * h * w变成h * w * channels。</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921202318278.png" alt="image-20210921202318278"></p>
+<ul>
+<li>input：要变换的张量</li>
+<li>dim0：要交换的维度</li>
+<li>dim1：要交换的维度</li>
+</ul>
+<h5 id="torch-squeeze-unsqueeze"><a href="#torch-squeeze-unsqueeze" class="headerlink" title="torch.squeeze()/unsqueeze()"></a>torch.squeeze()/unsqueeze()</h5><p><strong>squeeze()</strong>: 压缩长度为1的维度（轴）</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921202819633.png" alt="image-20210921202819633"></p>
+<p>dim：若为None，移除所有长度为1的轴；若指定维度，当且仅当该轴长度为1时，可以被移除。</p>
+<p>**unsqueeze()**：依据dim扩展维度</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921202948318.png" alt="image-20210921202948318"></p>
+<p>dim: 扩展的维度</p>
+<h3 id="D-张量数学运算"><a href="#D-张量数学运算" class="headerlink" title="D. 张量数学运算"></a>D. 张量数学运算</h3><p>分为三类：</p>
+<ol>
+<li>加减乘除</li>
+<li>对数，指数，幂函数</li>
+<li>三角函数</li>
+</ol>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921203343226.png" alt="image-20210921203343226"></p>
+<h4 id="两个pythonic的方法"><a href="#两个pythonic的方法" class="headerlink" title="两个pythonic的方法"></a>两个pythonic的方法</h4><p>两个特别pythonic的方法：</p>
+<p>torch.addcdiv()</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921203603682.png" alt="image-20210921203603682"></p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921203550310.png" alt="image-20210921203550310"></p>
+<p>torch.addcmul()</p>
+<p>理解方式同上</p>
+<h3 id="E-计算图与动态图机制"><a href="#E-计算图与动态图机制" class="headerlink" title="E. 计算图与动态图机制"></a>E. 计算图与动态图机制</h3><h4 id="1-线性回归（Linear-Regression）"><a href="#1-线性回归（Linear-Regression）" class="headerlink" title="1. 线性回归（Linear Regression）"></a>1. 线性回归（Linear Regression）</h4><p><strong>线性回归</strong>是分析一个<strong>变量</strong>与另一个（多个）<strong>变量</strong>之间<strong>关系</strong>的方法。</p>
+<p>因变量：y</p>
+<p>自变量：x</p>
+<p>关系：y = w*x + b</p>
+<p>分析：求解w，b</p>
+<h5 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h5><p>Model：y = w*x + b</p>
+<h5 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h5><p>MSE： <img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921204404418.png" alt="image-20210921204404418"></p>
+<h5 id="求解梯度并更新参数"><a href="#求解梯度并更新参数" class="headerlink" title="求解梯度并更新参数"></a>求解梯度并更新参数</h5><p>w = w - LR * w.grad</p>
+<p>b = w - LR * b.grad</p>
+<h4 id="2-计算图（Computational-Graph）"><a href="#2-计算图（Computational-Graph）" class="headerlink" title="2. 计算图（Computational Graph）"></a>2. 计算图（Computational Graph）</h4><h5 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h5><p>计算图是用来<strong>描述运算</strong>的<strong>有向无环图</strong>。</p>
+<p>计算图的两个主要元素：<strong>结点</strong>（Node）和<strong>边</strong>（Edge）</p>
+<p>结点表示<strong>数据</strong>，如向量，矩阵，张量</p>
+<p>边表示<strong>运算</strong>，如加减乘除卷积等<br>$$<br>y = (x + w) * (w + 1)<br>$$<br>a = x + w<br>b = w + 1<br>y = a * b</p>
+<img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921212833057.png" alt="image-20210921212833057" style="zoom: 25%;">
+
+<h5 id="计算图与求导机制"><a href="#计算图与求导机制" class="headerlink" title="计算图与求导机制"></a>计算图与求导机制</h5><p>当我们对w进行求导</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921213436761.png" alt="image-20210921213436761"></p>
+<img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210921213452525.png" alt="image-20210921213452525" style="zoom:25%;">
+
+<h5 id="is-leaf-叶子结点"><a href="#is-leaf-叶子结点" class="headerlink" title="is_leaf(叶子结点)"></a>is_leaf(叶子结点)</h5><p>torch.Tensor的is_leaf属性。用户创建的结点为叶子结点。</p>
+<p>在反向传播（BP）中，所有的计算都要依赖于叶子结点，反向传播之后，所有的非叶子结点的梯度都会被释放掉。</p>
+<p>is_leaf：张量是否为叶子结点（结点代表数据，边代表运算）。</p>
+<p><strong>如果想使用非叶子结点的梯度，则需要用torch.Tensor.retain_grad()</strong></p>
+<h5 id="grad-fn-方法"><a href="#grad-fn-方法" class="headerlink" title="grad_fn(方法)"></a>grad_fn(方法)</h5><p>记录创建该张量时所用的方法（函数）。</p>
+<p><strong>叶子结点的gradient_function 为None。</strong></p>
+<p>例：</p>
+<p>y.grad_fn = &lt; MulBackward0 &gt;</p>
+<p>a.grad_fn = &lt; AddBackward0 &gt;</p>
+<p>b.grad_fn = &lt; AddBackward0 &gt;</p>
+<h4 id="3-动态图vs静态图"><a href="#3-动态图vs静态图" class="headerlink" title="3. 动态图vs静态图"></a>3. 动态图vs静态图</h4><p>(PyTorch) 动态图：运算与搭建<strong>同时</strong>进行（自驾游出行）。</p>
+<p>(Tensorflow1.0) 静态图：<strong>先</strong>搭建图，<strong>后</strong>运算（跟旅游团出行）。</p>
+<h3 id="F-autograd与逻辑回归"><a href="#F-autograd与逻辑回归" class="headerlink" title="F. autograd与逻辑回归"></a>F. autograd与逻辑回归</h3><p>深度学习模型训练就是不断的更新权值。</p>
+<p>我们不需要手动计算梯度，只需要搭好前向计算图。</p>
+<h4 id="1-torch-autograd"><a href="#1-torch-autograd" class="headerlink" title="1. torch.autograd"></a>1. torch.autograd</h4><h5 id="torch-autograd-backward"><a href="#torch-autograd-backward" class="headerlink" title="torch.autograd.backward"></a>torch.autograd.backward</h5><p>用于自动求取梯度 </p>
+<p>一般常见的loss.backward()就是调用的这个方法。</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210922005408519.png" alt="image-20210922005408519"></p>
+<ul>
+<li>tensors: 用于求导的张量，如loss</li>
+<li>retain_graph：保存计算图</li>
+<li>create_graph：创建导数计算图，用于高阶求导</li>
+<li>grad_tensors：多梯度权重（用于多个梯度之间权重的设置）</li>
+</ul>
+<p><strong>注意</strong>：在retain_graph为false的情况，无法连续执行两次反向传播，会提示”the buffers have already been freed“。</p>
+<h5 id="torch-autograd-grad"><a href="#torch-autograd-grad" class="headerlink" title="torch.autograd.grad"></a>torch.autograd.grad</h5><p>求取梯度，返回值是我们想要的那一个张量的梯度。</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210922010704023.png" alt="image-20210922010704023"></p>
+<ul>
+<li>outputs：用于求导的张量，如loss</li>
+<li>inputs：需要梯度的张量</li>
+<li>create_graph：创建导数计算图（用于高阶求导时要为True，例如对导数再次求导）</li>
+<li>retain_graph：保存计算图</li>
+<li>grad_outputs：多梯度权重</li>
+</ul>
+<h5 id="注意"><a href="#注意" class="headerlink" title="注意"></a><strong><u><em>注意</em></u></strong></h5><ol>
+<li><p><strong>梯度不自动清零</strong></p>
+<p>所以一般在执行backward( )操作之后要进行grad.zero_( )</p>
+<p>_下划线表示原地，原位操作（in-place）</p>
+</li>
+<li><p><strong>依赖于叶子结点的结点，required_grad默认为True</strong></p>
+</li>
+<li><p><strong>叶子结点不可执行in-place操作</strong></p>
+<p>反向传播时根据地址寻找数据，并且用到了叶子结点该地址当中的数据。如果在反向传播前改变了该地址的数据，就会引起反向传播出错。</p>
+</li>
+</ol>
+<h4 id="2-逻辑回归（Logisti-Regress）"><a href="#2-逻辑回归（Logisti-Regress）" class="headerlink" title="2. 逻辑回归（Logisti Regress）"></a>2. 逻辑回归（Logisti Regress）</h4><p>逻辑回归是线性的二分类模型</p>
+<p>模型表达式:</p>
+<img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210922012147317.png" alt="image-20210922012147317" style="zoom:25%;">
+
+<img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210922012334999.png" alt="image-20210922012334999" style="zoom: 50%;">
+
+<p>线性回归是分析自变量x与因变量y（标量）之间关系的方法</p>
+<p>逻辑回归是分析自变量x与因变量y（概率）之间关系的方法</p>
+<p><img src="/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210922012729014.png" alt="image-20210922012729014"></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Yiting CHEN
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/" title="PyTorch-EnvSetup&amp;BasicConcept">http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/26/SayHi/" rel="prev" title="Prologue💬">
+      <i class="fa fa-chevron-left"></i> Prologue💬
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/26/PyTorch-DataProcess-Dataset/" rel="next" title="PyTorch-DataProcess&Dataset">
+      PyTorch-DataProcess&Dataset <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-PyTorch%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">一. PyTorch基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-text">A. 环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%B3%BB%E7%BB%9F%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%EF%BC%8CCUDA%E5%92%8Ccudnn%E9%85%8D%E7%BD%AE"><span class="nav-text">1. 系统显卡驱动，CUDA和cudnn配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-PyTorch%E5%AE%89%E8%A3%85"><span class="nav-text">2. PyTorch安装</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-%E5%BC%A0%E9%87%8F%E7%AE%80%E4%BB%8B%E4%B8%8E%E5%88%9B%E5%BB%BA"><span class="nav-text">B. 张量简介与创建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%9B%B4%E6%8E%A5%E5%88%9B%E5%BB%BA"><span class="nav-text">1. 直接创建</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-tensor"><span class="nav-text">torch.tensor()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-from-numpy"><span class="nav-text">torch.from_numpy()</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E4%BE%9D%E6%8D%AE%E6%95%B0%E5%80%BC%E5%88%9B%E5%BB%BA"><span class="nav-text">2. 依据数值创建</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-xxx-like-xxx"><span class="nav-text">torch.xxx_like()&#x2F;xxx()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-arange"><span class="nav-text">torch.arange( )</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-linspace"><span class="nav-text">torch.linspace( )</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-logspace"><span class="nav-text">torch.logspace( )</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-eyes"><span class="nav-text">torch.eyes( )</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E4%BE%9D%E6%A6%82%E7%8E%87%E5%88%86%E5%B8%83%E5%88%9B%E5%BB%BA"><span class="nav-text">3.依概率分布创建</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-normal"><span class="nav-text">torch.normal( )</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-randn-randn-like"><span class="nav-text">torch.randn()&#x2F;randn_like()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-rand-rand-like"><span class="nav-text">torch.rand()&#x2F;rand_like()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-randint-randint-like"><span class="nav-text">torch.randint()&#x2F;randint_like()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-randperm"><span class="nav-text">torch.randperm()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-bernoulli"><span class="nav-text">torch.bernoulli()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-%E5%BC%A0%E9%87%8F%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-text">C. 张量的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%BC%A0%E9%87%8F%E6%8B%BC%E6%8E%A5%E4%B8%8E%E5%88%87%E5%88%86"><span class="nav-text">1.张量拼接与切分</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-cat"><span class="nav-text">torch.cat( )</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-stack"><span class="nav-text">torch.stack()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-chunk"><span class="nav-text">torch.chunk()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-split"><span class="nav-text">torch.split()</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%BC%A0%E9%87%8F%E7%B4%A2%E5%BC%95"><span class="nav-text">2. 张量索引</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-index-select"><span class="nav-text">torch.index_select()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-masked-select"><span class="nav-text">torch.masked_select()</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%BC%A0%E9%87%8F%E7%9A%84%E5%8F%98%E6%8D%A2"><span class="nav-text">3. 张量的变换</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-reshape"><span class="nav-text">torch.reshape()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-transpose-torch-t"><span class="nav-text">torch.transpose()&#x2F;torch.t()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-squeeze-unsqueeze"><span class="nav-text">torch.squeeze()&#x2F;unsqueeze()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-%E5%BC%A0%E9%87%8F%E6%95%B0%E5%AD%A6%E8%BF%90%E7%AE%97"><span class="nav-text">D. 张量数学运算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AApythonic%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-text">两个pythonic的方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#E-%E8%AE%A1%E7%AE%97%E5%9B%BE%E4%B8%8E%E5%8A%A8%E6%80%81%E5%9B%BE%E6%9C%BA%E5%88%B6"><span class="nav-text">E. 计算图与动态图机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%EF%BC%88Linear-Regression%EF%BC%89"><span class="nav-text">1. 线性回归（Linear Regression）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B"><span class="nav-text">模型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B1%82%E8%A7%A3%E6%A2%AF%E5%BA%A6%E5%B9%B6%E6%9B%B4%E6%96%B0%E5%8F%82%E6%95%B0"><span class="nav-text">求解梯度并更新参数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E8%AE%A1%E7%AE%97%E5%9B%BE%EF%BC%88Computational-Graph%EF%BC%89"><span class="nav-text">2. 计算图（Computational Graph）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B-1"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%9B%BE%E4%B8%8E%E6%B1%82%E5%AF%BC%E6%9C%BA%E5%88%B6"><span class="nav-text">计算图与求导机制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#is-leaf-%E5%8F%B6%E5%AD%90%E7%BB%93%E7%82%B9"><span class="nav-text">is_leaf(叶子结点)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#grad-fn-%E6%96%B9%E6%B3%95"><span class="nav-text">grad_fn(方法)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%8A%A8%E6%80%81%E5%9B%BEvs%E9%9D%99%E6%80%81%E5%9B%BE"><span class="nav-text">3. 动态图vs静态图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#F-autograd%E4%B8%8E%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92"><span class="nav-text">F. autograd与逻辑回归</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-torch-autograd"><span class="nav-text">1. torch.autograd</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-autograd-backward"><span class="nav-text">torch.autograd.backward</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-autograd-grad"><span class="nav-text">torch.autograd.grad</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F"><span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%EF%BC%88Logisti-Regress%EF%BC%89"><span class="nav-text">2. 逻辑回归（Logisti Regress）</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Yiting CHEN</p>
+  <div class="site-description" itemprop="description">日拱一卒，功不唐捐</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChenEating716" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChenEating716" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenyiting@whu.edu.cn" title="E-Mail → mailto:chenyiting@whu.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yiting CHEN</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

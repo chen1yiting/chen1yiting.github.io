@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.chen-yiting.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="文章介绍了PyTorch当中搭建模型的基础方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PyTorch-ModelsConstruction">
+<meta property="og:url" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/index.html">
+<meta property="og:site_name" content="Robotics, ML &amp; Thug Life">
+<meta property="og:description" content="文章介绍了PyTorch当中搭建模型的基础方法。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923111900159-16326570841981.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923111953621-16326570841983.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923150239978-16326570841982.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923195219275-16326570841984.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923195435689-16326570841985.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923201126680-16326570841987.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923201301917-16326570841986.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923201323469-16326570841988.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923202218467-16326570841989.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923205449306-163265708419810.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923210001350-163265708419811.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923210527210-163265708419812.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923210734836-163265708419814.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923211736432-163265708419813.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923211835083-163265708419815.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923212056580-163265708419916.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923212830427-163265708419917.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923213658337-163265708419918.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923221525532-163265708419919.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923212830427-163265708419917.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923222244138-163265708419920.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923222813962-163265708419921.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923222749821-163265708419922.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923223344685-163265708419923.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923223502929-163265708419924.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923223628333-163265708419925.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923223736195-163265708419926.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923223932829-163265708419927.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923224046062-163265708419928.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923224438706-163265708419929.png">
+<meta property="article:published_time" content="2021-09-26T11:50:05.000Z">
+<meta property="article:modified_time" content="2021-09-26T12:13:12.018Z">
+<meta property="article:author" content="Yiting CHEN">
+<meta property="article:tag" content="PyTorch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/image-20210923111900159-16326570841981.png">
+
+<link rel="canonical" href="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>PyTorch-ModelsConstruction | Robotics, ML & Thug Life</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Robotics, ML & Thug Life</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">今天几号？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/projects/" rel="section"><i class="fa fa-flag fa-fw"></i>Projects</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yiting CHEN">
+      <meta itemprop="description" content="日拱一卒，功不唐捐">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Robotics, ML & Thug Life">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PyTorch-ModelsConstruction
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-09-26 19:50:05 / Modified: 20:13:12" itemprop="dateCreated datePublished" datetime="2021-09-26T19:50:05+08:00">2021-09-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PyTorch%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">PyTorch框架学习</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">文章介绍了PyTorch当中搭建模型的基础方法。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="三-PyTorch模型搭建（Models）"><a href="#三-PyTorch模型搭建（Models）" class="headerlink" title="三. PyTorch模型搭建（Models）"></a>三. PyTorch模型搭建（Models）</h2><h3 id="A-模型创建步骤与nn-Module"><a href="#A-模型创建步骤与nn-Module" class="headerlink" title="A. 模型创建步骤与nn.Module"></a>A. 模型创建步骤与nn.Module</h3><h4 id="1-网路模型创建步骤"><a href="#1-网路模型创建步骤" class="headerlink" title="1. 网路模型创建步骤"></a>1. 网路模型创建步骤</h4><p>模型（nn.Module）：</p>
+<ul>
+<li>模型创建：<ul>
+<li>构建网络<ul>
+<li>卷积层，池化层，激活函数层等等</li>
+</ul>
+</li>
+<li>拼接网络<ul>
+<li>LeNet，ResNet，AlexNet等等</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>权值初始化<ul>
+<li>Xavier，Kaiming，正态分布，均匀分布等</li>
+</ul>
+</li>
+</ul>
+<p>例：</p>
+<p>LeNet模型如下：</p>
+<p><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923111900159-16326570841981.png" alt="image-20210923111900159"></p>
+<p>LeNet计算图：</p>
+<p><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923111953621-16326570841983.png" alt="image-20210923111953621"></p>
+<p>从左向右便是前向传播。</p>
+<p>构建模型的两个要素：</p>
+<ul>
+<li>构建子模块：conv，pool，fc等等：在__ init __()中实现</li>
+<li>拼接子模块：按一定的顺序，一定的拓扑结构进行组装：在forward()当中实现</li>
+</ul>
+<p>代码示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LeNet</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="comment"># 模型初始化，就是构建子模块</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, classes</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(LeNet, self).__init__()</span><br><span class="line">        self.conv1 = nn.Conv2d(<span class="number">3</span>, <span class="number">6</span>, <span class="number">5</span>)</span><br><span class="line">        self.conv2 = nn.Conv2d(<span class="number">6</span>, <span class="number">16</span>, <span class="number">5</span>)</span><br><span class="line">        self.fc1 = nn.Linear(<span class="number">16</span>*<span class="number">5</span>*<span class="number">5</span>, <span class="number">120</span>)</span><br><span class="line">        self.fc2 = nn.Linear(<span class="number">120</span>, <span class="number">84</span>)</span><br><span class="line">        self.fc3 = nn.Linear(<span class="number">84</span>, classes)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 拼接子模块，也就是前向传播的一个实现</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        out = F.relu(self.conv1(x))</span><br><span class="line">        out = F.max_pool2d(out, <span class="number">2</span>)</span><br><span class="line">        out = F.relu(self.conv2(out))</span><br><span class="line">        out = out.view(out.size(<span class="number">0</span>), -<span class="number">1</span>)</span><br><span class="line">        out = F.relu(self.fc1(out))</span><br><span class="line">        out = F.relu(self.fc2(out))</span><br><span class="line">        out = self.fc3(out)</span><br><span class="line">        <span class="keyword">return</span> out</span><br><span class="line">    </span><br><span class="line">        </span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-nn-Module"><a href="#2-nn-Module" class="headerlink" title="2. nn.Module"></a>2. nn.Module</h4><p><strong>torch.nn</strong>：</p>
+<ul>
+<li>nn.Parameter：张量子类，表示可学习的参数，如weight，bias</li>
+<li>nn.Module：所有网络层的基类，管理网络的属性（例如LeNet要继承它）</li>
+<li>nn.functional：函数的具体实现，如卷积，池化，激活函数等等</li>
+<li>nn.init：提供了丰富的参数初始化的方法</li>
+</ul>
+<p><strong>nn.Module</strong>：</p>
+<ul>
+<li><strong>parameters（重要）</strong>：存储管理nn.Parameter类</li>
+<li><strong>modules（重要）</strong>：存储管理nn.Module类（构建子模块）</li>
+<li>buffers：存储管理缓冲属性，如BN层中的running_mean</li>
+<li>***_hooks：存储管理钩子函数（共五个和hooks有关的字典）</li>
+</ul>
+<p><strong>在对创建的新module（例如LeNet）进行赋值时（__ init  <strong>()中的属性构建），会被一个</strong> setAttr __()函数进行拦截，判断其为parameter类还是module类。然后在存储进各自对应的字典当中。</strong></p>
+<p><strong>总结</strong>：</p>
+<ul>
+<li>一个module可以包含多个子module</li>
+<li>一个module相当于一个运算，必须实现forward()函数</li>
+<li>每个module都有8个字典管理它的属性</li>
+</ul>
+<h3 id="B-模型容器与AlexNet构建"><a href="#B-模型容器与AlexNet构建" class="headerlink" title="B. 模型容器与AlexNet构建"></a>B. 模型容器与AlexNet构建</h3><h4 id="1-Containers"><a href="#1-Containers" class="headerlink" title="1. Containers"></a>1. Containers</h4><p><strong>Containers（容器）</strong>:</p>
+<ul>
+<li><strong>nn.Sequential</strong>：按顺序的将一组网络层包裹起来</li>
+<li><strong>nn.ModuleList</strong>：像python的list一样包装多个网络层</li>
+<li><strong>nn.ModuleDict</strong>：像python的dict一样包装多个网络层</li>
+</ul>
+<h5 id="nn-Sequential"><a href="#nn-Sequential" class="headerlink" title="nn.Sequential"></a>nn.Sequential</h5><p><strong>nn.Sequential</strong>是nn.Module的容器，<strong>按顺序</strong>包装一组网络层：</p>
+<ul>
+<li>顺序性：各网络层之间严格按照顺序构建</li>
+<li>自带forward()：自带的forward里，通过for循环一次执行前向运算</li>
+</ul>
+<p>例1：用Sequential搭建网络</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LeNetSequential</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="comment"># 构建子模块</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, classes</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(LeNetSequential, self).__init__()</span><br><span class="line">        self.features = nn.Sequential(</span><br><span class="line">        	nn.Conv2d(<span class="number">3</span>, <span class="number">6</span>, <span class="number">5</span>),</span><br><span class="line">            nn.ReLU(),</span><br><span class="line">            nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>),</span><br><span class="line">            nn.Conv2d(<span class="number">6</span>, <span class="number">16</span>, <span class="number">5</span>),</span><br><span class="line">            nn.ReLU(),</span><br><span class="line">            nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>),)</span><br><span class="line">       	</span><br><span class="line">        self.classifier = nn.Sequential(</span><br><span class="line">        	nn.Linear(<span class="number">6</span>*<span class="number">5</span>*<span class="number">5</span>, <span class="number">120</span>),</span><br><span class="line">            nn.ReLU(),</span><br><span class="line">            nn.Linear(<span class="number">120</span>, <span class="number">84</span>),</span><br><span class="line">            nn.ReLU(),</span><br><span class="line">            nn.Linear(<span class="number">84</span>, classes),)</span><br><span class="line">    <span class="comment"># 拼接子模块</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = self.features(x)</span><br><span class="line">        x = x.view(x.size()[<span class="number">0</span>], -<span class="number">1</span>)</span><br><span class="line">        x = self.classifier(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
+
+<p>通常以全连接层为界限，分为特征提取器和分类器两部分。</p>
+<p>例2：对Sequential输入OrderDict</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LeNetSequentialOrderDict</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="comment"># 构建子模块</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, classes</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(LeNetSequentialOrderDict, self).__init__()</span><br><span class="line">        self.features = nn.Sequential(OrderDict(&#123;</span><br><span class="line">        	<span class="string">&#x27;conv1&#x27;</span> : nn.Conv2d(<span class="number">3</span>, <span class="number">6</span>, <span class="number">5</span>),</span><br><span class="line">            <span class="string">&#x27;relu1&#x27;</span> : nn.ReLU(),</span><br><span class="line">            <span class="string">&#x27;pool1&#x27;</span> : nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>),</span><br><span class="line">            </span><br><span class="line">            <span class="string">&#x27;conv2&#x27;</span> : nn.Conv2d(<span class="number">6</span>, <span class="number">16</span>, <span class="number">5</span>),</span><br><span class="line">            <span class="string">&#x27;relu2&#x27;</span> : nn.ReLU(),</span><br><span class="line">            <span class="string">&#x27;pool2&#x27;</span> : nn.MaxPool2d(kernel_size=<span class="number">2</span>,stride=<span class="number">2</span>),</span><br><span class="line">        &#125;))</span><br><span class="line">       	</span><br><span class="line">        self.classifier = nn.Sequential(OrderDict(&#123;</span><br><span class="line">        	<span class="string">&#x27;fc1&#x27;</span> : nn.Linear(<span class="number">6</span>*<span class="number">5</span>*<span class="number">5</span>, <span class="number">120</span>),</span><br><span class="line">            <span class="string">&#x27;relu3&#x27;</span> : nn.ReLU(),</span><br><span class="line">            <span class="string">&#x27;fc2&#x27;</span> : nn.Linear(<span class="number">120</span>, <span class="number">84</span>),</span><br><span class="line">            <span class="string">&#x27;relu4&#x27;</span> : nn.ReLU(),</span><br><span class="line">            <span class="string">&#x27;fc3&#x27;</span> : nn.Linear(<span class="number">84</span>, classes),</span><br><span class="line">        &#125;))</span><br><span class="line">    <span class="comment"># 拼接子模块</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        x = self.features(x)</span><br><span class="line">        x = x.view(x.size()[<span class="number">0</span>], -<span class="number">1</span>)</span><br><span class="line">        x = self.classifier(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
+
+<h5 id="nn-ModuleList"><a href="#nn-ModuleList" class="headerlink" title="nn.ModuleList"></a>nn.ModuleList</h5><p>nn.ModuleList是nn.Module的容器，用于包装一组网络层，以迭代方式调用一组网络层。</p>
+<p><strong>主要方法</strong>：</p>
+<ul>
+<li>append()：在ModuleList后面添加网络层</li>
+<li>extend()：拼接两个ModuleList</li>
+<li>insert()：指定在ModuleList中位置插入网络层</li>
+</ul>
+<p>例1：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ModuleList</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(ModuleList, self).__init__()</span><br><span class="line">        self.linears = nn.ModuleList([nn.Linear(<span class="number">10</span>, <span class="number">10</span>) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">20</span>)])</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        <span class="keyword">for</span> i, linear <span class="keyword">in</span> <span class="built_in">enumerate</span>(self.linears):</span><br><span class="line">            x = linear(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+<h5 id="nn-ModuleDict"><a href="#nn-ModuleDict" class="headerlink" title="nn.ModuleDict"></a>nn.ModuleDict</h5><p><strong>nn.ModuleDict</strong>是 nn.module的容器， 用于包装一组网络层，以<strong>索引</strong>的方式调用网络层。</p>
+<ul>
+<li>clear()：清空ModuleDict</li>
+<li>items()：返回可迭代的键值对(key-value pairs)</li>
+<li>keys()：返回字典的键(key)</li>
+<li>values()：返回字典的值(value)</li>
+<li>pop()：返回一对键值，并从字典中删除</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ModuleDict</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(ModuleDict, self).__init__()</span><br><span class="line">        self.choices = nn.ModuleDict(&#123;</span><br><span class="line">            <span class="string">&#x27;conv&#x27;</span> : nn.Conv2d(<span class="number">10</span>, <span class="number">10</span>, <span class="number">3</span>),</span><br><span class="line">            <span class="string">&#x27;pool&#x27;</span> : nn.MaxPool2d(<span class="number">3</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">        </span><br><span class="line">        self.activations = nn.ModuleDict(&#123;</span><br><span class="line">            <span class="string">&#x27;relu&#x27;</span> : nn.ReLU(),</span><br><span class="line">            <span class="string">&#x27;prelu&#x27;</span> : nn.PReLU()</span><br><span class="line">        &#125;)</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x, choice, act</span>):</span></span><br><span class="line">        x = self.choices[choise](x)</span><br><span class="line">        x = self.activations[act](x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line">    </span><br><span class="line">output = net(fake_img, <span class="string">&#x27;conv&#x27;</span>, <span class="string">&#x27;prelu&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h5 id="容器总结："><a href="#容器总结：" class="headerlink" title="容器总结："></a>容器总结：</h5><ul>
+<li>nn.Sequential：<strong>顺序性</strong>，个网络层之间严格按顺序执行，常用于block构建</li>
+<li>nn.ModuleList：<strong>迭代性</strong>，常用于大量重复网络构建，通过for循环实现重复构建</li>
+<li>nn.ModuleDict：<strong>索引性</strong>，常用于可选择的网络层</li>
+</ul>
+<h4 id="2-AlexNet"><a href="#2-AlexNet" class="headerlink" title="2.AlexNet"></a>2.AlexNet</h4><p><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923150239978-16326570841982.png" alt="image-20210923150239978"></p>
+<p>前面卷积池化的部分组装成<strong>features</strong>，后面的全连接部分组装成<strong>classifier</strong></p>
+<h3 id="C-nn网络层-卷积层"><a href="#C-nn网络层-卷积层" class="headerlink" title="C. nn网络层-卷积层"></a>C. nn网络层-卷积层</h3><h4 id="1-1d-2d-3d卷积"><a href="#1-1d-2d-3d卷积" class="headerlink" title="1. 1d/2d/3d卷积"></a>1. 1d/2d/3d卷积</h4><p>卷积运算：卷积核在输入信号（图像）上滑动，相应位置上进行<strong>乘加</strong>。</p>
+<p>卷积核：又称为滤波器，过滤器，可认为是某种模式，特征。</p>
+<p><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923195219275-16326570841984.png" alt="image-20210923195219275"></p>
+<p>卷积过程类似于用一个模板去图像上寻找与他类似的区域，与卷积核模式越相似，激活值越高，从而实现特征提取。</p>
+<p>AlexNet卷积核可视化（如下图），发现卷积核学习到的是边缘，条纹，色彩着一些细节模式。<img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923195435689-16326570841985.png" alt="image-20210923195435689" style="zoom:50%;"></p>
+<p><strong>卷积维度</strong>：一般情况下，卷积核<strong>在几个维度下滑动，就是几维卷积</strong>。</p>
+<p>一个卷积核在一个信号上的几维卷积。</p>
+<p>一维卷积：</p>
+<img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923201126680-16326570841987.png" alt="image-20210923201126680" style="zoom:33%;">
+
+<p>二维卷积：</p>
+<img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923201301917-16326570841986.png" alt="image-20210923201301917" style="zoom:33%;">
+
+<p>三维卷积：                        <img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923201323469-16326570841988.png" alt="image-20210923201323469" style="zoom:33%;">、</p>
+<p>nn.Conv2d</p>
+<p>对多个二维信号进行二维卷积</p>
+<p>主要参数：</p>
+<ul>
+<li>in_channels：输入通道数</li>
+<li>out_channels：输出通道数，等价于卷积核个数</li>
+<li>kernel_size：卷积核尺寸</li>
+<li>stride：步长（每次滑动经过多少像素）</li>
+<li>padding：填充个数（保持输入和输出尺寸匹配）</li>
+<li>dilation：孔洞卷积大小（常用于图像分割任务，用于提升感受区域）</li>
+<li>groups：分组卷积设置</li>
+<li>bias：偏置</li>
+</ul>
+<p>图像尺寸变化：</p>
+<p>（简化版）：outsize = （Insize - kernelsize）/ stride + 1</p>
+<p>（完整版）：<img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923202218467-16326570841989.png" alt="image-20210923202218467"></p>
+<h4 id="2-卷积-nn-Conv2d"><a href="#2-卷积-nn-Conv2d" class="headerlink" title="2. 卷积-nn.Conv2d()"></a>2. 卷积-nn.Conv2d()</h4><p><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923205449306-163265708419810.png" alt="image-20210923205449306"></p>
+<h4 id="3-转置卷积-nn-ConvTranspose"><a href="#3-转置卷积-nn-ConvTranspose" class="headerlink" title="3.转置卷积-nn.ConvTranspose"></a>3.转置卷积-nn.ConvTranspose</h4><p>转置卷积又称为反卷积（Deconvolution)和部分跨越卷积（Fractionally strided Convolution），用于对图像进行上采样（UpSample）。</p>
+<p><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923210001350-163265708419811.png" alt="image-20210923210001350"></p>
+<p>nn.Transpose2d</p>
+<p>转置卷积实现上采样</p>
+<p><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923210527210-163265708419812.png" alt="image-20210923210527210"></p>
+<p>主要参数：</p>
+<ul>
+<li>in_channels：输入通道数</li>
+<li>out_channels：输出通道数，等价于卷积核个数</li>
+<li>kernel_size：卷积核尺寸</li>
+<li>stride：步长（每次滑动经过多少像素）</li>
+<li>padding：填充个数（保持输入和输出尺寸匹配）</li>
+<li>dilation：孔洞卷积大小（常用于图像分割任务，用于提升感受区域）</li>
+<li>groups：分组卷积设置</li>
+<li>bias：偏置</li>
+</ul>
+<p>转置卷积的尺寸计算：</p>
+<p>（简化版）outsize = （insize - 1）*stride + kernelsize</p>
+<p>（完整版）：<br><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923210734836-163265708419814.png" alt="image-20210923210734836"></p>
+<h3 id="D-池化、线性、激活函数层"><a href="#D-池化、线性、激活函数层" class="headerlink" title="D. 池化、线性、激活函数层"></a>D. 池化、线性、激活函数层</h3><h4 id="1-池化层——Pooling-Layer"><a href="#1-池化层——Pooling-Layer" class="headerlink" title="1. 池化层——Pooling Layer"></a>1. 池化层——Pooling Layer</h4><p>池化运算：对信号进行 <strong>“收集”</strong> 并 <strong>“总结”</strong>，类似水池收集水资源，因而得名池化层。</p>
+<p><strong>“收集”</strong>：多变少</p>
+<p><strong>“总结”</strong>：最大值 / 平均值</p>
+<img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923211736432-163265708419813.png" alt="image-20210923211736432" style="zoom:50%;">
+
+<img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923211835083-163265708419815.png" alt="image-20210923211835083" style="zoom:50%;">
+
+<h5 id="nn-MaxPool2d"><a href="#nn-MaxPool2d" class="headerlink" title="nn.MaxPool2d"></a>nn.MaxPool2d</h5><p>对二维信号（图像）进行最大值池化</p>
+<p><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923212056580-163265708419916.png" alt="image-20210923212056580"></p>
+<p>主要参数：</p>
+<ul>
+<li>kernel_size：池化核尺寸</li>
+<li>stride：步长（步长通常与窗口大小一样）</li>
+<li>padding：填充个数</li>
+<li>dilation：池化核间隔大小</li>
+<li>ceil_mode：尺寸向上取整</li>
+<li>return_indices：记录池化像素索引（记录最大值在的位置，在反池化的时候把最大值放在对应的位置上）</li>
+</ul>
+<p><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923212830427-163265708419917.png" alt="image-20210923212830427"></p>
+<h5 id="nn-AvgPool2d"><a href="#nn-AvgPool2d" class="headerlink" title="nn.AvgPool2d"></a>nn.AvgPool2d</h5><p>对二维信号（图像）进行平均值池化</p>
+<p><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923213658337-163265708419918.png" alt="image-20210923213658337"></p>
+<p>主要参数：</p>
+<ul>
+<li>kernel_size：池化核尺寸</li>
+<li>stride：步长（步长通常与窗口大小一样）</li>
+<li>padding：填充个数</li>
+<li>ceil_mode：尺寸向上取整</li>
+<li>count_include_pad：填充值用于计算</li>
+<li>divisor_override：除法因子</li>
+</ul>
+<h5 id="nn-MaxUnpool2d"><a href="#nn-MaxUnpool2d" class="headerlink" title="nn.MaxUnpool2d"></a>nn.MaxUnpool2d</h5><p><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923221525532-163265708419919.png" alt="image-20210923221525532"></p>
+<p>对二维信号（图像）进行最大值池化上采样</p>
+<p>主要参数：</p>
+<ul>
+<li>kernel_size：池化核尺寸</li>
+<li>stride：步长</li>
+<li>padding：填充个数</li>
+</ul>
+<p><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923212830427-163265708419917.png" alt="image-20210923212830427"></p>
+<p>在forward( )的时候要传入索引层，就是indices。</p>
+<h4 id="2-线性层——Linear-Layer"><a href="#2-线性层——Linear-Layer" class="headerlink" title="2. 线性层——Linear Layer"></a>2. 线性层——Linear Layer</h4><p>线性层又称全连接层，其<strong>每个神经元与上一层所有神经元相连</strong>。</p>
+<p>实现对前一层的<strong>线性组合，线性变换</strong></p>
+<img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923222244138-163265708419920.png" alt="image-20210923222244138" style="zoom:25%;">
+
+<h5 id="nn-Linear"><a href="#nn-Linear" class="headerlink" title="nn.Linear"></a>nn.Linear</h5><p>对一维信号（向量）进行线性组合</p>
+<p><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923222813962-163265708419921.png" alt="image-20210923222813962"></p>
+<p>主要参数：</p>
+<ul>
+<li>in_features：输入结点数</li>
+<li>out_features：输出结点数</li>
+<li>bias：是否需要偏置</li>
+</ul>
+<p>计算公式：<img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923222749821-163265708419922.png" alt="image-20210923222749821" style="zoom:50%;"></p>
+<h4 id="3-激活函数层——Activation-Layer"><a href="#3-激活函数层——Activation-Layer" class="headerlink" title="3. 激活函数层——Activation Layer"></a>3. 激活函数层——Activation Layer</h4><p>激活函数对特征进行<strong>非线性变换</strong>，赋予多层神经网络具有<strong>深度意义</strong>。</p>
+<p>如果<strong>没有</strong>非线性变化，<strong>无论</strong>多少层线性层叠加都没有意义，一个矩阵就都能搞定。</p>
+<h5 id="nn-Sigmoid"><a href="#nn-Sigmoid" class="headerlink" title="nn.Sigmoid"></a>nn.Sigmoid</h5><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923223344685-163265708419923.png" alt="image-20210923223344685" style="zoom:33%;">
+
+<p>特性：</p>
+<ul>
+<li>输出值在（0，1），符合概率</li>
+<li>导数范围是[0, 0.25]，容易梯度消失</li>
+<li>输出为非0均值，破坏数据分布</li>
+</ul>
+<img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923223502929-163265708419924.png" alt="image-20210923223502929" style="zoom: 25%;">
+
+<h5 id="nn-tanh"><a href="#nn-tanh" class="headerlink" title="nn.tanh"></a>nn.tanh</h5><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923223628333-163265708419925.png" alt="image-20210923223628333" style="zoom: 50%;">
+
+<p>特性：</p>
+<ul>
+<li>输出值在（-1，1），数据符合0均值</li>
+<li>导数范围是（0，1），易导致梯度消失</li>
+</ul>
+<img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923223736195-163265708419926.png" alt="image-20210923223736195" style="zoom: 25%;">
+
+<h5 id="nn-ReLU"><a href="#nn-ReLU" class="headerlink" title="nn.ReLU"></a>nn.ReLU</h5><img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923223932829-163265708419927.png" alt="image-20210923223932829" style="zoom: 33%;">
+
+<p>特性：</p>
+<ul>
+<li>输出值均为正数，负半轴导致死神经元（有一部分神经元就死掉了）</li>
+<li>导数是1（不改变梯度的尺度），缓解梯度消失，但易引发梯度爆炸</li>
+</ul>
+<img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923224046062-163265708419928.png" alt="image-20210923224046062" style="zoom:25%;">
+
+<h5 id="nn-ReLU变式"><a href="#nn-ReLU变式" class="headerlink" title="nn.ReLU变式"></a>nn.ReLU变式</h5><p>nn.LeakyReLU</p>
+<ul>
+<li>negative_slope：负半轴斜率</li>
+</ul>
+<p>nn.PReLU</p>
+<ul>
+<li>init：可学习斜率</li>
+</ul>
+<p>nn.RReLU</p>
+<p>R代表random</p>
+<ul>
+<li>lower：均匀分布下限</li>
+<li>upper：均匀分布上限</li>
+</ul>
+<img src="/2021/09/26/PyTorch-ModelsConstruction/image-20210923224438706-163265708419929.png" alt="image-20210923224438706" style="zoom:25%;">
+
+<p><strong>还有很多其他改进</strong>，日后补充</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Yiting CHEN
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/" title="PyTorch-ModelsConstruction">http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/26/PyTorch-DataProcess-Dataset/" rel="prev" title="PyTorch-DataProcess&Dataset">
+      <i class="fa fa-chevron-left"></i> PyTorch-DataProcess&Dataset
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/26/PyTorch-Loss-Optimizer/" rel="next" title="PyTorch-Loss&Optimizer">
+      PyTorch-Loss&Optimizer <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89-PyTorch%E6%A8%A1%E5%9E%8B%E6%90%AD%E5%BB%BA%EF%BC%88Models%EF%BC%89"><span class="nav-text">三. PyTorch模型搭建（Models）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-%E6%A8%A1%E5%9E%8B%E5%88%9B%E5%BB%BA%E6%AD%A5%E9%AA%A4%E4%B8%8Enn-Module"><span class="nav-text">A. 模型创建步骤与nn.Module</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%BD%91%E8%B7%AF%E6%A8%A1%E5%9E%8B%E5%88%9B%E5%BB%BA%E6%AD%A5%E9%AA%A4"><span class="nav-text">1. 网路模型创建步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-nn-Module"><span class="nav-text">2. nn.Module</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-%E6%A8%A1%E5%9E%8B%E5%AE%B9%E5%99%A8%E4%B8%8EAlexNet%E6%9E%84%E5%BB%BA"><span class="nav-text">B. 模型容器与AlexNet构建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Containers"><span class="nav-text">1. Containers</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-Sequential"><span class="nav-text">nn.Sequential</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-ModuleList"><span class="nav-text">nn.ModuleList</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-ModuleDict"><span class="nav-text">nn.ModuleDict</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="nav-text">容器总结：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-AlexNet"><span class="nav-text">2.AlexNet</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-nn%E7%BD%91%E7%BB%9C%E5%B1%82-%E5%8D%B7%E7%A7%AF%E5%B1%82"><span class="nav-text">C. nn网络层-卷积层</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1d-2d-3d%E5%8D%B7%E7%A7%AF"><span class="nav-text">1. 1d&#x2F;2d&#x2F;3d卷积</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%B7%E7%A7%AF-nn-Conv2d"><span class="nav-text">2. 卷积-nn.Conv2d()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E8%BD%AC%E7%BD%AE%E5%8D%B7%E7%A7%AF-nn-ConvTranspose"><span class="nav-text">3.转置卷积-nn.ConvTranspose</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-%E6%B1%A0%E5%8C%96%E3%80%81%E7%BA%BF%E6%80%A7%E3%80%81%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E5%B1%82"><span class="nav-text">D. 池化、线性、激活函数层</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%B1%A0%E5%8C%96%E5%B1%82%E2%80%94%E2%80%94Pooling-Layer"><span class="nav-text">1. 池化层——Pooling Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-MaxPool2d"><span class="nav-text">nn.MaxPool2d</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-AvgPool2d"><span class="nav-text">nn.AvgPool2d</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-MaxUnpool2d"><span class="nav-text">nn.MaxUnpool2d</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E7%BA%BF%E6%80%A7%E5%B1%82%E2%80%94%E2%80%94Linear-Layer"><span class="nav-text">2. 线性层——Linear Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-Linear"><span class="nav-text">nn.Linear</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E5%B1%82%E2%80%94%E2%80%94Activation-Layer"><span class="nav-text">3. 激活函数层——Activation Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-Sigmoid"><span class="nav-text">nn.Sigmoid</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-tanh"><span class="nav-text">nn.tanh</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-ReLU"><span class="nav-text">nn.ReLU</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-ReLU%E5%8F%98%E5%BC%8F"><span class="nav-text">nn.ReLU变式</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Yiting CHEN</p>
+  <div class="site-description" itemprop="description">日拱一卒，功不唐捐</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChenEating716" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChenEating716" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenyiting@whu.edu.cn" title="E-Mail → mailto:chenyiting@whu.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yiting CHEN</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

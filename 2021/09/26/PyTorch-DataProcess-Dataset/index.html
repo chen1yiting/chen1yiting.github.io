@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.chen-yiting.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="文章中介绍了基本的训练数据预处理，以及Dataset类的构建方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PyTorch-DataProcess&amp;Dataset">
+<meta property="og:url" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/index.html">
+<meta property="og:site_name" content="Robotics, ML &amp; Thug Life">
+<meta property="og:description" content="文章中介绍了基本的训练数据预处理，以及Dataset类的构建方法。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922133310174.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922155733171.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922170343251.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922171520294.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922172839907.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922210309872.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922211513888.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922212510007.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922213455329.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922213841911.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922215241192.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922215447677.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922220031371.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922220406992.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922221913501.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922222014416.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922222201258.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922222233010.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922222310180.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922222513169.png">
+<meta property="article:published_time" content="2021-09-26T11:48:00.000Z">
+<meta property="article:modified_time" content="2021-09-26T12:11:04.316Z">
+<meta property="article:author" content="Yiting CHEN">
+<meta property="article:tag" content="PyTorch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922133310174.png">
+
+<link rel="canonical" href="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>PyTorch-DataProcess&Dataset | Robotics, ML & Thug Life</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Robotics, ML & Thug Life</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">今天几号？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/projects/" rel="section"><i class="fa fa-flag fa-fw"></i>Projects</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yiting CHEN">
+      <meta itemprop="description" content="日拱一卒，功不唐捐">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Robotics, ML & Thug Life">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PyTorch-DataProcess&Dataset
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-09-26 19:48:00 / Modified: 20:11:04" itemprop="dateCreated datePublished" datetime="2021-09-26T19:48:00+08:00">2021-09-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PyTorch%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">PyTorch框架学习</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">文章中介绍了基本的训练数据预处理，以及Dataset类的构建方法。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="二-PyTorch数据处理（Dataset）"><a href="#二-PyTorch数据处理（Dataset）" class="headerlink" title="二. PyTorch数据处理（Dataset）"></a>二. PyTorch数据处理（Dataset）</h2><h3 id="A-数据读取机制Dataloader与Dataset"><a href="#A-数据读取机制Dataloader与Dataset" class="headerlink" title="A. 数据读取机制Dataloader与Dataset"></a>A. 数据读取机制Dataloader与Dataset</h3><p><strong>数据</strong>：</p>
+<ul>
+<li><strong>数据收集</strong>：Img &amp; Label</li>
+<li><strong>数据划分</strong>：train valid test</li>
+<li><strong>数据读取</strong>：Dataloader（Sampler生成索引 / Dataset根据索引读取数据）</li>
+<li><strong>数据预处理</strong>：transform</li>
+</ul>
+<p><strong>Epoch</strong>: 所有训练样本都输入到模型当中一次，称为一个epoch</p>
+<p><strong>Iteration</strong>：一批样本输入到模型中</p>
+<p><strong>Batchsize</strong>：批大小，决定了一个Epoch进行多少次Iteration</p>
+<p><strong>例</strong>：</p>
+<ul>
+<li><p>样本总数：80，Batchsize：8，1 Epoch = 10 Iteration</p>
+</li>
+<li><p>样本总数：87，Batchsize：8</p>
+<p>drop_last = True/False，1 Epoch = 10 Iteration/11 Iteration</p>
+</li>
+</ul>
+<p>数据读取机制：</p>
+<ul>
+<li>读哪些数据：在每一个iteration时，读一个batchsize大小，该读取哪几个数据。一般是sampler输出的index。</li>
+<li>从哪读数据：在硬盘中从哪找数据。dataset中的data_dir。</li>
+<li>怎么读数据： Dataset中的getitem</li>
+</ul>
+<p>训练时：</p>
+<p>以Epoch为主循环，其中嵌入每次Iteration的循环。</p>
+<h4 id="1-Dataloader和Dataset"><a href="#1-Dataloader和Dataset" class="headerlink" title="1. Dataloader和Dataset"></a>1. Dataloader和Dataset</h4><h5 id="torch-utils-data-Dataloader"><a href="#torch-utils-data-Dataloader" class="headerlink" title="torch.utils.data.Dataloader"></a>torch.utils.data.Dataloader</h5><p>构建可迭代的数据装载器</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922133310174.png" alt="image-20210922133310174"></p>
+<ul>
+<li>dataset：Dataset类，决定数据从哪读取及如何读取</li>
+<li>batchsize：批大小</li>
+<li>num_works：是否多进程读取数据</li>
+<li>shuffle：每个epoch是否乱序</li>
+<li>drop_last：当样本数不能被batchsize整除时，是否舍弃最后一批数据</li>
+</ul>
+<h5 id="torch-utils-data-Dataset"><a href="#torch-utils-data-Dataset" class="headerlink" title="torch.utils.data.Dataset"></a>torch.utils.data.Dataset</h5><p>Dataset抽象类，所有自定义的Dataset需要继承它，并且复写__ getitem __( )</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922155733171.png" alt="image-20210922155733171"></p>
+<p>getitem: 接受一个索引，返回一个样本。</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922170343251.png" alt="image-20210922170343251"></p>
+<h3 id="B-数据预处理模块"><a href="#B-数据预处理模块" class="headerlink" title="B. 数据预处理模块"></a>B. 数据预处理模块</h3><p><strong>torchvision</strong>简介：</p>
+<p>计算机视觉工具包</p>
+<ul>
+<li>torchvision.transforms：常用的图像预处理方法</li>
+<li>torchvision.dataset：常用数据集的dataset实现，MNIST，CIFAR-10，ImageNet</li>
+<li>torchvision.model：常用的模型预训练，AlexNet，VGG，ResNet，GoogleLeNet</li>
+</ul>
+<h4 id="1-transform运行机制"><a href="#1-transform运行机制" class="headerlink" title="1.transform运行机制"></a>1.transform运行机制</h4><p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922171520294.png" alt="image-20210922171520294"></p>
+<h5 id="transforms-Compose"><a href="#transforms-Compose" class="headerlink" title="transforms.Compose"></a>transforms.Compose</h5><p>将一系列方法进行有序的包装，之后安装顺序对数据进行处理。</p>
+<h5 id="transforms-Normalize"><a href="#transforms-Normalize" class="headerlink" title="transforms.Normalize"></a>transforms.Normalize</h5><p>逐channel的对图像进行标准化</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922172839907.png" alt="image-20210922172839907"></p>
+<p>output = (input - mean) / std</p>
+<ul>
+<li>mean：各通道的均值</li>
+<li>std：各通道的标准差</li>
+<li>inplace：是否原地操作</li>
+</ul>
+<h4 id="2-数据标准化"><a href="#2-数据标准化" class="headerlink" title="2.数据标准化"></a>2.数据标准化</h4><h3 id="C-数据增强"><a href="#C-数据增强" class="headerlink" title="C. 数据增强"></a>C. 数据增强</h3><h4 id="1-transforms——剪裁"><a href="#1-transforms——剪裁" class="headerlink" title="1. transforms——剪裁"></a>1. transforms——剪裁</h4><h5 id="transforms-CenterCrop"><a href="#transforms-CenterCrop" class="headerlink" title="transforms.CenterCrop"></a>transforms.CenterCrop</h5><p>从图像中心裁剪图片</p>
+<ul>
+<li>size：所需裁剪图片尺寸</li>
+</ul>
+<h5 id="transforms-RandomCrop"><a href="#transforms-RandomCrop" class="headerlink" title="transforms.RandomCrop"></a>transforms.RandomCrop</h5><p>从图片中随机裁剪尺寸为size的图片</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922210309872.png" alt="image-20210922210309872"></p>
+<ul>
+<li>size：所需裁剪图片尺寸</li>
+<li>padding：设置填充大小。当为a时，上下左右均填充a个像素；当为（a，b）时，上下填充b个像素，左右填充a个。当为（a，b，c，d）时，左，上，右，下分别填充a，b，c，d个像素。</li>
+<li>pad_is_need：若图像小于设定的size，则填充</li>
+<li>padding_mode：四种填充模式<ol>
+<li>constant：像素值由fill设定</li>
+<li>edge：像素值由图像边缘像素决定</li>
+<li>reflect：镜像填充，最后一个像素不镜像[1, 2, 3, 4]——&gt; [3,2,1,2,3,4,3,2]</li>
+<li>symmetric：镜像填充，最后一个像素镜像[1, 2, 3, 4]——&gt;[2,1,1,2,3,4,4,3]</li>
+</ol>
+</li>
+<li>fill：constant时，设置填充的像素值</li>
+</ul>
+<h5 id="transforms-RandomResizeCrop"><a href="#transforms-RandomResizeCrop" class="headerlink" title="transforms.RandomResizeCrop"></a>transforms.RandomResizeCrop</h5><p>随机大小，长宽比裁剪图片</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922211513888.png" alt="image-20210922211513888"></p>
+<ul>
+<li><p>size：所需裁剪图片尺寸</p>
+</li>
+<li><p>scale：随即裁剪面积比例，默认（0.08，1）</p>
+</li>
+<li><p>ratio：随机长宽比，默认（3/4, 4/3）</p>
+</li>
+<li><p>interpolation：插值方法 </p>
+<p>PIL.Image.NEAREST</p>
+<p>PIL.Image.BILINEAR</p>
+<p>PIL.Image.BICUBIC</p>
+</li>
+</ul>
+<h5 id="FiveCrop-TenCrop"><a href="#FiveCrop-TenCrop" class="headerlink" title="FiveCrop/TenCrop"></a>FiveCrop/TenCrop</h5><p>在图片的上下左右以及中心裁剪出尺寸为size的5张图片，TenCrop对这5张图片进行水平或者垂直镜像获得10张图片</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922212510007.png" alt="image-20210922212510007"></p>
+<p>size：所需裁剪图片的尺寸</p>
+<p>vertical_flip：是否垂直翻转</p>
+<h4 id="2-transforms——翻转、旋转"><a href="#2-transforms——翻转、旋转" class="headerlink" title="2. transforms——翻转、旋转"></a>2. transforms——翻转、旋转</h4><h5 id="transforms-RandomHorizontalFlip-VerticalFlip"><a href="#transforms-RandomHorizontalFlip-VerticalFlip" class="headerlink" title="transforms.RandomHorizontalFlip/VerticalFlip"></a>transforms.RandomHorizontalFlip/VerticalFlip</h5><p>依概率水平（左右）或垂直（上下）翻转图片</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922213455329.png" alt="image-20210922213455329"></p>
+<ul>
+<li>p：翻转概率</li>
+</ul>
+<h5 id="transforms-RandomRotation"><a href="#transforms-RandomRotation" class="headerlink" title="transforms.RandomRotation"></a>transforms.RandomRotation</h5><p>随机旋转图片</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922213841911.png" alt="image-20210922213841911"></p>
+<ul>
+<li>degrees：旋转角度。当为a时，在（-a，a）之间选择旋转角度；当为（a，b）时，在（a，b）之间选择旋转角度</li>
+<li>resample：重采样方法</li>
+<li>expand：是否扩大图片，以保持原图信息</li>
+</ul>
+<h4 id="3-transfroms——图像变换"><a href="#3-transfroms——图像变换" class="headerlink" title="3. transfroms——图像变换"></a>3. transfroms——图像变换</h4><h5 id="transforms-Pad"><a href="#transforms-Pad" class="headerlink" title="transforms.Pad"></a>transforms.Pad</h5><p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922215241192.png" alt="image-20210922215241192"></p>
+<ul>
+<li><p>padding：设置填充大小。当为a时，上下左右均填充a个像素；当为（a，b）时，上下填充b个像素，左右填充a个。当为（a，b，c，d）时，左，上，右，下分别填充a，b，c，d个像素。</p>
+</li>
+<li><p>padding_mode：四种填充模式</p>
+<ol>
+<li>constant：像素值由fill设定</li>
+<li>edge：像素值由图像边缘像素决定</li>
+<li>reflect：镜像填充，最后一个像素不镜像[1, 2, 3, 4]——&gt; [3,2,1,2,3,4,3,2]</li>
+<li>symmetric：镜像填充，最后一个像素镜像[1, 2, 3, 4]——&gt;[2,1,1,2,3,4,4,3]</li>
+</ol>
+</li>
+<li><p>fill：constant时，设置填充的像素值</p>
+</li>
+</ul>
+<h5 id="transforms-ColorJitter"><a href="#transforms-ColorJitter" class="headerlink" title="transforms.ColorJitter"></a>transforms.ColorJitter</h5><p>调整亮度，对比度，饱和度和色相</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922215447677.png" alt="image-20210922215447677"></p>
+<ul>
+<li>brightness：亮度调整参数。当为a时，从[max(0, 1-a), 1+a]中随机选择，当为（a，b）时，从[a, b]中选择</li>
+<li>contrast：对比度参数，同上</li>
+<li>saturation：饱和度参数，同上</li>
+<li>hue：色相参数，当为a时，从[-a，a]中选择参数（0&lt;= a &lt;=0.5）当为（a，b）时，从[a, b]中选择参数，注：-0.5 &lt;= a &lt;= b &lt;= 0.5</li>
+</ul>
+<h5 id="transforms-Grayscale-RandomGrayscale"><a href="#transforms-Grayscale-RandomGrayscale" class="headerlink" title="transforms.Grayscale/RandomGrayscale"></a>transforms.Grayscale/RandomGrayscale</h5><p>依据概率将图片转换为灰度图</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922220031371.png" alt="image-20210922220031371"></p>
+<ul>
+<li>num_output_channels：输出通道数只能设置为1或3</li>
+<li>p：概率值，图像被转换为灰度图的概率</li>
+</ul>
+<h5 id="transforms-RandomAffine"><a href="#transforms-RandomAffine" class="headerlink" title="transforms.RandomAffine"></a>transforms.RandomAffine</h5><p>对图像进行仿射变换，仿射变换是二维的线性变换，由五种基本原子变换构成，分别是<strong>旋转</strong>、<strong>平移</strong>、<strong>缩放</strong>、<strong>错切</strong>和<strong>翻转</strong>。</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922220406992.png" alt="image-20210922220406992"></p>
+<ul>
+<li>degrees：旋转角度设置</li>
+<li>translate：平移区间设置，如（a，b），a设置宽（width），b设置高（height）。图像在宽维度平移的区间为-img_width* a &lt; dx &lt;img_width * a</li>
+<li>scale：缩放比例（以面积为单位）</li>
+<li>fill_color：填充颜色设置</li>
+<li>shear：错切角度设置，有水平错切和垂直错切。若为a，则仅在x轴错切，错切角度在（-a，a）之间；若为（a，b），则a设置x轴角度，b设置y的角度。若为（a，b，c，d），则a，b设置x轴角度，c，d设置y轴角度</li>
+<li>resample：重采样方式，用NEAREST，BILINEAR，BICUBIC</li>
+</ul>
+<h5 id="transforms-RandomErasing"><a href="#transforms-RandomErasing" class="headerlink" title="transforms.RandomErasing"></a>transforms.RandomErasing</h5><p>对图像进行随机遮挡</p>
+<ul>
+<li>p：概率值，执行该操作的概率</li>
+<li>scale：遮挡区域的面积</li>
+<li>ratio：遮挡区域长宽比</li>
+<li>value：设置遮挡区域的像素值（R，G，B）or（Gray）,或者任意字符串（则填入随机像素值，还挺好看）</li>
+</ul>
+<h5 id="transforms-Lambda"><a href="#transforms-Lambda" class="headerlink" title="transforms.Lambda"></a>transforms.Lambda</h5><p>用户自定义lambda方法</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922221913501.png" alt="image-20210922221913501"></p>
+<ul>
+<li><p>lambda：lambda匿名函数</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922222014416.png" alt="image-20210922222014416"></p>
+</li>
+</ul>
+<h4 id="4-transforms选择操作"><a href="#4-transforms选择操作" class="headerlink" title="4. transforms选择操作"></a>4. transforms选择操作</h4><h5 id="transforms-RandomChoice"><a href="#transforms-RandomChoice" class="headerlink" title="transforms.RandomChoice"></a>transforms.RandomChoice</h5><p>一组transforms方法中每次随机挑选一个</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922222201258.png" alt="image-20210922222201258"></p>
+<h5 id="transforms-RandomApply"><a href="#transforms-RandomApply" class="headerlink" title="transforms.RandomApply"></a>transforms.RandomApply</h5><p>依据概率执行一组transforms操作</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922222233010.png" alt="image-20210922222233010"></p>
+<h5 id="transforms-RandomOrder"><a href="#transforms-RandomOrder" class="headerlink" title="transforms.RandomOrder"></a>transforms.RandomOrder</h5><p>对一组transforms操作打乱顺序</p>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922222310180.png" alt="image-20210922222310180"></p>
+<h4 id="5-自定义transforms"><a href="#5-自定义transforms" class="headerlink" title="5. 自定义transforms"></a>5. 自定义transforms</h4><p>自定义transforms要素：</p>
+<ul>
+<li>仅接受一个参数，返回一个参数</li>
+<li>注意上游和下游的操作</li>
+</ul>
+<p><img src="/2021/09/26/PyTorch-DataProcess-Dataset/image-20210922222513169.png" alt="image-20210922222513169"></p>
+<h5 id="椒盐噪声"><a href="#椒盐噪声" class="headerlink" title="椒盐噪声"></a>椒盐噪声</h5><p>椒盐噪声又称脉冲噪声，是一种随机出现的白点或者黑点，白点称为盐噪声，黑点称为椒噪声</p>
+<p><strong>信噪比（Signal-Noise Rate，SNR）</strong>：衡量噪声的比例。</p>
+<h4 id="6-数据增强思想"><a href="#6-数据增强思想" class="headerlink" title="6. 数据增强思想"></a>6. 数据增强思想</h4><p>原则：让训练集与测试集更接近</p>
+<ul>
+<li><strong>空间位置</strong>：平移</li>
+<li><strong>色彩</strong>：灰度图，色彩抖动</li>
+<li><strong>形状</strong>：仿射变换</li>
+<li><strong>上下文场景</strong>：遮挡，填充</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Yiting CHEN
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/" title="PyTorch-DataProcess&amp;Dataset">http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/26/PyTorch-EnvSetup-BasicConcept/" rel="prev" title="PyTorch-EnvSetup&BasicConcept">
+      <i class="fa fa-chevron-left"></i> PyTorch-EnvSetup&BasicConcept
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/26/PyTorch-ModelsConstruction/" rel="next" title="PyTorch-ModelsConstruction">
+      PyTorch-ModelsConstruction <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-PyTorch%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88Dataset%EF%BC%89"><span class="nav-text">二. PyTorch数据处理（Dataset）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E6%9C%BA%E5%88%B6Dataloader%E4%B8%8EDataset"><span class="nav-text">A. 数据读取机制Dataloader与Dataset</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Dataloader%E5%92%8CDataset"><span class="nav-text">1. Dataloader和Dataset</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-utils-data-Dataloader"><span class="nav-text">torch.utils.data.Dataloader</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-utils-data-Dataset"><span class="nav-text">torch.utils.data.Dataset</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86%E6%A8%A1%E5%9D%97"><span class="nav-text">B. 数据预处理模块</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-transform%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6"><span class="nav-text">1.transform运行机制</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-Compose"><span class="nav-text">transforms.Compose</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-Normalize"><span class="nav-text">transforms.Normalize</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E6%A0%87%E5%87%86%E5%8C%96"><span class="nav-text">2.数据标准化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA"><span class="nav-text">C. 数据增强</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-transforms%E2%80%94%E2%80%94%E5%89%AA%E8%A3%81"><span class="nav-text">1. transforms——剪裁</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-CenterCrop"><span class="nav-text">transforms.CenterCrop</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-RandomCrop"><span class="nav-text">transforms.RandomCrop</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-RandomResizeCrop"><span class="nav-text">transforms.RandomResizeCrop</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#FiveCrop-TenCrop"><span class="nav-text">FiveCrop&#x2F;TenCrop</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-transforms%E2%80%94%E2%80%94%E7%BF%BB%E8%BD%AC%E3%80%81%E6%97%8B%E8%BD%AC"><span class="nav-text">2. transforms——翻转、旋转</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-RandomHorizontalFlip-VerticalFlip"><span class="nav-text">transforms.RandomHorizontalFlip&#x2F;VerticalFlip</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-RandomRotation"><span class="nav-text">transforms.RandomRotation</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-transfroms%E2%80%94%E2%80%94%E5%9B%BE%E5%83%8F%E5%8F%98%E6%8D%A2"><span class="nav-text">3. transfroms——图像变换</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-Pad"><span class="nav-text">transforms.Pad</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-ColorJitter"><span class="nav-text">transforms.ColorJitter</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-Grayscale-RandomGrayscale"><span class="nav-text">transforms.Grayscale&#x2F;RandomGrayscale</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-RandomAffine"><span class="nav-text">transforms.RandomAffine</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-RandomErasing"><span class="nav-text">transforms.RandomErasing</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-Lambda"><span class="nav-text">transforms.Lambda</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-transforms%E9%80%89%E6%8B%A9%E6%93%8D%E4%BD%9C"><span class="nav-text">4. transforms选择操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-RandomChoice"><span class="nav-text">transforms.RandomChoice</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-RandomApply"><span class="nav-text">transforms.RandomApply</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#transforms-RandomOrder"><span class="nav-text">transforms.RandomOrder</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E8%87%AA%E5%AE%9A%E4%B9%89transforms"><span class="nav-text">5. 自定义transforms</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A4%92%E7%9B%90%E5%99%AA%E5%A3%B0"><span class="nav-text">椒盐噪声</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%80%9D%E6%83%B3"><span class="nav-text">6. 数据增强思想</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Yiting CHEN</p>
+  <div class="site-description" itemprop="description">日拱一卒，功不唐捐</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChenEating716" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChenEating716" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenyiting@whu.edu.cn" title="E-Mail → mailto:chenyiting@whu.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yiting CHEN</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

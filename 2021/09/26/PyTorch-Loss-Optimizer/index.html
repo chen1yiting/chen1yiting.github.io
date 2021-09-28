@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.chen-yiting.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="文章介绍了PyTorch当中比较常用的损失函数和优化器。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PyTorch-Loss&amp;Optimizer">
+<meta property="og:url" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/index.html">
+<meta property="og:site_name" content="Robotics, ML &amp; Thug Life">
+<meta property="og:description" content="文章介绍了PyTorch当中比较常用的损失函数和优化器。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210924001951770.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210924004244068.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210924004442111.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210924005023102.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210924105850749.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210924112655749.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210924163054623.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925145330328.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925145853652.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925150840297.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925150852293.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925151138993.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925151323568.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925151752707.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925152326201.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925153835354.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925153849860.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925155812561.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925160607942.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925160853772.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925160909202.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925161602192.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925161628228.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925162115800.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925162211016.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925162237021.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925162430193.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925162632490.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925163057884.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925164501982.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925164937096.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925165616845.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925211631557.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925215213471.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925220758203.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925221017651.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925221141585.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925230235496.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210925230441311.png">
+<meta property="article:published_time" content="2021-09-26T11:52:09.000Z">
+<meta property="article:modified_time" content="2021-09-26T12:12:42.613Z">
+<meta property="article:author" content="Yiting CHEN">
+<meta property="article:tag" content="PyTorch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/image-20210924001951770.png">
+
+<link rel="canonical" href="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>PyTorch-Loss&Optimizer | Robotics, ML & Thug Life</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Robotics, ML & Thug Life</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">今天几号？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/projects/" rel="section"><i class="fa fa-flag fa-fw"></i>Projects</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yiting CHEN">
+      <meta itemprop="description" content="日拱一卒，功不唐捐">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Robotics, ML & Thug Life">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PyTorch-Loss&Optimizer
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-09-26 19:52:09 / Modified: 20:12:42" itemprop="dateCreated datePublished" datetime="2021-09-26T19:52:09+08:00">2021-09-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PyTorch%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">PyTorch框架学习</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">文章介绍了PyTorch当中比较常用的损失函数和优化器。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="四-PyTorch损失优化（Loss-amp-Optimizer）"><a href="#四-PyTorch损失优化（Loss-amp-Optimizer）" class="headerlink" title="四. PyTorch损失优化（Loss&amp;Optimizer）"></a>四. PyTorch损失优化（Loss&amp;Optimizer）</h2><h3 id="A-权值初始化"><a href="#A-权值初始化" class="headerlink" title="A. 权值初始化"></a>A. 权值初始化</h3><h4 id="1-梯度消失与爆炸Gradient-Vanishing-and-Exploring"><a href="#1-梯度消失与爆炸Gradient-Vanishing-and-Exploring" class="headerlink" title="1. 梯度消失与爆炸Gradient Vanishing and Exploring"></a>1. 梯度消失与爆炸Gradient Vanishing and Exploring</h4><h5 id="方差一致性原则"><a href="#方差一致性原则" class="headerlink" title="方差一致性原则"></a>方差一致性原则</h5><p>$$</p>
+<ol>
+<li> E(X*Y) = E(X)*E(Y)\</li>
+<li> D(X) = E(X^2) - [E(X)]^2\</li>
+<li> D(X+Y) = D(X) + D(Y)<br>$$</li>
+</ol>
+<p>$$<br>1.2.3 \Rightarrow D(X<em>Y) = D(X)<em>D(Y) + D(X)</em>[E(Y)]^2 + D(Y)</em>[E(X)]^2\<br>若E(X)=0, E(Y)=0\<br>则D(X*Y) = D(X)*D(Y)<br>$$</p>
+<p>$$<br>第一个隐藏层的第一个神经元, 输入层的每一个神经元✖权值求和：\<br>H_{11} = \sum^{n}<em>{i=0}X_i*W</em>{1i}\由公式 D(X<em>Y) = D(X)<em>D(Y)\<br>可知D(H_{11}) = \sum^{n}<em>{i=0}D(X_i)*D(W</em>{1i})\ = n*(1</em>1)n为神经元的个数，X_i和W_i的方差均为1\<br>=n\<br>std(H_{11}) = \sqrt{D(H_{11})} = \sqrt{n}\<br>意味着经过一层神经元的传播标准差就会扩大\sqrt{n}倍\<br>因此，想让方差D(H_1) = n</em>D(X)*D(W) = 1\<br>D(W)=\frac{1}{n}\Rightarrow std(W)=\sqrt{\frac{1}{n}}\<br>所以权值的标准差为\sqrt{\frac{1}{n}}时（n为每一层神经元个数），\才可以保证尺度维持在恰当范围。<br>$$</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210924001951770.png" alt="image-20210924001951770"></p>
+<p>需要保持尺度不变</p>
+<h4 id="2-Xavier方法和Kaiming方法"><a href="#2-Xavier方法和Kaiming方法" class="headerlink" title="2. Xavier方法和Kaiming方法"></a>2. Xavier方法和Kaiming方法</h4><p>Xavier初始化</p>
+<p>方差一致性：保持数据尺度维持在恰当范围，通常方差为1。</p>
+<p>适用激活函数：饱和函数，如sigmoid，Tanh</p>
+<img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210924004244068.png" alt="image-20210924004244068" style="zoom: 50%;">
+
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210924004442111.png" alt="image-20210924004442111"></p>
+<p>Kaiming初始化</p>
+<p>方差一致性：保持数据尺度维持在恰当范围，通常方差为1。</p>
+<p>适用激活函数：ReLU及其变种</p>
+<img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210924005023102.png" alt="image-20210924005023102" style="zoom: 33%;">
+
+
+
+
+
+<h4 id="3-常用初始化方法"><a href="#3-常用初始化方法" class="headerlink" title="3. 常用初始化方法"></a>3. 常用初始化方法</h4><h5 id="PyTorch方法查询"><a href="#PyTorch方法查询" class="headerlink" title="PyTorch方法查询"></a>PyTorch方法查询</h5><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/nn.init.html">https://pytorch.org/docs/stable/nn.init.html</a></p>
+<ul>
+<li>Xavier均匀/正态分布</li>
+<li>Kaiming均匀/正态分布</li>
+<li>均匀分布 / 正态分布 / 常熟分布</li>
+<li>正交矩阵初始化 / 单位矩阵初始化 / 稀疏矩阵初始化</li>
+</ul>
+<h5 id="nn-init-calculate-gain"><a href="#nn-init-calculate-gain" class="headerlink" title="nn.init.calculate_gain()"></a>nn.init.calculate_gain()</h5><p>nn.init.calculate_gain(nonlinearity, param=None)</p>
+<p>计算激活函数的方差变换尺度</p>
+<p>主要参数：</p>
+<ul>
+<li>nonlinearity：激活函数名称</li>
+<li>param：激活函数的参数，如leakyReLU的negative_slop</li>
+</ul>
+<h3 id="B-损失函数"><a href="#B-损失函数" class="headerlink" title="B. 损失函数"></a>B. 损失函数</h3><h4 id="1-损失函数概念"><a href="#1-损失函数概念" class="headerlink" title="1. 损失函数概念"></a>1. 损失函数概念</h4><p><strong>损失函数</strong>：衡量模型输出与真实标签的<strong>差异</strong></p>
+<img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210924105850749.png" alt="image-20210924105850749" style="zoom:50%;">
+
+<p>损失函数（Loss Function）：</p>
+<p>计算<strong>一个样本</strong><br>$$<br>Loss = f（y’，y)<br>$$<br>代价函数（Cost Function）：</p>
+<p>计算<strong>训练集（样本集）</strong>中各个Loss的<strong>平均值</strong><br>$$<br>Cost = \frac{1}{N}\sum^{N}_{i}f(y’_i, y_i)<br>$$<br>目标函数（Objective Function）：<br>$$<br>Obj = Cost（代价函数） + Regularization<br>$$<br>Cost代价函数<strong>并不是越小越好</strong>，可能会有过拟合。约束项是Regularization（L1，L2，稀疏约束），和Cost一起构成目标函数。</p>
+<h4 id="2-损失函数"><a href="#2-损失函数" class="headerlink" title="2. 损失函数"></a>2. 损失函数</h4><h5 id="nn-CrossEntropyLoss"><a href="#nn-CrossEntropyLoss" class="headerlink" title="nn.CrossEntropyLoss"></a>nn.CrossEntropyLoss</h5><p><strong>nn.LogSoftmax()与nn.NLLLoss()结合</strong>，进行交叉熵计算</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210924112655749.png" alt="image-20210924112655749"></p>
+<p>主要参数：</p>
+<ul>
+<li>weight：各类别的loss设置权值</li>
+<li>ignore_index：忽略某个类别</li>
+<li>reduction：计算模式，可为none/sum/mean。‘none’不会造成维度上的衰减，‘sum’会将loss值相加，‘mean’会对所有loss求平均。  </li>
+</ul>
+<p>none- 逐个元素计算</p>
+<p>sum- 所有元素求和，返回标量</p>
+<p>mean- 加权平均，返回标量</p>
+<p>交叉熵 = 信息熵 + 相对熵</p>
+<p>熵（用来描述一件事情的不确定性，不确定性的概率越大，熵就越大）：</p>
+<p>熵是自信息的一个期望，是描述整个概率分布：<br>$$<br>H(P)=E_{x\thicksim p}[I(x)] = -\sum^{N}<em>{i}P(x_i)logP(x_i)<br>$$<br>自信息的公式，对概率取一个负log：<br>$$<br>I(x) = -log[p(x)]<br>$$<br>相对熵，用来衡量两个分布之间的距离（差异）：<br>$$<br>D</em>{KL}(P, Q) = E_{x\thicksim p}[log\frac{P(x)}{Q(x)}]\<br>= E_{x\thicksim p}[logP(x) - logQ(x)]\<br>=\sum^{N}<em>{i=1}P(x_i)[logP(x_i)-logQ(x_i)]\<br>=\sum^{N}</em>{i=1}P(x_i)logP(x_i)-\sum^{N}_{i=1}P(x_i)logQ(x_i)\<br>=H(P,Q) - H(P)\<br>P是真实分布，Q是模型拟合的分布。我们要用Q去拟合（逼近）P<br>$$<br>weight参数的使用：</p>
+<ul>
+<li>向量的形式，有多少个类别，就要有多少个weight</li>
+<li>使用之后，会给不同的类别赋予不同的权值</li>
+</ul>
+<h5 id="nn-NLLLoss"><a href="#nn-NLLLoss" class="headerlink" title="nn.NLLLoss"></a>nn.NLLLoss</h5><p>实现负对数似然函数中的负号功能（其实只是执行了加个负号的功能）</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210924163054623.png" alt="image-20210924163054623"></p>
+<p>主要参数：</p>
+<ul>
+<li>weight：各类别的loss设置权值</li>
+<li>ignore_index：忽略某个类别</li>
+<li>reduction：计算模式，可为none/sum/mean</li>
+</ul>
+<p>none- 逐个元素计算</p>
+<p>sum- 所有元素求和，返回标量</p>
+<p>mean- 加权平均，返回标量</p>
+<h5 id="nn-BCELoss"><a href="#nn-BCELoss" class="headerlink" title="nn.BCELoss"></a>nn.BCELoss</h5><p>二分类交叉熵</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925145330328.png" alt="image-20210925145330328"></p>
+<p><strong>注意事项</strong>：输入值取值在[0, 1]，符合概率取值的区间</p>
+<p>主要参数：</p>
+<ul>
+<li>weight：各类别的loss设置权值</li>
+<li>ignore_index：忽略某个类别</li>
+<li>reduction：计算模式，可为none/sum/mean</li>
+</ul>
+<h5 id="nn-BCEWithLogitsLoss"><a href="#nn-BCEWithLogitsLoss" class="headerlink" title="nn.BCEWithLogitsLoss"></a>nn.BCEWithLogitsLoss</h5><p>结合<strong>Sigmoid</strong>与<strong>二分类交叉熵</strong></p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925145853652.png" alt="image-20210925145853652"></p>
+<p><strong>注意事项：网络后面不加sigmoid函数</strong></p>
+<p>主要参数：</p>
+<ul>
+<li>pos_weight：正样本的权值</li>
+<li>weight：各类别的loss设置权值</li>
+<li>ignore_index：忽略某个类别</li>
+<li>reduction：计算模式，可为none/sum/mean</li>
+</ul>
+<h5 id="nn-L1Loss"><a href="#nn-L1Loss" class="headerlink" title="nn.L1Loss"></a>nn.L1Loss</h5><p>计算inputs与target之差的绝对值</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925150840297.png" alt="image-20210925150840297"></p>
+<h5 id="nn-MSELoss"><a href="#nn-MSELoss" class="headerlink" title="nn.MSELoss"></a>nn.MSELoss</h5><p>计算inputs与target之差的平方</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925150852293.png" alt="image-20210925150852293"></p>
+<p>主要参数：</p>
+<ul>
+<li>reduction：计算模式，可为none/ sum/ mean</li>
+</ul>
+<h5 id="nn-SmoothL1Loss"><a href="#nn-SmoothL1Loss" class="headerlink" title="nn.SmoothL1Loss"></a>nn.SmoothL1Loss</h5><p>平滑的L1Loss。</p>
+<p>Xi是模型输出，Yi是标签。</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925151138993.png" alt="image-20210925151138993"></p>
+<p>主要参数：</p>
+<ul>
+<li>reduction：计算模式，可为none/ sum/ mean</li>
+<li><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925151323568.png" alt="image-20210925151323568" style="zoom:33%;"></li>
+</ul>
+<h5 id="nn-PoissonNLLLoss"><a href="#nn-PoissonNLLLoss" class="headerlink" title="nn.PoissonNLLLoss"></a>nn.PoissonNLLLoss</h5><p>泊松分布的负对数似然损失函数</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925151752707.png" alt="image-20210925151752707"></p>
+<p>主要参数：</p>
+<ul>
+<li><strong>log_input</strong>：输入是否为对数形式，决定计算公式</li>
+<li><strong>full</strong>：计算所有loss，默认为False</li>
+<li><strong>eps</strong>：修正项，避免log（input）为nan</li>
+</ul>
+<h5 id="nn-KLDivLoss"><a href="#nn-KLDivLoss" class="headerlink" title="nn.KLDivLoss"></a>nn.KLDivLoss</h5><p>计算<strong>KLD（divergence）</strong>，KL散度，<strong>相对熵</strong>。衡量两个分布之间的距离。</p>
+<p><strong>注意事项：需提前将输入计算log-probabilities，如通过nn.logsoftmax()</strong></p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925152326201.png" alt="image-20210925152326201"></p>
+<p>主要参数：</p>
+<ul>
+<li>reduction：none/ sum/ mean /batchmean</li>
+</ul>
+<p>batchmean- batchsize维度求平均值</p>
+<h5 id="nn-MarginRankingLoss"><a href="#nn-MarginRankingLoss" class="headerlink" title="nn.MarginRankingLoss"></a>nn.MarginRankingLoss</h5><p>计算两个向量之间的相似度，<strong>用于排序任务</strong></p>
+<p>y=1时，希望x1与x2大，当x1&gt;x2时，不产生loss</p>
+<p>y=-1时，希望x2比x1大，当x2&gt;x1时，不产生loss</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925153835354.png" alt="image-20210925153835354"></p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925153849860.png" alt="image-20210925153849860"></p>
+<p><strong>特别说明：该方法计算两组数据之间的差异，返回一个n*n的loss矩阵</strong></p>
+<p>主要参数：</p>
+<ul>
+<li>margin：边界值，x1与x2之间的差异值</li>
+<li>reduction：计算模式</li>
+</ul>
+<h5 id="nn-MultiLabelMarginLoss"><a href="#nn-MultiLabelMarginLoss" class="headerlink" title="nn.MultiLabelMarginLoss"></a>nn.MultiLabelMarginLoss</h5><p>多标签边界损失函数</p>
+<p>举例：四分类任务，样本x属于0类或者3类</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925155812561.png" alt="image-20210925155812561"></p>
+<p>标签：[0，3，-1，1]，不是[1，0，0，1]</p>
+<h5 id="nn-SofrMarginLoss"><a href="#nn-SofrMarginLoss" class="headerlink" title="nn.SofrMarginLoss"></a>nn.SofrMarginLoss</h5><p>计算二分类的logistic损失</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925160607942.png" alt="image-20210925160607942"></p>
+<h5 id="nn-MultiLabelSoftMarginLoss"><a href="#nn-MultiLabelSoftMarginLoss" class="headerlink" title="nn.MultiLabelSoftMarginLoss"></a>nn.MultiLabelSoftMarginLoss</h5><p>SoftMarginLoss多标签版本</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925160853772.png" alt="image-20210925160853772"></p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925160909202.png" alt="image-20210925160909202"></p>
+<p>主要参数：</p>
+<p><strong>weight</strong>：各类别的loss设置权值</p>
+<p><strong>reduction</strong>：计算模式，可为none / sum / mean</p>
+<h5 id="nn-MultiMarginLoss"><a href="#nn-MultiMarginLoss" class="headerlink" title="nn.MultiMarginLoss"></a>nn.MultiMarginLoss</h5><p>计算多分类的折页损失</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925161602192.png" alt="image-20210925161602192"></p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925161628228.png" alt="image-20210925161628228"></p>
+<p>主要参数：</p>
+<ul>
+<li>p：可选1或2</li>
+<li>weight：各类别的loss设置权值</li>
+<li>margin：边界值</li>
+<li>reduction：计算模式，可为none/sum/mean</li>
+</ul>
+<h5 id="nn-TripletMarginLoss"><a href="#nn-TripletMarginLoss" class="headerlink" title="nn.TripletMarginLoss"></a>nn.TripletMarginLoss</h5><p>计算三元组损失，人脸验证中常用</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925162115800.png" alt="image-20210925162115800"></p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925162211016.png" alt="image-20210925162211016"></p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925162237021.png" alt="image-20210925162237021"></p>
+<p>主要参数：</p>
+<ul>
+<li>p：范数的阶，默认为2</li>
+<li>margin：边界值</li>
+<li>reduction：计算模式，可为none/sum/mean</li>
+</ul>
+<h5 id="nn-HingeEmbeddingLoss"><a href="#nn-HingeEmbeddingLoss" class="headerlink" title="nn.HingeEmbeddingLoss"></a>nn.HingeEmbeddingLoss</h5><p>计算两个输入的相似性，常用于非线性embedding和半监督学习</p>
+<p><strong>特别注意：输入x应为两个输入只差的绝对值</strong></p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925162430193.png" alt="image-20210925162430193"></p>
+<p>主要参数：</p>
+<ul>
+<li>margin：边界值</li>
+<li>reduction：计算模式，可为none/sum/mean</li>
+</ul>
+<h5 id="nn-CosineEmbeddingLoss"><a href="#nn-CosineEmbeddingLoss" class="headerlink" title="nn.CosineEmbeddingLoss"></a>nn.CosineEmbeddingLoss</h5><p>采用余弦相似度计算两个输入的相似性，主要关注方向上的差异。</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925162632490.png" alt="image-20210925162632490"></p>
+<p>主要参数：</p>
+<p>margin：可取值[-1，1]，推荐为[0，0.5]</p>
+<p>reduction：计算模式，可为none/sum/mean</p>
+<h5 id="nn-CTCLoss"><a href="#nn-CTCLoss" class="headerlink" title="nn.CTCLoss"></a>nn.CTCLoss</h5><p>计算CTC损失，解决时序类数据的分类Connectionist Temporal Classification</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925163057884.png" alt="image-20210925163057884"></p>
+<p>主要参数：</p>
+<ul>
+<li>blank：blank label</li>
+<li>zero_infinity：无穷大的值或者梯度置0</li>
+<li>reduction：计算模式，可为none/sum/mean</li>
+</ul>
+<h3 id="C-优化器-Optimizer"><a href="#C-优化器-Optimizer" class="headerlink" title="C. 优化器 Optimizer"></a>C. 优化器 Optimizer</h3><h4 id="1-什么是优化器"><a href="#1-什么是优化器" class="headerlink" title="1. 什么是优化器"></a>1. 什么是优化器</h4><p>pytorch的优化器：管理并更新模型中的可学习参数的值，使得模型输出更接近真实标签</p>
+<ul>
+<li><strong>导数</strong>：函数在指定坐标轴上的变化率</li>
+<li><strong>方向导数</strong>：指定方向上的变化率</li>
+<li><strong>梯度</strong>：一个向量，方向为方向导数取得最大值的方向</li>
+</ul>
+<img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925164501982.png" alt="image-20210925164501982" style="zoom:50%;">
+
+<h4 id="2-optimizer的属性"><a href="#2-optimizer的属性" class="headerlink" title="2. optimizer的属性"></a>2. optimizer的属性</h4><p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925164937096.png" alt="image-20210925164937096"></p>
+<p>基本属性：</p>
+<ul>
+<li>defaults：优化器超参数</li>
+<li>state：参数的缓存，如momentum的缓存</li>
+<li>param_groups：管理的参数组</li>
+<li>_step_count：记录更新的次数，学习率调整中使用</li>
+</ul>
+<p>基本方法：</p>
+<ul>
+<li><p>zero_grad()：清空所管理参数的梯度<img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925165616845.png" alt="image-20210925165616845" style="zoom:50%;"></p>
+</li>
+<li><p>step()：执行一步更新，更新一次我们的权值参数</p>
+</li>
+<li><p>add_param_group()：添加参数组</p>
+</li>
+<li><p>state_dict()：获取优化器当前状态信息字典</p>
+</li>
+<li><p>load_state_dict()：加载状态信息字典（用于模型断点的续训练）</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925211631557.png" alt="image-20210925211631557"></p>
+</li>
+</ul>
+<p><strong>pytorch特性：张量梯度不自动清零，会将每一次计算的梯度加在一起。所以需要使用完梯度，或者backward之前，要zero_grad()一下。</strong></p>
+<h4 id="3-optimizer的方法"><a href="#3-optimizer的方法" class="headerlink" title="3. optimizer的方法"></a>3. optimizer的方法</h4><h4 id="4-learning-rate学习率"><a href="#4-learning-rate学习率" class="headerlink" title="4. learning rate学习率"></a>4. learning rate学习率</h4><p>梯度下降：<br>$$<br>W_{i+1} = W_{i} - g(W_{i})<br>$$<br>假设现在函数为<br>$$<br>y = f(x) = 4<em>x^2\<br>y’ = f’(x)=8</em>x<br>$$<br><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925215213471.png" alt="image-20210925215213471" style="zoom:33%;"><br>$$<br>x_0 =2,y_0 = 16,f’(x_0)=16\<br>x_1=x_0 - f’(x_0)=2-16=14\<br>x_1=-14,y_1 = 784, f’(x_1)=-112\<br>x_2 = x_1 - f’(x_1)=-14+112=98,y_2=38416\<br>……<br>$$<br>如果没有学习率的话，就会梯度爆炸。</p>
+<img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925220758203.png" alt="image-20210925220758203" style="zoom: 50%;">
+
+<p>学习率（learning rate）控制更新的步伐。<br>$$<br>W_{i+1} = W_{i} - LR*g(W_{i})<br>$$<br>此时我们将LR设置为0.2：</p>
+<img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925221017651.png" alt="image-20210925221017651" style="zoom: 50%;">
+
+<p>将LR设置为0.1时：</p>
+<img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925221141585.png" alt="image-20210925221141585" style="zoom: 50%;">
+
+
+
+<h4 id="5-momentum-动量"><a href="#5-momentum-动量" class="headerlink" title="5. momentum 动量"></a>5. momentum 动量</h4><p>Momentum（动量，冲量）：<strong>结合当前梯度与上一次更新信息</strong>，用于当前更新。</p>
+<p>指数加权平均：<br>$$<br>v_t = \beta * v_{t-1} + (1-\beta)*\theta_t\<br>v_{100} = \beta * v_{99} + (1-\beta)*\theta_{100}\<br>= (1-\beta)<em>\theta_{100} + (1-\beta)<em>\beta</em>\theta_{99}+(\beta^2</em>v_{98})\<br>=\sum^N_i(1-\beta)<em>\beta^i</em>\theta_{N-i}<br>$$<br><strong>核心思想</strong>：距离当前时间越近，影响越大；距离当前时间越远，影响越小。</p>
+<p>PyTorch中的更新公式：<br>$$<br>v_i = m<em>v_{i-1}+g(w_i)\<br>w_{i+1}=w_i - lr</em>v_i\<br>w_{w+1}：第i+1次更新的参数\<br>lr：学习率\<br>v_i = 更新量\<br>m：momentum系数\<br>g(w_i)：w_i的梯度<br>$$</p>
+<h4 id="6-torch-optim-SGD"><a href="#6-torch-optim-SGD" class="headerlink" title="6. torch.optim.SGD"></a>6. torch.optim.SGD</h4><p>用的最多的优化器，绝大部分模型都可以用SGD获得一个不错的效果。</p>
+<p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925230235496.png" alt="image-20210925230235496"></p>
+<p>主要参数：</p>
+<ul>
+<li>params：管理的参数组</li>
+<li>lr：初始学习率</li>
+<li>momentum：动量参数，贝塔</li>
+<li>weight_decay：L2正则化系数</li>
+<li>nesterov：是否采用NAG（通常为false，不会采用）</li>
+</ul>
+<h3 id="D-Pytorch的十种优化器"><a href="#D-Pytorch的十种优化器" class="headerlink" title="D. Pytorch的十种优化器"></a>D. Pytorch的十种优化器</h3><p><img src="/2021/09/26/PyTorch-Loss-Optimizer/image-20210925230441311.png" alt="image-20210925230441311"></p>
+<h4 id="TODO：详细使用方法以后补充"><a href="#TODO：详细使用方法以后补充" class="headerlink" title="TODO：详细使用方法以后补充"></a>TODO：详细使用方法以后补充</h4>
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Yiting CHEN
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/" title="PyTorch-Loss&amp;Optimizer">http://www.chen-yiting.com/2021/09/26/PyTorch-Loss-Optimizer/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/26/PyTorch-ModelsConstruction/" rel="prev" title="PyTorch-ModelsConstruction">
+      <i class="fa fa-chevron-left"></i> PyTorch-ModelsConstruction
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/27/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/" rel="next" title="面向对象编程">
+      面向对象编程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B-PyTorch%E6%8D%9F%E5%A4%B1%E4%BC%98%E5%8C%96%EF%BC%88Loss-amp-Optimizer%EF%BC%89"><span class="nav-text">四. PyTorch损失优化（Loss&amp;Optimizer）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-%E6%9D%83%E5%80%BC%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">A. 权值初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%E4%B8%8E%E7%88%86%E7%82%B8Gradient-Vanishing-and-Exploring"><span class="nav-text">1. 梯度消失与爆炸Gradient Vanishing and Exploring</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%B9%E5%B7%AE%E4%B8%80%E8%87%B4%E6%80%A7%E5%8E%9F%E5%88%99"><span class="nav-text">方差一致性原则</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Xavier%E6%96%B9%E6%B3%95%E5%92%8CKaiming%E6%96%B9%E6%B3%95"><span class="nav-text">2. Xavier方法和Kaiming方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%B8%B8%E7%94%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E6%96%B9%E6%B3%95"><span class="nav-text">3. 常用初始化方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#PyTorch%E6%96%B9%E6%B3%95%E6%9F%A5%E8%AF%A2"><span class="nav-text">PyTorch方法查询</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-init-calculate-gain"><span class="nav-text">nn.init.calculate_gain()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-text">B. 损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E6%A6%82%E5%BF%B5"><span class="nav-text">1. 损失函数概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-text">2. 损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-CrossEntropyLoss"><span class="nav-text">nn.CrossEntropyLoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-NLLLoss"><span class="nav-text">nn.NLLLoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-BCELoss"><span class="nav-text">nn.BCELoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-BCEWithLogitsLoss"><span class="nav-text">nn.BCEWithLogitsLoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-L1Loss"><span class="nav-text">nn.L1Loss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-MSELoss"><span class="nav-text">nn.MSELoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-SmoothL1Loss"><span class="nav-text">nn.SmoothL1Loss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-PoissonNLLLoss"><span class="nav-text">nn.PoissonNLLLoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-KLDivLoss"><span class="nav-text">nn.KLDivLoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-MarginRankingLoss"><span class="nav-text">nn.MarginRankingLoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-MultiLabelMarginLoss"><span class="nav-text">nn.MultiLabelMarginLoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-SofrMarginLoss"><span class="nav-text">nn.SofrMarginLoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-MultiLabelSoftMarginLoss"><span class="nav-text">nn.MultiLabelSoftMarginLoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-MultiMarginLoss"><span class="nav-text">nn.MultiMarginLoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-TripletMarginLoss"><span class="nav-text">nn.TripletMarginLoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-HingeEmbeddingLoss"><span class="nav-text">nn.HingeEmbeddingLoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-CosineEmbeddingLoss"><span class="nav-text">nn.CosineEmbeddingLoss</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-CTCLoss"><span class="nav-text">nn.CTCLoss</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-%E4%BC%98%E5%8C%96%E5%99%A8-Optimizer"><span class="nav-text">C. 优化器 Optimizer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E4%BC%98%E5%8C%96%E5%99%A8"><span class="nav-text">1. 什么是优化器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-optimizer%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-text">2. optimizer的属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-optimizer%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-text">3. optimizer的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-learning-rate%E5%AD%A6%E4%B9%A0%E7%8E%87"><span class="nav-text">4. learning rate学习率</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-momentum-%E5%8A%A8%E9%87%8F"><span class="nav-text">5. momentum 动量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-torch-optim-SGD"><span class="nav-text">6. torch.optim.SGD</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-Pytorch%E7%9A%84%E5%8D%81%E7%A7%8D%E4%BC%98%E5%8C%96%E5%99%A8"><span class="nav-text">D. Pytorch的十种优化器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TODO%EF%BC%9A%E8%AF%A6%E7%BB%86%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E4%BB%A5%E5%90%8E%E8%A1%A5%E5%85%85"><span class="nav-text">TODO：详细使用方法以后补充</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Yiting CHEN</p>
+  <div class="site-description" itemprop="description">日拱一卒，功不唐捐</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChenEating716" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChenEating716" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenyiting@whu.edu.cn" title="E-Mail → mailto:chenyiting@whu.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yiting CHEN</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
