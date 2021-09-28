@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.chen-yiting.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文介绍了PyTorch当中对模型参数各种正则化的方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PyTorch-NormalizationMethods">
+<meta property="og:url" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/index.html">
+<meta property="og:site_name" content="Robotics, ML &amp; Thug Life">
+<meta property="og:description" content="本文介绍了PyTorch当中对模型参数各种正则化的方法。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210928144756798.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210928144900258.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210928150418596.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210928150700661.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210928170616222.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210928172047828.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210928174311292.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210928204020955.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210928204237860.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210928204609151.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210928233554595.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210928233745338.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210929013113431.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210929013529249.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210929014311324.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210929014606099.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210929014751878.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210929014847346.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210929015053479.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210929015248450.png">
+<meta property="article:published_time" content="2021-09-28T18:07:48.000Z">
+<meta property="article:modified_time" content="2021-09-28T18:09:38.229Z">
+<meta property="article:author" content="Yiting CHEN">
+<meta property="article:tag" content="PyTorch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/image-20210928144756798.png">
+
+<link rel="canonical" href="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>PyTorch-NormalizationMethods | Robotics, ML & Thug Life</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Robotics, ML & Thug Life</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">今天几号？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/projects/" rel="section"><i class="fa fa-flag fa-fw"></i>Projects</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yiting.jpeg">
+      <meta itemprop="name" content="Yiting CHEN">
+      <meta itemprop="description" content="日拱一卒，功不唐捐">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Robotics, ML & Thug Life">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PyTorch-NormalizationMethods
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-09-29 02:07:48 / Modified: 02:09:38" itemprop="dateCreated datePublished" datetime="2021-09-29T02:07:48+08:00">2021-09-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PyTorch%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">PyTorch框架学习</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/09/29/PyTorch-NormalizationMethods/" class="post-meta-item leancloud_visitors" data-flag-title="PyTorch-NormalizationMethods" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/09/29/PyTorch-NormalizationMethods/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/29/PyTorch-NormalizationMethods/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <div class="post-description">本文介绍了PyTorch当中对模型参数各种正则化的方法。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="六-PyTorch正则化"><a href="#六-PyTorch正则化" class="headerlink" title="六. PyTorch正则化"></a>六. PyTorch正则化</h2><h3 id="A-正则化之weight-decay"><a href="#A-正则化之weight-decay" class="headerlink" title="A. 正则化之weight decay"></a>A. 正则化之weight decay</h3><h4 id="1-正则化与偏差-方差分解"><a href="#1-正则化与偏差-方差分解" class="headerlink" title="1.正则化与偏差-方差分解"></a>1.正则化与偏差-方差分解</h4><p>Regularization：减小<strong>方差</strong>的策略。</p>
+<p>误差可分解为：偏差，方差与噪音之和。即<strong>误差 = 偏差 + 方差 + 噪音</strong>之和。</p>
+<ul>
+<li><strong>偏差</strong>度量了学习算法的期望预测与真实结果的偏离程度，即刻画了学习算法本身的拟合能力；</li>
+<li><strong>方差</strong>度量了同样大小的训练集的变动所导致的学习性能的变化，即刻画了数据扰动所造成的影响；</li>
+<li><strong>噪音</strong>则表达了在当前任务上任何学习算法所能达到的期望泛化误差的下界</li>
+</ul>
+<p>通常不考虑噪声，<strong>方差</strong>是<strong>训练集与验证集</strong>之间的差异。Regularization就是拿来解决方差过大的问题，也就是过拟合现象。</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928144756798.png" alt="image-20210928144756798"></p>
+<p>L1和L2正则项的表达式如下图所示：</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928144900258.png" alt="image-20210928144900258"></p>
+<p>L1容易获得稀疏分布。</p>
+<p>L1和L2都可以让参数值比较小，模型不会很复杂。</p>
+<h4 id="2-PyTorch中的L2正则项-weight-decay"><a href="#2-PyTorch中的L2正则项-weight-decay" class="headerlink" title="2.PyTorch中的L2正则项-weight decay"></a>2.PyTorch中的L2正则项-weight decay</h4><p>L2 Regularization = weight decay(权值衰减)</p>
+<p>目标函数（Objective Function）：</p>
+<p>Obj = Cost + Regularization Term</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928150418596.png" alt="image-20210928150418596"></p>
+<p>加入之后很明显Wi发生了一个权值衰减。</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928150700661.png" alt="image-20210928150700661"></p>
+<p>通过直接向SGD递参数选择是否weight decay：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">optim_wdecay = torch.optim.SGD(net_weight_decay.parameters(), lr=lr_init, momentum=<span class="number">0.9</span>, weight_decay=<span class="number">1e-2</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="B-正则化之dropout"><a href="#B-正则化之dropout" class="headerlink" title="B. 正则化之dropout"></a>B. 正则化之dropout</h3><h4 id="1-Dropout概念"><a href="#1-Dropout概念" class="headerlink" title="1. Dropout概念"></a>1. Dropout概念</h4><p>Dropout：随机失活</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928170616222.png" alt="image-20210928170616222"></p>
+<ul>
+<li>随机：dropout probability</li>
+<li>失活：weight = 0</li>
+</ul>
+<p><strong>数据尺度变化</strong>：测试时，所有权重乘以1-drop_prob。drop_prob = 0.3， 1- drop_prob = 0.7</p>
+<p>每一次前向传播，训练的模型都是不一样的，随机失活一批神经元。</p>
+<p>假设一个神经元接受上一层的五个输出值，假设其特别依赖第一个特征，别的神经元权值就很小。加了dropout之后，就不知道上一层哪个神经元会出现，就不会特别依赖某一个输出值，所以就不会给某一个神经元过大的权重。基本上就是一会平均对每一道特征的依赖。</p>
+<h4 id="2-Dropout注意事项"><a href="#2-Dropout注意事项" class="headerlink" title="2. Dropout注意事项"></a>2. Dropout注意事项</h4><p>nn.Dropout()</p>
+<p>功能：Dropout层</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928172047828.png" alt="image-20210928172047828"></p>
+<p>参数：</p>
+<ul>
+<li>p：被舍弃的概率，失活概率</li>
+</ul>
+<p>使用方法：</p>
+<p>直接在模型的init里面扔nn.Dropout(d_prob)，放在需要dropout网络层的前一层。</p>
+<p><strong>实现细节：</strong>训练时权重均乘以1/1-p，即除以1-p。</p>
+<h3 id="C-Batch-Normalization"><a href="#C-Batch-Normalization" class="headerlink" title="C. Batch Normalization"></a>C. Batch Normalization</h3><h4 id="1-Batch-Normalization概念"><a href="#1-Batch-Normalization概念" class="headerlink" title="1. Batch Normalization概念"></a>1. Batch Normalization概念</h4><p>概念：批标准化（广泛使用，自2015年问世）</p>
+<ul>
+<li>批：一批数据，通常为mini-batch</li>
+<li>标准化：0均值，1方差</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>可以<strong>用</strong>更大的学习率，加速模型的收敛</li>
+<li>可以<strong>不用</strong>精心设计权值初始化</li>
+<li>可以<strong>不用</strong>dropout或较小的dropout</li>
+<li>可以<strong>不用</strong>L2或者较小的weight decay</li>
+<li>可以<strong>不用</strong>LRN（local response normalization）</li>
+</ul>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928174311292.png" alt="image-20210928174311292"></p>
+<p>最后一步是affine transform，增强Capacity。scale&amp;shift，并且γ和β都是可学习参数。</p>
+<h4 id="2-PyTorch的Batch-Normalization-1d-2d-3d实现"><a href="#2-PyTorch的Batch-Normalization-1d-2d-3d实现" class="headerlink" title="2. PyTorch的Batch Normalization 1d/2d/3d实现"></a>2. PyTorch的Batch Normalization 1d/2d/3d实现</h4><p>在网络的init模块中定义nn.BatchNorm2d/1d/3d。</p>
+<h5 id="BatchNorm（所有batchnorm的实现都得继承它）"><a href="#BatchNorm（所有batchnorm的实现都得继承它）" class="headerlink" title="_BatchNorm（所有batchnorm的实现都得继承它）"></a>_BatchNorm（所有batchnorm的实现都得继承它）</h5><p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928204020955.png" alt="image-20210928204020955"></p>
+<ul>
+<li>nn.BatchNorm1d input = B*特征数（几个神经元几个特征） * 1d特征</li>
+<li>nn.BatchNorm2d input = B*特征数 * 2d特征 </li>
+<li>nn.BatchNorm3d input = B*特征数 * 3d特征</li>
+</ul>
+<p>xd特征就是指输入tensor是x维。</p>
+<p>参数：</p>
+<ul>
+<li>num_features：一个样本特征数量(最重要)</li>
+<li>eps：分母修正项</li>
+<li>momentum：指数加权平均估计当前mean/var</li>
+<li>affine：是否需要affine transform</li>
+<li>track_running_stats：是训练状态，还是测试状态</li>
+</ul>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928204237860.png" alt="image-20210928204237860"></p>
+<p>主要属性：</p>
+<ul>
+<li>running_mean：均值</li>
+<li>running_var：方差</li>
+<li>weight：affine transform中的γ</li>
+<li>bias：affine transform中的β</li>
+</ul>
+<p>每一个维度都会有自己的四个参数值。</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928204609151.png" alt="image-20210928204609151"></p>
+<p>训练：均值和方差采用指数加权平均计算</p>
+<p>测试：当前统计值</p>
+<h3 id="D-BN、LN、IN-and-GN"><a href="#D-BN、LN、IN-and-GN" class="headerlink" title="D. BN、LN、IN and GN"></a>D. BN、LN、IN and GN</h3><h4 id="1-为什么要Normalization"><a href="#1-为什么要Normalization" class="headerlink" title="1. 为什么要Normalization"></a>1. 为什么要Normalization</h4><p>Internal Covariate Shift（ICS）：数据尺度/分布一场，导致训练困难。</p>
+<p>进行normalization可以约束数据的尺度和分布。</p>
+<p>常见的normalization方法：</p>
+<h4 id="2-Batch-Normalization（BN）"><a href="#2-Batch-Normalization（BN）" class="headerlink" title="2. Batch Normalization（BN）"></a>2. Batch Normalization（BN）</h4><h4 id="3-Layer-Normalization（LN）"><a href="#3-Layer-Normalization（LN）" class="headerlink" title="3. Layer Normalization（LN）"></a>3. Layer Normalization（LN）</h4><p>起因：BN不适用于变长的网络，如RNN</p>
+<p>思路：<strong>逐层</strong>计算均值和方差</p>
+<img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928233554595.png" alt="image-20210928233554595" style="zoom:33%;">
+
+<p>注意事项：</p>
+<p>不再有running_mean和running_var</p>
+<p>gamma和beta为逐元素（特征）的</p>
+<h5 id="nn-LayerNorm"><a href="#nn-LayerNorm" class="headerlink" title="nn.LayerNorm"></a>nn.LayerNorm</h5><p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928233745338.png" alt="image-20210928233745338"></p>
+<p>主要参数：</p>
+<ul>
+<li>normalized_shape：该层特征形状</li>
+<li>eps：分母修正项</li>
+<li>elementwise_affine：是否需要affine transform</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln = nn.LayerNorm(feature_maps_bs.size()[<span class="number">1</span>:], elementwise_affine=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>对于feature_map_bs.size的设置是有规矩的：</p>
+<p>假设feature_maps_bs的形状是 [8, 6, 3, 4], B * C * H * W</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ln = nn.LayerNorm([<span class="number">4</span>])</span><br><span class="line">ln = nn.LayerNorm([<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line">ln = nn.LayerNorm([<span class="number">6</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line">ln = nn.LayerNorm([<span class="number">8</span>,<span class="number">6</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="comment"># size从后往前必须与输入数据吻合</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="4-Instance-Normalization（IN）"><a href="#4-Instance-Normalization（IN）" class="headerlink" title="4. Instance Normalization（IN）"></a>4. Instance Normalization（IN）</h4><p>起因：BN在图像生成（Image Generation）中不适用</p>
+<p>思路：逐Instance（channel通道）计算均值和方差。</p>
+<p>在每一个<strong>特征通道</strong>里面计算方差和均值。</p>
+<img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929013113431.png" alt="image-20210929013113431" style="zoom:33%;">
+
+<h5 id="nn-InstanceNorm"><a href="#nn-InstanceNorm" class="headerlink" title="nn.InstanceNorm"></a>nn.InstanceNorm</h5><p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929013529249.png" alt="image-20210929013529249"></p>
+<p>主要参数：</p>
+<ul>
+<li>num_features：一个样本特征数量（更重要）</li>
+<li>eps：分母修正项</li>
+<li>momentum：指数加权平均估计当前mean/var</li>
+<li>affine：是否需要affine transform</li>
+<li>track_running_stats：是训练状态，还是测试状态</li>
+</ul>
+<h4 id="5-Group-Normalization（GN）"><a href="#5-Group-Normalization（GN）" class="headerlink" title="5. Group Normalization（GN）"></a>5. Group Normalization（GN）</h4><p>起因：小batch样本中，BN估计的值不准</p>
+<p>思路：数据不够，通道来凑</p>
+<p>注意事项：</p>
+<ol>
+<li>不再有running_mean和running_var</li>
+<li>gamma和beta为逐通道（channel）的</li>
+</ol>
+<p>应用场景：大模型（小batch size）任务。</p>
+<p>GPU吃不下太多的batchsize，所有均值和方差估计不准，BN失效。</p>
+<h5 id="nn-GroupNorm"><a href="#nn-GroupNorm" class="headerlink" title="nn.GroupNorm"></a>nn.GroupNorm</h5><p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929014311324.png" alt="image-20210929014311324"></p>
+<p>主要参数：</p>
+<ul>
+<li>num_groups：分组数，通道设置为2的n次方，根据通道图设置个合适的。</li>
+<li>num_channels：通道数（特征数）。除以组数就是每个group有几个通道。</li>
+<li>eps：分母修正项</li>
+<li>affine：是否需要affine transform</li>
+</ul>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>BN、LN、IN和GN都是为了客服Internal Covariate Shift（ICS）</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929014606099.png" alt="image-20210929014606099"></p>
+<p>*Group Norm其实应该是四维。</p>
+<p>BN：</p>
+<img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929014751878.png" alt="image-20210929014751878" style="zoom:33%;">
+
+<p>LN：</p>
+<p>按layer计算</p>
+<img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929014847346.png" alt="image-20210929014847346" style="zoom:33%;">
+
+<p>IN：</p>
+<p>一般用于图像生成，保留风格。</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929015053479.png" alt="image-20210929015053479"></p>
+<p>GN：</p>
+<p>网络太大，batch太小。</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929015248450.png" alt="image-20210929015248450"></p>
+<p>减均值除以标准差乘γ加β，所有normalization计算都一样。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Yiting CHEN
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/" title="PyTorch-NormalizationMethods">http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/28/PyTorch-TrainingProcess/" rel="prev" title="PyTorch-TrainingProcess">
+      <i class="fa fa-chevron-left"></i> PyTorch-TrainingProcess
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD-PyTorch%E6%AD%A3%E5%88%99%E5%8C%96"><span class="nav-text">六. PyTorch正则化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-%E6%AD%A3%E5%88%99%E5%8C%96%E4%B9%8Bweight-decay"><span class="nav-text">A. 正则化之weight decay</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%AD%A3%E5%88%99%E5%8C%96%E4%B8%8E%E5%81%8F%E5%B7%AE-%E6%96%B9%E5%B7%AE%E5%88%86%E8%A7%A3"><span class="nav-text">1.正则化与偏差-方差分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-PyTorch%E4%B8%AD%E7%9A%84L2%E6%AD%A3%E5%88%99%E9%A1%B9-weight-decay"><span class="nav-text">2.PyTorch中的L2正则项-weight decay</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-%E6%AD%A3%E5%88%99%E5%8C%96%E4%B9%8Bdropout"><span class="nav-text">B. 正则化之dropout</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Dropout%E6%A6%82%E5%BF%B5"><span class="nav-text">1. Dropout概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Dropout%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-text">2. Dropout注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-Batch-Normalization"><span class="nav-text">C. Batch Normalization</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Batch-Normalization%E6%A6%82%E5%BF%B5"><span class="nav-text">1. Batch Normalization概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-PyTorch%E7%9A%84Batch-Normalization-1d-2d-3d%E5%AE%9E%E7%8E%B0"><span class="nav-text">2. PyTorch的Batch Normalization 1d&#x2F;2d&#x2F;3d实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#BatchNorm%EF%BC%88%E6%89%80%E6%9C%89batchnorm%E7%9A%84%E5%AE%9E%E7%8E%B0%E9%83%BD%E5%BE%97%E7%BB%A7%E6%89%BF%E5%AE%83%EF%BC%89"><span class="nav-text">_BatchNorm（所有batchnorm的实现都得继承它）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-BN%E3%80%81LN%E3%80%81IN-and-GN"><span class="nav-text">D. BN、LN、IN and GN</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81Normalization"><span class="nav-text">1. 为什么要Normalization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Batch-Normalization%EF%BC%88BN%EF%BC%89"><span class="nav-text">2. Batch Normalization（BN）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Layer-Normalization%EF%BC%88LN%EF%BC%89"><span class="nav-text">3. Layer Normalization（LN）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-LayerNorm"><span class="nav-text">nn.LayerNorm</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Instance-Normalization%EF%BC%88IN%EF%BC%89"><span class="nav-text">4. Instance Normalization（IN）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-InstanceNorm"><span class="nav-text">nn.InstanceNorm</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-Group-Normalization%EF%BC%88GN%EF%BC%89"><span class="nav-text">5. Group Normalization（GN）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nn-GroupNorm"><span class="nav-text">nn.GroupNorm</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-text">小结</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yiting CHEN"
+      src="/images/yiting.jpeg">
+  <p class="site-author-name" itemprop="name">Yiting CHEN</p>
+  <div class="site-description" itemprop="description">日拱一卒，功不唐捐</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChenEating716" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChenEating716" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenyiting@whu.edu.cn" title="E-Mail → mailto:chenyiting@whu.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+
+
+
+
+<script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=UB7V-RAFj6oD9oVSVdeRrdqXwvEf1IElIBBpgDOSJWg&cl=ffffff&w=a"></script>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-bolt"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yiting CHEN</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'wCRLpXPq36WyR2elloFP4fKp-gzGzoHsz',
+      appKey     : 'B7FhAvW8W7lUO2USrKWEoCyb',
+      placeholder: "来都来了",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

@@ -714,30 +714,6 @@
       </tags>
   </entry>
   <entry>
-    <title>PythonLibraries</title>
-    <url>/2021/09/27/PythonLabraries/</url>
-    <content><![CDATA[<h1 id="一些好用且常用的库"><a href="#一些好用且常用的库" class="headerlink" title="一些好用且常用的库"></a>一些好用且常用的库</h1><h2 id="collections"><a href="#collections" class="headerlink" title="collections"></a>collections</h2><h3 id="namedtuple"><a href="#namedtuple" class="headerlink" title="namedtuple()"></a>namedtuple()</h3><p>collections模块的namedtuple子类不仅可以使用索引 (index) 访问item，还可以通过类似字典的方式（key-value）进行访问。在仿真引擎中对机械臂进行控制建模时，需要对同一个关节有多维度的设定，此时namedtuple用起来就很方便。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 适用于仿真中处理描述机器人运动状态和设定的各种参数</span></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"></span><br><span class="line">author = namedtuple(<span class="string">&#x27;author&#x27;</span>, [<span class="string">&#x27;firstname&#x27;</span>, <span class="string">&#x27;lastname&#x27;</span>])</span><br><span class="line">me = author(Yiting, Chen)</span><br><span class="line"><span class="built_in">print</span> me.firstname, me.lastname</span><br><span class="line"><span class="built_in">print</span> me[<span class="number">0</span>], me[<span class="number">1</span>]</span><br><span class="line">me = author._make([Eating, Chen])</span><br><span class="line"><span class="built_in">print</span> me.firstname, me.lastname</span><br><span class="line">me = me._replace(firstname = Eating716)</span><br><span class="line"><span class="built_in">print</span> me.firstname, me.lastname</span><br><span class="line"></span><br><span class="line"><span class="comment"># results</span></span><br><span class="line"><span class="comment"># Yiting Chen</span></span><br><span class="line"><span class="comment"># Yiting Chen</span></span><br><span class="line"><span class="comment"># Eating Chen</span></span><br><span class="line"><span class="comment"># Eating716 Chen</span></span><br><span class="line"> </span><br><span class="line">websites = [</span><br><span class="line">    (<span class="string">&#x27;Sohu&#x27;</span>, <span class="string">&#x27;http://www.sohu.com/&#x27;</span>, <span class="string">u&#x27;张朝阳&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;Baidu&#x27;</span>, <span class="string">&#x27;http://www.baidu.com.cn/&#x27;</span>, <span class="string">u&#x27;李彦宏&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;163&#x27;</span>, <span class="string">&#x27;http://www.163.com/&#x27;</span>, <span class="string">u&#x27;丁磊&#x27;</span>)</span><br><span class="line">]</span><br><span class="line"> </span><br><span class="line">Website = namedtuple(<span class="string">&#x27;Website&#x27;</span>, [<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;url&#x27;</span>, <span class="string">&#x27;founder&#x27;</span>])</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> website <span class="keyword">in</span> websites:</span><br><span class="line">    website = Website._make(website)</span><br><span class="line">    <span class="built_in">print</span> website</span><br><span class="line">    </span><br><span class="line"><span class="comment"># results:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Website(name=&#x27;Sohu&#x27;, url=&#x27;http://www.sohu.com/&#x27;, founder=u&#x27;\u5f20\u671d\u9633&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Website(name=&#x27;Baidu&#x27;, url=&#x27;http://www.baidu.com.cn/&#x27;, founder=u&#x27;\u738b\u5fd7\u4e1c&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Website(name=&#x27;163&#x27;, url=&#x27;http://www.163.com/&#x27;, founder=u&#x27;\u4e01\u78ca&#x27;)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>PythonCoding</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Prologue💬</title>
-    <url>/2021/09/26/SayHi/</url>
-    <content><![CDATA[<p><strong><font size="10">Hi, this is Yiting Chen🚬. </font></strong></p>
-<p><strong><font size="6">I’m an amateur in Robotics &amp; ML🤖. </font></strong></p>
-<p><strong><font size="4">Wishing to make some progress in this area📈 </font></strong></p>
-<p><strong><font size="6">This blog is for recording my daily study📝.</font></strong></p>
-<p><strong><font size="4">Please let me 📬(<a href="mailto:&#99;&#104;&#x65;&#x6e;&#121;&#x69;&#x74;&#x69;&#x6e;&#x67;&#64;&#119;&#104;&#117;&#46;&#101;&#x64;&#117;&#46;&#99;&#x6e;">&#99;&#104;&#x65;&#x6e;&#121;&#x69;&#x74;&#x69;&#x6e;&#x67;&#64;&#119;&#104;&#117;&#46;&#101;&#x64;&#117;&#46;&#99;&#x6e;</a>) know if there is any question. </font></strong></p>
-]]></content>
-  </entry>
-  <entry>
     <title>PyTorch-ModelsConstruction</title>
     <url>/2021/09/26/PyTorch-ModelsConstruction/</url>
     <content><![CDATA[<h2 id="三-PyTorch模型搭建（Models）"><a href="#三-PyTorch模型搭建（Models）" class="headerlink" title="三. PyTorch模型搭建（Models）"></a>三. PyTorch模型搭建（Models）</h2><h3 id="A-模型创建步骤与nn-Module"><a href="#A-模型创建步骤与nn-Module" class="headerlink" title="A. 模型创建步骤与nn.Module"></a>A. 模型创建步骤与nn.Module</h3><h4 id="1-网路模型创建步骤"><a href="#1-网路模型创建步骤" class="headerlink" title="1. 网路模型创建步骤"></a>1. 网路模型创建步骤</h4><p>模型（nn.Module）：</p>
@@ -999,6 +975,221 @@
       </tags>
   </entry>
   <entry>
+    <title>PyTorch-NormalizationMethods</title>
+    <url>/2021/09/29/PyTorch-NormalizationMethods/</url>
+    <content><![CDATA[<h2 id="六-PyTorch正则化"><a href="#六-PyTorch正则化" class="headerlink" title="六. PyTorch正则化"></a>六. PyTorch正则化</h2><h3 id="A-正则化之weight-decay"><a href="#A-正则化之weight-decay" class="headerlink" title="A. 正则化之weight decay"></a>A. 正则化之weight decay</h3><h4 id="1-正则化与偏差-方差分解"><a href="#1-正则化与偏差-方差分解" class="headerlink" title="1.正则化与偏差-方差分解"></a>1.正则化与偏差-方差分解</h4><p>Regularization：减小<strong>方差</strong>的策略。</p>
+<p>误差可分解为：偏差，方差与噪音之和。即<strong>误差 = 偏差 + 方差 + 噪音</strong>之和。</p>
+<ul>
+<li><strong>偏差</strong>度量了学习算法的期望预测与真实结果的偏离程度，即刻画了学习算法本身的拟合能力；</li>
+<li><strong>方差</strong>度量了同样大小的训练集的变动所导致的学习性能的变化，即刻画了数据扰动所造成的影响；</li>
+<li><strong>噪音</strong>则表达了在当前任务上任何学习算法所能达到的期望泛化误差的下界</li>
+</ul>
+<p>通常不考虑噪声，<strong>方差</strong>是<strong>训练集与验证集</strong>之间的差异。Regularization就是拿来解决方差过大的问题，也就是过拟合现象。</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928144756798.png" alt="image-20210928144756798"></p>
+<p>L1和L2正则项的表达式如下图所示：</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928144900258.png" alt="image-20210928144900258"></p>
+<p>L1容易获得稀疏分布。</p>
+<p>L1和L2都可以让参数值比较小，模型不会很复杂。</p>
+<h4 id="2-PyTorch中的L2正则项-weight-decay"><a href="#2-PyTorch中的L2正则项-weight-decay" class="headerlink" title="2.PyTorch中的L2正则项-weight decay"></a>2.PyTorch中的L2正则项-weight decay</h4><p>L2 Regularization = weight decay(权值衰减)</p>
+<p>目标函数（Objective Function）：</p>
+<p>Obj = Cost + Regularization Term</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928150418596.png" alt="image-20210928150418596"></p>
+<p>加入之后很明显Wi发生了一个权值衰减。</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928150700661.png" alt="image-20210928150700661"></p>
+<p>通过直接向SGD递参数选择是否weight decay：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">optim_wdecay = torch.optim.SGD(net_weight_decay.parameters(), lr=lr_init, momentum=<span class="number">0.9</span>, weight_decay=<span class="number">1e-2</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="B-正则化之dropout"><a href="#B-正则化之dropout" class="headerlink" title="B. 正则化之dropout"></a>B. 正则化之dropout</h3><h4 id="1-Dropout概念"><a href="#1-Dropout概念" class="headerlink" title="1. Dropout概念"></a>1. Dropout概念</h4><p>Dropout：随机失活</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928170616222.png" alt="image-20210928170616222"></p>
+<ul>
+<li>随机：dropout probability</li>
+<li>失活：weight = 0</li>
+</ul>
+<p><strong>数据尺度变化</strong>：测试时，所有权重乘以1-drop_prob。drop_prob = 0.3， 1- drop_prob = 0.7</p>
+<p>每一次前向传播，训练的模型都是不一样的，随机失活一批神经元。</p>
+<p>假设一个神经元接受上一层的五个输出值，假设其特别依赖第一个特征，别的神经元权值就很小。加了dropout之后，就不知道上一层哪个神经元会出现，就不会特别依赖某一个输出值，所以就不会给某一个神经元过大的权重。基本上就是一会平均对每一道特征的依赖。</p>
+<h4 id="2-Dropout注意事项"><a href="#2-Dropout注意事项" class="headerlink" title="2. Dropout注意事项"></a>2. Dropout注意事项</h4><p>nn.Dropout()</p>
+<p>功能：Dropout层</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928172047828.png" alt="image-20210928172047828"></p>
+<p>参数：</p>
+<ul>
+<li>p：被舍弃的概率，失活概率</li>
+</ul>
+<p>使用方法：</p>
+<p>直接在模型的init里面扔nn.Dropout(d_prob)，放在需要dropout网络层的前一层。</p>
+<p><strong>实现细节：</strong>训练时权重均乘以1/1-p，即除以1-p。</p>
+<h3 id="C-Batch-Normalization"><a href="#C-Batch-Normalization" class="headerlink" title="C. Batch Normalization"></a>C. Batch Normalization</h3><h4 id="1-Batch-Normalization概念"><a href="#1-Batch-Normalization概念" class="headerlink" title="1. Batch Normalization概念"></a>1. Batch Normalization概念</h4><p>概念：批标准化（广泛使用，自2015年问世）</p>
+<ul>
+<li>批：一批数据，通常为mini-batch</li>
+<li>标准化：0均值，1方差</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>可以<strong>用</strong>更大的学习率，加速模型的收敛</li>
+<li>可以<strong>不用</strong>精心设计权值初始化</li>
+<li>可以<strong>不用</strong>dropout或较小的dropout</li>
+<li>可以<strong>不用</strong>L2或者较小的weight decay</li>
+<li>可以<strong>不用</strong>LRN（local response normalization）</li>
+</ul>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928174311292.png" alt="image-20210928174311292"></p>
+<p>最后一步是affine transform，增强Capacity。scale&amp;shift，并且γ和β都是可学习参数。</p>
+<h4 id="2-PyTorch的Batch-Normalization-1d-2d-3d实现"><a href="#2-PyTorch的Batch-Normalization-1d-2d-3d实现" class="headerlink" title="2. PyTorch的Batch Normalization 1d/2d/3d实现"></a>2. PyTorch的Batch Normalization 1d/2d/3d实现</h4><p>在网络的init模块中定义nn.BatchNorm2d/1d/3d。</p>
+<h5 id="BatchNorm（所有batchnorm的实现都得继承它）"><a href="#BatchNorm（所有batchnorm的实现都得继承它）" class="headerlink" title="_BatchNorm（所有batchnorm的实现都得继承它）"></a>_BatchNorm（所有batchnorm的实现都得继承它）</h5><p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928204020955.png" alt="image-20210928204020955"></p>
+<ul>
+<li>nn.BatchNorm1d input = B*特征数（几个神经元几个特征） * 1d特征</li>
+<li>nn.BatchNorm2d input = B*特征数 * 2d特征 </li>
+<li>nn.BatchNorm3d input = B*特征数 * 3d特征</li>
+</ul>
+<p>xd特征就是指输入tensor是x维。</p>
+<p>参数：</p>
+<ul>
+<li>num_features：一个样本特征数量(最重要)</li>
+<li>eps：分母修正项</li>
+<li>momentum：指数加权平均估计当前mean/var</li>
+<li>affine：是否需要affine transform</li>
+<li>track_running_stats：是训练状态，还是测试状态</li>
+</ul>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928204237860.png" alt="image-20210928204237860"></p>
+<p>主要属性：</p>
+<ul>
+<li>running_mean：均值</li>
+<li>running_var：方差</li>
+<li>weight：affine transform中的γ</li>
+<li>bias：affine transform中的β</li>
+</ul>
+<p>每一个维度都会有自己的四个参数值。</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928204609151.png" alt="image-20210928204609151"></p>
+<p>训练：均值和方差采用指数加权平均计算</p>
+<p>测试：当前统计值</p>
+<h3 id="D-BN、LN、IN-and-GN"><a href="#D-BN、LN、IN-and-GN" class="headerlink" title="D. BN、LN、IN and GN"></a>D. BN、LN、IN and GN</h3><h4 id="1-为什么要Normalization"><a href="#1-为什么要Normalization" class="headerlink" title="1. 为什么要Normalization"></a>1. 为什么要Normalization</h4><p>Internal Covariate Shift（ICS）：数据尺度/分布一场，导致训练困难。</p>
+<p>进行normalization可以约束数据的尺度和分布。</p>
+<p>常见的normalization方法：</p>
+<h4 id="2-Batch-Normalization（BN）"><a href="#2-Batch-Normalization（BN）" class="headerlink" title="2. Batch Normalization（BN）"></a>2. Batch Normalization（BN）</h4><h4 id="3-Layer-Normalization（LN）"><a href="#3-Layer-Normalization（LN）" class="headerlink" title="3. Layer Normalization（LN）"></a>3. Layer Normalization（LN）</h4><p>起因：BN不适用于变长的网络，如RNN</p>
+<p>思路：<strong>逐层</strong>计算均值和方差</p>
+<img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928233554595.png" alt="image-20210928233554595" style="zoom:33%;">
+
+<p>注意事项：</p>
+<p>不再有running_mean和running_var</p>
+<p>gamma和beta为逐元素（特征）的</p>
+<h5 id="nn-LayerNorm"><a href="#nn-LayerNorm" class="headerlink" title="nn.LayerNorm"></a>nn.LayerNorm</h5><p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210928233745338.png" alt="image-20210928233745338"></p>
+<p>主要参数：</p>
+<ul>
+<li>normalized_shape：该层特征形状</li>
+<li>eps：分母修正项</li>
+<li>elementwise_affine：是否需要affine transform</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ln = nn.LayerNorm(feature_maps_bs.size()[<span class="number">1</span>:], elementwise_affine=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>对于feature_map_bs.size的设置是有规矩的：</p>
+<p>假设feature_maps_bs的形状是 [8, 6, 3, 4], B * C * H * W</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ln = nn.LayerNorm([<span class="number">4</span>])</span><br><span class="line">ln = nn.LayerNorm([<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line">ln = nn.LayerNorm([<span class="number">6</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line">ln = nn.LayerNorm([<span class="number">8</span>,<span class="number">6</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="comment"># size从后往前必须与输入数据吻合</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="4-Instance-Normalization（IN）"><a href="#4-Instance-Normalization（IN）" class="headerlink" title="4. Instance Normalization（IN）"></a>4. Instance Normalization（IN）</h4><p>起因：BN在图像生成（Image Generation）中不适用</p>
+<p>思路：逐Instance（channel通道）计算均值和方差。</p>
+<p>在每一个<strong>特征通道</strong>里面计算方差和均值。</p>
+<img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929013113431.png" alt="image-20210929013113431" style="zoom:33%;">
+
+<h5 id="nn-InstanceNorm"><a href="#nn-InstanceNorm" class="headerlink" title="nn.InstanceNorm"></a>nn.InstanceNorm</h5><p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929013529249.png" alt="image-20210929013529249"></p>
+<p>主要参数：</p>
+<ul>
+<li>num_features：一个样本特征数量（更重要）</li>
+<li>eps：分母修正项</li>
+<li>momentum：指数加权平均估计当前mean/var</li>
+<li>affine：是否需要affine transform</li>
+<li>track_running_stats：是训练状态，还是测试状态</li>
+</ul>
+<h4 id="5-Group-Normalization（GN）"><a href="#5-Group-Normalization（GN）" class="headerlink" title="5. Group Normalization（GN）"></a>5. Group Normalization（GN）</h4><p>起因：小batch样本中，BN估计的值不准</p>
+<p>思路：数据不够，通道来凑</p>
+<p>注意事项：</p>
+<ol>
+<li>不再有running_mean和running_var</li>
+<li>gamma和beta为逐通道（channel）的</li>
+</ol>
+<p>应用场景：大模型（小batch size）任务。</p>
+<p>GPU吃不下太多的batchsize，所有均值和方差估计不准，BN失效。</p>
+<h5 id="nn-GroupNorm"><a href="#nn-GroupNorm" class="headerlink" title="nn.GroupNorm"></a>nn.GroupNorm</h5><p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929014311324.png" alt="image-20210929014311324"></p>
+<p>主要参数：</p>
+<ul>
+<li>num_groups：分组数，通道设置为2的n次方，根据通道图设置个合适的。</li>
+<li>num_channels：通道数（特征数）。除以组数就是每个group有几个通道。</li>
+<li>eps：分母修正项</li>
+<li>affine：是否需要affine transform</li>
+</ul>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>BN、LN、IN和GN都是为了客服Internal Covariate Shift（ICS）</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929014606099.png" alt="image-20210929014606099"></p>
+<p>*Group Norm其实应该是四维。</p>
+<p>BN：</p>
+<img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929014751878.png" alt="image-20210929014751878" style="zoom:33%;">
+
+<p>LN：</p>
+<p>按layer计算</p>
+<img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929014847346.png" alt="image-20210929014847346" style="zoom:33%;">
+
+<p>IN：</p>
+<p>一般用于图像生成，保留风格。</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929015053479.png" alt="image-20210929015053479"></p>
+<p>GN：</p>
+<p>网络太大，batch太小。</p>
+<p><img src="/2021/09/29/PyTorch-NormalizationMethods/image-20210929015248450.png" alt="image-20210929015248450"></p>
+<p>减均值除以标准差乘γ加β，所有normalization计算都一样。</p>
+]]></content>
+      <categories>
+        <category>PyTorch框架学习</category>
+      </categories>
+      <tags>
+        <tag>PyTorch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PythonLibraries</title>
+    <url>/2021/09/27/PythonLabraries/</url>
+    <content><![CDATA[<h1 id="一些好用且常用的库"><a href="#一些好用且常用的库" class="headerlink" title="一些好用且常用的库"></a>一些好用且常用的库</h1><h2 id="collections"><a href="#collections" class="headerlink" title="collections"></a>collections</h2><h3 id="namedtuple"><a href="#namedtuple" class="headerlink" title="namedtuple()"></a>namedtuple()</h3><p>collections模块的namedtuple子类不仅可以使用索引 (index) 访问item，还可以通过类似字典的方式（key-value）进行访问。在仿真引擎中对机械臂进行控制建模时，需要对同一个关节有多维度的设定，此时namedtuple用起来就很方便。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 适用于仿真中处理描述机器人运动状态和设定的各种参数</span></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"></span><br><span class="line">author = namedtuple(<span class="string">&#x27;author&#x27;</span>, [<span class="string">&#x27;firstname&#x27;</span>, <span class="string">&#x27;lastname&#x27;</span>])</span><br><span class="line">me = author(Yiting, Chen)</span><br><span class="line"><span class="built_in">print</span> me.firstname, me.lastname</span><br><span class="line"><span class="built_in">print</span> me[<span class="number">0</span>], me[<span class="number">1</span>]</span><br><span class="line">me = author._make([Eating, Chen])</span><br><span class="line"><span class="built_in">print</span> me.firstname, me.lastname</span><br><span class="line">me = me._replace(firstname = Eating716)</span><br><span class="line"><span class="built_in">print</span> me.firstname, me.lastname</span><br><span class="line"></span><br><span class="line"><span class="comment"># results</span></span><br><span class="line"><span class="comment"># Yiting Chen</span></span><br><span class="line"><span class="comment"># Yiting Chen</span></span><br><span class="line"><span class="comment"># Eating Chen</span></span><br><span class="line"><span class="comment"># Eating716 Chen</span></span><br><span class="line"> </span><br><span class="line">websites = [</span><br><span class="line">    (<span class="string">&#x27;Sohu&#x27;</span>, <span class="string">&#x27;http://www.sohu.com/&#x27;</span>, <span class="string">u&#x27;张朝阳&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;Baidu&#x27;</span>, <span class="string">&#x27;http://www.baidu.com.cn/&#x27;</span>, <span class="string">u&#x27;李彦宏&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;163&#x27;</span>, <span class="string">&#x27;http://www.163.com/&#x27;</span>, <span class="string">u&#x27;丁磊&#x27;</span>)</span><br><span class="line">]</span><br><span class="line"> </span><br><span class="line">Website = namedtuple(<span class="string">&#x27;Website&#x27;</span>, [<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;url&#x27;</span>, <span class="string">&#x27;founder&#x27;</span>])</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> website <span class="keyword">in</span> websites:</span><br><span class="line">    website = Website._make(website)</span><br><span class="line">    <span class="built_in">print</span> website</span><br><span class="line">    </span><br><span class="line"><span class="comment"># results:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Website(name=&#x27;Sohu&#x27;, url=&#x27;http://www.sohu.com/&#x27;, founder=u&#x27;\u5f20\u671d\u9633&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Website(name=&#x27;Baidu&#x27;, url=&#x27;http://www.baidu.com.cn/&#x27;, founder=u&#x27;\u738b\u5fd7\u4e1c&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Website(name=&#x27;163&#x27;, url=&#x27;http://www.163.com/&#x27;, founder=u&#x27;\u4e01\u78ca&#x27;)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>PythonCoding</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Prologue💬</title>
+    <url>/2021/09/26/SayHi/</url>
+    <content><![CDATA[<p><strong><font size="10">Hi, this is Yiting Chen🚬. </font></strong></p>
+<p><strong><font size="6">I’m an amateur in Robotics &amp; ML🤖. </font></strong></p>
+<p><strong><font size="4">Wishing to make some progress in this area📈 </font></strong></p>
+<p><strong><font size="6">This blog is for recording my daily study📝.</font></strong></p>
+<p><strong><font size="4">Please let me 📬(<a href="mailto:&#x63;&#x68;&#101;&#110;&#x79;&#x69;&#116;&#105;&#x6e;&#103;&#x40;&#119;&#104;&#x75;&#x2e;&#101;&#100;&#117;&#46;&#99;&#110;">&#x63;&#x68;&#101;&#110;&#x79;&#x69;&#116;&#105;&#x6e;&#103;&#x40;&#119;&#104;&#x75;&#x2e;&#101;&#100;&#117;&#46;&#99;&#110;</a>) know if there is any question. </font></strong></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>用随机梯度下降来优化人生</title>
+    <url>/2021/09/27/limu-SGD/</url>
+    <content><![CDATA[<p>作者：李沐 | 来源：知乎</p>
+<p><strong>要有目标</strong>。你需要有目标。短的也好，长的也好。认真定下的也好，别人那里捡的也好。就跟随机梯度下降需要有个目标函数一样。</p>
+<p><strong>目标要大</strong>。不管是人生目标还是目标函数，你最好不要知道最后可以走到哪里。如果你知道，那么你的目标就太简单了，可能是个凸函数。你可以在一开始的时候给自己一些小目标，例如期末考个80分，训练一个线性模型。但接下来得有更大的目标，财富自由也好，100亿参数的变形金刚也好，得足够一颗赛艇。</p>
+<p><strong>坚持走</strong>。不管你的目标多复杂，随机梯度下降都是最简单的。每一次你找一个大概还行的方向（梯度），然后迈一步（下降）。两个核心要素是方向和步子的长短。但最重要的是你得一直走下去，能多走几步就多走几步。</p>
+<p><strong>痛苦的卷</strong>。每一步里你都在试图改变你自己或者你的模型参数。改变带来痛苦。但没有改变就没有进步。你过得很痛苦不代表在朝着目标走，因为你可能走反了。但过得很舒服那一定在原地踏步。需要时刻跟自己作对。</p>
+<p><strong>可以躺平</strong>。你用你内心的激情来迈步子。步子太小走不动，步子太长容易过早消耗掉了激情。周期性的调大调小步长效果挺好。所以你可以时不时休息休息。</p>
+<p><strong>四处看看</strong>。每一步走的方向是你对世界的认识。如果你探索的世界不怎么变化，那么要么你的目标太简单，要么你困在你的舒适区了。随机梯度下降的第一个词是随机，就是你需要四处走走，看过很多地方，做些错误的决定，这样你可以在前期迈过一些不是很好的舒适区。</p>
+<p><strong>快也是慢</strong>。你没有必要特意去追求找到最好的方向和最合适的步子。你身边当然会有幸运之子，他们每一步都在别人前面。但经验告诉我们，随机梯度下降前期进度太快，后期可能乏力。就是说你过早的找到一个舒适区，忘了世界有多大。所以你不要急，前面徘徊一段时间不是坏事。成名无需太早。</p>
+<p><strong>赢在起点</strong>。起点当然重要。如果你在终点附近起步，可以少走很多路。而且终点附近的路都比较平，走着舒服。当你发现别人不如你的时候，看看自己站在哪里。可能你就是运气很好，赢在了起跑线。如果你跟别人在同一起跑线，不见得你能做更好。</p>
+<p><strong>很远也能到达</strong>。如果你是在随机起点，那么做好准备前面的路会非常不平坦。越远离终点，越人迹罕见。四处都是悬崖。但随机梯度下降告诉我们，不管起点在哪里，最后得到的解都差不多。当然这个前提是你得一直按照梯度的方向走下去。如果中间梯度炸掉了，那么你随机一个起点，调整步子节奏，重新来。</p>
+<p><strong>独一无二</strong>。也许大家有着差不多的目标，在差不多的时间毕业买房结婚生娃。但每一步里，每个人内心中看到的世界都不一样，导致走的路不一样。你如果跑多次随机梯度下降，在各个时间点的目标函数值可能都差不多，但每次的参数千差万别。不会有人关心你每次训练出来的模型里面参数具体是什么值，除了你自己。</p>
+<p><strong>简单最好</strong> 。当然有比随机梯度下降更复杂的算法。他们想每一步看想更远更准，想步子迈最大。但如果你的目标很复杂，简单的随机梯度下降反而效果最好。深度学习里大家都用它。关注当前，每次抬头瞄一眼世界，快速做个决定，然后迈一小步。小步快跑。只要你有目标，不要停，就能到达。</p>
+]]></content>
+      <categories>
+        <category>杂文</category>
+      </categories>
+      <tags>
+        <tag>杂文</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>面向对象编程</title>
     <url>/2021/09/27/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<h2 id="面向对象编程"><a href="#面向对象编程" class="headerlink" title="面向对象编程"></a>面向对象编程</h2><h3 id="面向对象的思想"><a href="#面向对象的思想" class="headerlink" title="面向对象的思想"></a>面向对象的思想</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 我们现在先整个类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">human</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, nation</span>):</span></span><br><span class="line">        self.planet = earth</span><br><span class="line">        self.nation = nation</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">whereufrom</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;I come from %s&quot;</span> % self.nation)</span><br><span class="line">        </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Yiting</span>(<span class="params">human</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, age, surname, nation</span>):</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">super</span>(<span class="params">Yiting, self</span>).<span class="title">__init__</span>(<span class="params">nation</span>)</span></span><br><span class="line"><span class="function">        <span class="title">self</span>.<span class="title">age</span> = <span class="title">age</span></span></span><br><span class="line"><span class="function">        <span class="title">self</span>.<span class="title">surname</span> = <span class="title">surname</span></span></span><br><span class="line"><span class="function">    	<span class="title">self</span>.<span class="title">firstname</span> = &#x27;<span class="title">Yiting</span>&#x27;</span></span><br><span class="line"><span class="function">        </span></span><br><span class="line"><span class="function">    <span class="title">def</span> <span class="title">eating</span>(<span class="params">self, food</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Yiting is eating&quot;</span>)</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">whoamI</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;My name is Yiting &#123;&#125;&quot;</span>.<span class="built_in">format</span>(self.surname))</span><br><span class="line">        <span class="keyword">return</span> self.firstname + self.surname</span><br><span class="line">    </span><br><span class="line">me = Yiting(<span class="number">21</span>, Chen, China)</span><br></pre></td></tr></table></figure>
@@ -1055,29 +1246,6 @@
       </categories>
       <tags>
         <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>用随机梯度下降来优化人生</title>
-    <url>/2021/09/27/limu-SGD/</url>
-    <content><![CDATA[<p>作者：李沐 | 来源：知乎</p>
-<p><strong>要有目标</strong>。你需要有目标。短的也好，长的也好。认真定下的也好，别人那里捡的也好。就跟随机梯度下降需要有个目标函数一样。</p>
-<p><strong>目标要大</strong>。不管是人生目标还是目标函数，你最好不要知道最后可以走到哪里。如果你知道，那么你的目标就太简单了，可能是个凸函数。你可以在一开始的时候给自己一些小目标，例如期末考个80分，训练一个线性模型。但接下来得有更大的目标，财富自由也好，100亿参数的变形金刚也好，得足够一颗赛艇。</p>
-<p><strong>坚持走</strong>。不管你的目标多复杂，随机梯度下降都是最简单的。每一次你找一个大概还行的方向（梯度），然后迈一步（下降）。两个核心要素是方向和步子的长短。但最重要的是你得一直走下去，能多走几步就多走几步。</p>
-<p><strong>痛苦的卷</strong>。每一步里你都在试图改变你自己或者你的模型参数。改变带来痛苦。但没有改变就没有进步。你过得很痛苦不代表在朝着目标走，因为你可能走反了。但过得很舒服那一定在原地踏步。需要时刻跟自己作对。</p>
-<p><strong>可以躺平</strong>。你用你内心的激情来迈步子。步子太小走不动，步子太长容易过早消耗掉了激情。周期性的调大调小步长效果挺好。所以你可以时不时休息休息。</p>
-<p><strong>四处看看</strong>。每一步走的方向是你对世界的认识。如果你探索的世界不怎么变化，那么要么你的目标太简单，要么你困在你的舒适区了。随机梯度下降的第一个词是随机，就是你需要四处走走，看过很多地方，做些错误的决定，这样你可以在前期迈过一些不是很好的舒适区。</p>
-<p><strong>快也是慢</strong>。你没有必要特意去追求找到最好的方向和最合适的步子。你身边当然会有幸运之子，他们每一步都在别人前面。但经验告诉我们，随机梯度下降前期进度太快，后期可能乏力。就是说你过早的找到一个舒适区，忘了世界有多大。所以你不要急，前面徘徊一段时间不是坏事。成名无需太早。</p>
-<p><strong>赢在起点</strong>。起点当然重要。如果你在终点附近起步，可以少走很多路。而且终点附近的路都比较平，走着舒服。当你发现别人不如你的时候，看看自己站在哪里。可能你就是运气很好，赢在了起跑线。如果你跟别人在同一起跑线，不见得你能做更好。</p>
-<p><strong>很远也能到达</strong>。如果你是在随机起点，那么做好准备前面的路会非常不平坦。越远离终点，越人迹罕见。四处都是悬崖。但随机梯度下降告诉我们，不管起点在哪里，最后得到的解都差不多。当然这个前提是你得一直按照梯度的方向走下去。如果中间梯度炸掉了，那么你随机一个起点，调整步子节奏，重新来。</p>
-<p><strong>独一无二</strong>。也许大家有着差不多的目标，在差不多的时间毕业买房结婚生娃。但每一步里，每个人内心中看到的世界都不一样，导致走的路不一样。你如果跑多次随机梯度下降，在各个时间点的目标函数值可能都差不多，但每次的参数千差万别。不会有人关心你每次训练出来的模型里面参数具体是什么值，除了你自己。</p>
-<p><strong>简单最好</strong> 。当然有比随机梯度下降更复杂的算法。他们想每一步看想更远更准，想步子迈最大。但如果你的目标很复杂，简单的随机梯度下降反而效果最好。深度学习里大家都用它。关注当前，每次抬头瞄一眼世界，快速做个决定，然后迈一小步。小步快跑。只要你有目标，不要停，就能到达。</p>
-]]></content>
-      <categories>
-        <category>杂文</category>
-      </categories>
-      <tags>
-        <tag>杂文</tag>
       </tags>
   </entry>
   <entry>

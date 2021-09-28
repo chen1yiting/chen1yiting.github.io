@@ -79,7 +79,7 @@
 <meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210922012334999.png">
 <meta property="og:image" content="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/image-20210922012729014.png">
 <meta property="article:published_time" content="2021-09-26T11:32:20.000Z">
-<meta property="article:modified_time" content="2021-09-26T12:12:18.376Z">
+<meta property="article:modified_time" content="2021-09-28T18:10:09.915Z">
 <meta property="article:author" content="Yiting CHEN">
 <meta property="article:tag" content="PyTorch">
 <meta name="twitter:card" content="summary">
@@ -273,10 +273,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-09-26 19:32:20 / Modified: 20:12:18" itemprop="dateCreated datePublished" datetime="2021-09-26T19:32:20+08:00">2021-09-26</time>
+              <time title="Created: 2021-09-26 19:32:20" itemprop="dateCreated datePublished" datetime="2021-09-26T19:32:20+08:00">2021-09-26</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-29 02:10:09" itemprop="dateModified" datetime="2021-09-29T02:10:09+08:00">2021-09-29</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -288,6 +294,13 @@
             </span>
 
           
+            <span id="/2021/09/26/PyTorch-EnvSetup-BasicConcept/" class="post-meta-item leancloud_visitors" data-flag-title="PyTorch-EnvSetup&BasicConcept" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
             <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -295,6 +308,20 @@
               <span class="post-meta-item-text">Views: </span>
               <span id="busuanzi_value_page_pv"></span>
             </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/09/26/PyTorch-EnvSetup-BasicConcept/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/26/PyTorch-EnvSetup-BasicConcept/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
             <div class="post-description">文章介绍了PyTorch在win10+i7+3070配置电脑上的环境配置，以及关于PyTorch的一些基础概念。</div>
 
         </div>
@@ -615,6 +642,7 @@
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -676,7 +704,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -815,6 +843,35 @@
   
 
   
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'wCRLpXPq36WyR2elloFP4fKp-gzGzoHsz',
+      appKey     : 'B7FhAvW8W7lUO2USrKWEoCyb',
+      placeholder: "来都来了",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
 
 </body>
 </html>

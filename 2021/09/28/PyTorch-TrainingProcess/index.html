@@ -270,6 +270,13 @@
             </span>
 
           
+            <span id="/2021/09/28/PyTorch-TrainingProcess/" class="post-meta-item leancloud_visitors" data-flag-title="PyTorch-TrainingProcess" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
             <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -277,6 +284,20 @@
               <span class="post-meta-item-text">Views: </span>
               <span id="busuanzi_value_page_pv"></span>
             </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/09/28/PyTorch-TrainingProcess/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/28/PyTorch-TrainingProcess/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
             <div class="post-description">本文介绍了PyTorch模型训练时的一些学习率优化方法以及可视化技巧。</div>
 
         </div>
@@ -577,7 +598,10 @@
     <a href="/2021/09/27/limu-SGD/" rel="prev" title="用随机梯度下降来优化人生">
       <i class="fa fa-chevron-left"></i> 用随机梯度下降来优化人生
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/29/PyTorch-NormalizationMethods/" rel="next" title="PyTorch-NormalizationMethods">
+      PyTorch-NormalizationMethods <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -590,6 +614,7 @@
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -651,7 +676,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -790,6 +815,35 @@
   
 
   
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'wCRLpXPq36WyR2elloFP4fKp-gzGzoHsz',
+      appKey     : 'B7FhAvW8W7lUO2USrKWEoCyb',
+      placeholder: "来都来了",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
 
 </body>
 </html>
