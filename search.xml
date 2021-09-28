@@ -1080,4 +1080,266 @@
         <tag>杂文</tag>
       </tags>
   </entry>
+  <entry>
+    <title>PyTorch-TrainingProcess</title>
+    <url>/2021/09/28/PyTorch-TrainingProcess/</url>
+    <content><![CDATA[<h2 id="五-PyTorch训练过程"><a href="#五-PyTorch训练过程" class="headerlink" title="五. PyTorch训练过程"></a>五. PyTorch训练过程</h2><h4 id="A-学习率调整策略"><a href="#A-学习率调整策略" class="headerlink" title="A. 学习率调整策略"></a>A. 学习率调整策略</h4><h5 id="1-为什么要调整学习率"><a href="#1-为什么要调整学习率" class="headerlink" title="1. 为什么要调整学习率"></a>1. 为什么要调整学习率</h5><p>学习率（learning rate）控制了参数更新的步伐，一般前期会比较大，后期会下降。</p>
+<p><strong>就像打高尔夫。</strong></p>
+<p>PyTorch提供了很好的学习率调整方法。</p>
+<h5 id="2-调整方法"><a href="#2-调整方法" class="headerlink" title="2. 调整方法"></a>2. 调整方法</h5><h6 id="class-LRScheduler"><a href="#class-LRScheduler" class="headerlink" title="class _LRScheduler"></a>class _LRScheduler</h6><p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926212016387.png" alt="image-20210926212016387"></p>
+<p>主要属性：</p>
+<ul>
+<li>optimizer：关联的优化器（学习率放在优化器当中，所以必须关联）</li>
+<li>last_epoch：记录epoch数，学习率的调整以epoch为周期</li>
+<li>base_lrs：记录初始学习率</li>
+</ul>
+<p><strong>主要方法：</strong></p>
+<ul>
+<li>step()：更新下一个epoch的学习率</li>
+<li>get_lr()：虚函数，计算下一个epoch的学习率。用来给子类override。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 例如：</span></span><br><span class="line">scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=<span class="number">10</span>, gamma=<span class="number">0.1</span> )</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StepLR</span>(<span class="params">_LRScheduler</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, optimizer, step_size, gamma=<span class="number">0.1</span>, last_epoch=-<span class="number">1</span></span>):</span></span><br><span class="line">        self.step_size = gamma</span><br><span class="line">        self.gamma = gamma</span><br><span class="line">        <span class="built_in">super</span>(StepLR, self).__init__(optimizer, last_epoch)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_lr</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> [base_lr * self.gamma ** (self.last_epoch//self.step_size) <span class="keyword">for</span> base_lr <span class="keyword">in</span> self.base_lrs]</span><br></pre></td></tr></table></figure>
+
+<p>整个scheduler只出现在两行，第一次是构建，第二次是执行step()。执行step()时注意一定要<strong>放在epoch当中</strong>，而不是iteration。</p>
+<h6 id="StepLR"><a href="#StepLR" class="headerlink" title="StepLR"></a>StepLR</h6><p>等间隔调整学习率</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926212157451.png" alt="image-20210926212157451"></p>
+<p>主要参数：</p>
+<ul>
+<li>step_size：等间隔数</li>
+<li>gamma：调整系数</li>
+</ul>
+<p><strong>调整方式：lr = lr * gamma</strong></p>
+<h6 id="MultiStepLR"><a href="#MultiStepLR" class="headerlink" title="MultiStepLR"></a>MultiStepLR</h6><p>按给定时间调整学习率</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926220926788.png" alt="image-20210926220926788"></p>
+<p>主要参数：</p>
+<ul>
+<li>milestones：设定调整时刻数（构建一个list放入，例如[10, 120, 200], 根据list数值调整）</li>
+<li>gamma：调整系数</li>
+</ul>
+<h6 id="ExponentialLR"><a href="#ExponentialLR" class="headerlink" title="ExponentialLR"></a>ExponentialLR</h6><p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926221144356.png" alt="image-20210926221144356"></p>
+<p>按指数衰减调整学习率</p>
+<p>主要参数：</p>
+<ul>
+<li>gamma：指数的底（通常设置为接近1的一个数）</li>
+</ul>
+<p>调整方式：lr = lr * gamma ** epoch</p>
+<h6 id="CosineAnnealingLR"><a href="#CosineAnnealingLR" class="headerlink" title="CosineAnnealingLR"></a>CosineAnnealingLR</h6><p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926221836558.png" alt="image-20210926221836558"></p>
+<p>余弦周期调整学习率</p>
+<p>主要参数：</p>
+<ul>
+<li>T_max：下降周期</li>
+<li>eta_min：学习率的下限</li>
+<li><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926222018170.png" alt="image-20210926222018170" style="zoom: 25%;"></li>
+</ul>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926221851244.png" alt="image-20210926221851244"></p>
+<h6 id="ReduceLRonPlateau"><a href="#ReduceLRonPlateau" class="headerlink" title="ReduceLRonPlateau"></a>ReduceLRonPlateau</h6><p>监控指标，当指标不再变化则调整</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926222248004.png" alt="image-20210926222248004"></p>
+<p>主要参数：</p>
+<ul>
+<li>mode：min/max 两种模式</li>
+<li>factor：调整系数</li>
+<li>patience：”耐心“，接受几次不变化</li>
+<li>cooldown：”冷却时间“，停止监控一段时间</li>
+<li>verbose：是否打印日志</li>
+<li>min_lr：学习率的下限</li>
+<li>eps：学习率衰减最小值</li>
+</ul>
+<h6 id="LambaLR"><a href="#LambaLR" class="headerlink" title="LambaLR"></a>LambaLR</h6><p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926224426382.png" alt="image-20210926224426382"></p>
+<p>自定义调整策略</p>
+<p>主要参数：</p>
+<ul>
+<li>lr_lambda：function or list</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">optimizer = optim.SGD([&#123;<span class="string">&#x27;params&#x27;</span> : [weights_1]&#125;, &#123;<span class="string">&#x27;params&#x27;</span>: [weights_2]&#125;], lr = lr_init)</span><br><span class="line"></span><br><span class="line">lambda1 = <span class="keyword">lambda</span> epoch: <span class="number">0.1</span> ** (epoch // <span class="number">20</span>)</span><br><span class="line">lambda2 = <span class="keyword">lambda</span> epoch: <span class="number">0.95</span> ** epoch</span><br><span class="line"></span><br><span class="line">scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=[lambda1, lambda2])</span><br></pre></td></tr></table></figure>
+
+<p>不同的参数组，有不同的调整策略。在finetune当中很常见。</p>
+<h5 id="3-学习率调整小结"><a href="#3-学习率调整小结" class="headerlink" title="3. 学习率调整小结"></a>3. 学习率调整小结</h5><ol>
+<li>有序调整：Step，MultiStep，Exponential 和 CosineAnnealing</li>
+<li>自适应调整：ReduceLROnPleateau</li>
+<li>自定义调整：Lambda</li>
+</ol>
+<p>学习率初始化：</p>
+<ol>
+<li>设置较小数：0.01、0.001、0.0001</li>
+<li>搜索最大学习率：《Cyclical Learning Rates for Training Neural Networks》<ol>
+<li><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926225813725.png" alt="image-20210926225813725" style="zoom:33%;"></li>
+<li><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926225855652.png" alt="image-20210926225855652" style="zoom:33%;"></li>
+</ol>
+</li>
+</ol>
+<h4 id="B-可视化工具-——-Tensorboard"><a href="#B-可视化工具-——-Tensorboard" class="headerlink" title="B. 可视化工具 —— Tensorboard"></a>B. 可视化工具 —— Tensorboard</h4><h5 id="1-TensorBoard简介"><a href="#1-TensorBoard简介" class="headerlink" title="1. TensorBoard简介"></a>1. TensorBoard简介</h5><p>TensorBoard：Tensorflow中强大的可视化工具</p>
+<p>支持标量、图像、文本、音频、视频和Embedding等多种数据的可视化。</p>
+<p>用来监控当前训练是不是一个良好的训练状态。</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926230630563.png" alt="image-20210926230630563"></p>
+<h5 id="2-TensorBoard安装"><a href="#2-TensorBoard安装" class="headerlink" title="2. TensorBoard安装"></a>2. TensorBoard安装</h5><p>“报错安装法”</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install future</span><br><span class="line">pip install tensorboard</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="3-TensorBoard运行可视化"><a href="#3-TensorBoard运行可视化" class="headerlink" title="3. TensorBoard运行可视化"></a>3. TensorBoard运行可视化</h5><p>运行机制：</p>
+<p>python脚本：记录可视化的数据 ——&gt; 硬盘：event file ——&gt; 终端：tensorboard ——&gt; Web端：<img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926230827260.png" alt="image-20210926230827260" style="zoom:25%;"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> torch.utils.tensorboard <span class="keyword">import</span> summaryWriter</span><br><span class="line"></span><br><span class="line">writer = SummaryWriter(comment=<span class="string">&#x27;test tensorboard&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">    writer.add_scalar(<span class="string">&#x27;y=2x&#x27;</span>, x*<span class="number">2</span>,x)</span><br><span class="line">    writer.add_scalar(<span class="string">&#x27;y=pow(2,x)&#x27;</span>, <span class="number">2</span>**x, x)</span><br><span class="line">    </span><br><span class="line">    writer.add_scalar(<span class="string">&#x27;data/scalar_group&#x27;</span>, &#123;<span class="string">&quot;xsinx&quot;</span>: x*np.sin(x), <span class="string">&quot;xcosx&quot;</span>: x * np.cos(x), <span class="string">&quot;arctanx&quot;</span>: np.arctan(x)&#125;, x)</span><br><span class="line">    </span><br><span class="line">writer.close()</span><br></pre></td></tr></table></figure>
+
+<p>runs/文件夹下会有event file拿来可视化。cd到runs所在文件夹下，输入：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tensorboard --logdir=./runs</span><br></pre></td></tr></table></figure>
+
+<p>之后点击终端里的网址，便在在Web中打开可视化界面。</p>
+<h4 id="C-TensorBoard使用（一）"><a href="#C-TensorBoard使用（一）" class="headerlink" title="C. TensorBoard使用（一）"></a>C. TensorBoard使用（一）</h4><p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926233724340.png" alt="image-20210926233724340"></p>
+<h5 id="1-SummaryWriter"><a href="#1-SummaryWriter" class="headerlink" title="1. SummaryWriter"></a>1. SummaryWriter</h5><h6 id="SummaryWriter"><a href="#SummaryWriter" class="headerlink" title="SummaryWriter"></a>SummaryWriter</h6><p>提供创建event file的高级接口：</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926234221840.png" alt="image-20210926234221840"></p>
+<p>主要属性：</p>
+<ul>
+<li>log_dir：event file输出文件夹</li>
+<li>comment：不指定log_dir时，文件夹后缀</li>
+<li>filename_suffix：event file文件名后缀</li>
+</ul>
+<p>（不设置log_dir的话，就会是/runs/comment/event_file）</p>
+<p>设置log_dir之后，comment就不会起作用。</p>
+<h5 id="2-SummaryWriter-add-scalar-amp-add-histogram"><a href="#2-SummaryWriter-add-scalar-amp-add-histogram" class="headerlink" title="2.SummaryWriter.add_scalar &amp; add_histogram"></a>2.SummaryWriter.add_scalar &amp; add_histogram</h5><h6 id="add-scalar"><a href="#add-scalar" class="headerlink" title="add_scalar()"></a>add_scalar()</h6><p>功能：记录标量</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926235143739.png" alt="image-20210926235143739"></p>
+<ul>
+<li>tag：图像的标签名，图的唯一标识</li>
+<li>scalar_value：要记录的标量</li>
+<li>global_step：x轴</li>
+</ul>
+<h6 id="add-scalars"><a href="#add-scalars" class="headerlink" title="add_scalars()"></a>add_scalars()</h6><p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210926235304794.png" alt="image-20210926235304794"></p>
+<ul>
+<li>main_tag：该图的标签（意义同上的tag）</li>
+<li>tag_scalar_dict：key是变量的sub-tag，value是变量的值</li>
+</ul>
+<h6 id="add-histogram"><a href="#add-histogram" class="headerlink" title="add_histogram()"></a>add_histogram()</h6><p>功能：统计直方图与多分位数折线图</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210927000249812.png" alt="image-20210927000249812"></p>
+<ul>
+<li>tag：图像的标签名，图的唯一标识</li>
+<li>values：要统计的参数</li>
+<li>global_step：y轴</li>
+<li>bins：取直方图的bins</li>
+</ul>
+<h5 id="3-模型指标监控"><a href="#3-模型指标监控" class="headerlink" title="3. 模型指标监控"></a>3. 模型指标监控</h5><ol>
+<li><p>在迭代训练之前，先构建一个SummaryWriter。</p>
+</li>
+<li><p>先设置iteration记录参数，iter_count += 1，然后</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">writer.add_scalars(<span class="string">&quot;Loss&quot;</span>, &#123;<span class="string">&quot;Train&quot;</span>：loss.item()&#125;, iter_count)</span><br><span class="line"></span><br><span class="line">writer.add_scalars(<span class="string">&quot;Accuracy&quot;</span>,&#123;<span class="string">&quot;Train&quot;</span>: correct / total&#125;, iter_count)</span><br></pre></td></tr></table></figure></li>
+<li><p>```python<br>writer.add_scalars(“Loss”, {“Train”:np.mean(valid_curve)}, iter_count)</p>
+<p>writer.add_scalars(“Accuracy”, {“Train”: correct / total}, iter_count)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">4. 每个epoch，记录梯度，权值：</span><br><span class="line"></span><br><span class="line">   ```python</span><br><span class="line">   for name, param in net.named_parameter():</span><br><span class="line">       writer.add_histogram(name + &#x27;_grad&#x27;, param.grad, epoch)</span><br><span class="line">       writer.add_histogram(name + &#x27;_data&#x27;, param, epoch)</span><br><span class="line">   </span><br></pre></td></tr></table></figure>
+
+<p><strong>可以在训练过程中可视化，训练过程中即时生成可视化。</strong></p>
+</li>
+</ol>
+<p>在观察每一层的数值和梯度分布时：</p>
+<ol>
+<li>当靠后的epoch梯度很小时，并不一定是梯度消失。loss的稳定也会导致梯度变小。</li>
+<li>如果模型的参数发散（非正态），并且模型表现不佳，则训练很明显出了问题。</li>
+<li>如果说最后一层梯度大，前面梯度小，则说明反向传播时，梯度的尺度在不断减小，出现了梯度消失，无法合理更新模型。</li>
+</ol>
+<h4 id="D-Tensorboard的使用（二）"><a href="#D-Tensorboard的使用（二）" class="headerlink" title="D. Tensorboard的使用（二）"></a>D. Tensorboard的使用（二）</h4><h5 id="1-add-image-and-torchvision-utils-make-grid"><a href="#1-add-image-and-torchvision-utils-make-grid" class="headerlink" title="1. add_image and torchvision.utils.make_grid"></a>1. add_image and torchvision.utils.make_grid</h5><h6 id="add-image"><a href="#add-image" class="headerlink" title="add_image()"></a>add_image()</h6><p>记录图像</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210927110457174.png" alt="image-20210927110457174"></p>
+<ul>
+<li>tag：图像的标签名，图的唯一标识</li>
+<li>img_tensor：图像数据，注意尺度（最终需要缩放到0-255之间，如果都是0-1区间，会默认放大到0-255区间）</li>
+<li>global_step：x轴</li>
+<li>dataformats：数据形式，CHW，HWC，HW（二维灰度图，不带颜色）</li>
+</ul>
+<h6 id="torchvision-utils-make-grid"><a href="#torchvision-utils-make-grid" class="headerlink" title="torchvision.utils.make_grid"></a>torchvision.utils.make_grid</h6><p>制作网格图像</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210927145242252.png" alt="image-20210927145242252"></p>
+<ul>
+<li>tensor：图像数据，B（几张图） * C * H * W格式</li>
+<li>nrow：行数（列数自动计算）</li>
+<li>padding：图像间距（像素单位）</li>
+<li>range：标准化范围</li>
+<li>scale_each：是否单张图维度标准化</li>
+<li>pad_value：padding的像素值</li>
+</ul>
+<p>如何可视化卷积特征图，部分代码示例如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> instance(sub_module, nn.Conv2d):</span><br><span class="line">    kernel_num += <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> kernel_num &gt; vis_max:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    kernel = sub_module.weight</span><br><span class="line">    c_out, c_int, k_w, k_h = <span class="built_in">tuple</span>(kernels.shape)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> o_icx <span class="keyword">in</span> <span class="built_in">range</span>(c_out):</span><br><span class="line">        kernel_idx = kernels[o_idx, :, :, :].unsqueeze(<span class="number">1</span>) <span class="comment"># make_grid需要BCHW，需要拓展C维数据</span></span><br><span class="line">        kernel_grid = vutils.make_grid(kernel_idx, normalize=<span class="literal">True</span>, scale_each=<span class="literal">True</span>, nrow=c_int)</span><br><span class="line">        writer.add_image(<span class="string">&#x27;&#123;&#125; Convlayer split_in_channel&#x27;</span>.<span class="built_in">format</span>(kernel_num), kernel_grid, global_step=o_idx)</span><br><span class="line">        kernel_all = kernels.view(-<span class="number">1</span>, <span class="number">3</span>, k_h, k_w)</span><br><span class="line">        kernel_grid = vutils.make_grid(kernel_all, normalize=<span class="literal">True</span>, scale_each=<span class="literal">True</span>, nrow=<span class="number">8</span>)</span><br><span class="line">        writer.add_image(<span class="string">&#x27;&#123;&#125;_all&#x27;</span>.<span class="built_in">format</span>(kernel_num), kernel_grid, global_step=<span class="number">322</span>)</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 最后带个writer.close()</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="2-AlexNet卷积核与特征图可视化"><a href="#2-AlexNet卷积核与特征图可视化" class="headerlink" title="2. AlexNet卷积核与特征图可视化"></a>2. AlexNet卷积核与特征图可视化</h5><p>先对数据进行预处理，例如resize，正则化，ToTensor等操作。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 模型</span></span><br><span class="line">alexnet = models.alexnet(pretrained=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># forward</span></span><br><span class="line">convlayer1 = alexnet.features[<span class="number">0</span>]</span><br><span class="line"><span class="comment"># 如果不在此手动获取，特征图便会被释放掉。高阶用法可以使用hook函数勾取。</span></span><br><span class="line">fmap_1 = convlayer1(img_tensor)</span><br><span class="line"></span><br><span class="line"><span class="comment">#预处理</span></span><br><span class="line">fmap_1.transpose_(<span class="number">0</span>, <span class="number">1</span>) <span class="comment"># bchw=(1, 64, 55, 55) --&gt; (64, 1, 55, 55)</span></span><br><span class="line">fmap_1_grid = vutils.make_grid(fmap_1, normalize=<span class="literal">True</span>, scale_each=<span class="literal">True</span>, nrow=<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line">writer.add_image(<span class="string">&#x27;feature map in conv1&#x27;</span>, fmap_1_grid, global_step=<span class="number">322</span>)</span><br><span class="line">writer.close()</span><br></pre></td></tr></table></figure>
+
+<p>部分特征图：</p>
+<img src="/2021/09/28/PyTorch-TrainingProcess/image-20210927153107085.png" alt="image-20210927153107085" style="zoom:33%;">
+
+<h5 id="3-add-graph-and-torchsummary"><a href="#3-add-graph-and-torchsummary" class="headerlink" title="3. add_graph and torchsummary"></a>3. add_graph and torchsummary</h5><h6 id="add-graph"><a href="#add-graph" class="headerlink" title="add_graph()"></a>add_graph()</h6><p>可视化模型计算图（看起来非常的宏伟）</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210927153238642.png" alt="image-20210927153238642"></p>
+<ul>
+<li>model：模型，必须是nn.Module</li>
+<li>input_to_model：输出给模型的数据</li>
+<li>verbose：是否打印计算图结构信息</li>
+</ul>
+<h6 id="torchsummary"><a href="#torchsummary" class="headerlink" title="torchsummary"></a>torchsummary</h6><p>查看模型信息，便于调试</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210927153850524.png" alt="image-20210927153850524"></p>
+<ul>
+<li>model：pytorch模型</li>
+<li>input_size：模型输入size</li>
+<li>batch_size：batch size</li>
+<li>device：”cuda” or “cpu”</li>
+</ul>
+<p><strong>github</strong>：<a href="https://github.com/sksq96/pytorch-summary">https://github.com/sksq96/pytorch-summary</a></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装 pip install torchsummary</span></span><br><span class="line"><span class="keyword">from</span> torchsummary <span class="keyword">import</span> summary</span><br><span class="line"><span class="built_in">print</span>(summary(lenet, (<span class="number">3</span>, <span class="number">32</span>, <span class="number">32</span>), device=<span class="string">&quot;gpu&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>打印信息如下：含有可训练参数，不可训练参数，模型所占内存。</p>
+<img src="/2021/09/28/PyTorch-TrainingProcess/image-20210927154217792.png" alt="image-20210927154217792" style="zoom: 33%;">
+
+<h4 id="E-Hook函数与CAM算法"><a href="#E-Hook函数与CAM算法" class="headerlink" title="E. Hook函数与CAM算法"></a>E. Hook函数与CAM算法</h4><h5 id="1-Hook函数概念"><a href="#1-Hook函数概念" class="headerlink" title="1. Hook函数概念"></a>1. Hook函数概念</h5><p>Hook函数机制：不改变主体，实现额外的功能，就像hook（挂件，挂钩）</p>
+<p>在前向传播或者反向传播的主体上，通过hook获取中间的特征图，梯度。</p>
+<ol>
+<li>torch.Tensor.register_hook(hook)</li>
+<li>torch.nn.Module.register_forward_hook</li>
+<li>torch.nn.Module.register_forward_pre_hook</li>
+<li>torch.nn.Module.register_backward_hook</li>
+</ol>
+<h6 id="Tensor-register-hook"><a href="#Tensor-register-hook" class="headerlink" title="Tensor.register_hook"></a>Tensor.register_hook</h6><p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210927161602936.png" alt="image-20210927161602936"></p>
+<p>功能：注册一个<strong>反向传播</strong>hook函数</p>
+<p>Hook函数仅一个输入参数，为张量的<strong>梯度</strong>。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">2.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">a = torch.add(w, x)</span><br><span class="line">b = torch.add(w, <span class="number">1</span>)</span><br><span class="line">y = torch.mul(a, b)</span><br><span class="line"></span><br><span class="line">a_grad = <span class="built_in">list</span>()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">grad_hook</span>(<span class="params">grad</span>):</span></span><br><span class="line">    a_grad.append(grad)</span><br><span class="line">    <span class="comment"># return grad*3</span></span><br><span class="line">    </span><br><span class="line">handle = a.register_hook(grad_hook)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 当backward结束之后，a的梯度将会被存储在list a_grad当中。我们如果带return的话，会覆盖掉原始张量的梯度。</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="Module-register-forward-hook"><a href="#Module-register-forward-hook" class="headerlink" title="Module.register_forward_hook"></a>Module.register_forward_hook</h6><p>注册module的前向传播hook函数</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210927234212309.png" alt="image-20210927234212309"></p>
+<ul>
+<li>module：当前网络层</li>
+<li>input：当前网络层输入数据</li>
+<li>output：当前网络层输出数据</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward_hook</span>(<span class="params">module, data_input, data_output</span>):</span></span><br><span class="line">    fmap_block.append(data_output) <span class="comment"># feature map</span></span><br><span class="line">    input_block.append(data_input) <span class="comment"># 网络层的输入数据</span></span><br><span class="line">    </span><br><span class="line">fmap_block = <span class="built_in">list</span>()</span><br><span class="line">input_block = <span class="built_in">list</span>()</span><br><span class="line"><span class="comment"># 将函数注册上去</span></span><br><span class="line">net.conv1.register_forward_hook(forward_hook)</span><br></pre></td></tr></table></figure>
+
+<h6 id="Module-register-forward-pre-hook"><a href="#Module-register-forward-pre-hook" class="headerlink" title="Module.register_forward_pre_hook"></a>Module.register_forward_pre_hook</h6><p>注册module前向传播前的hook函数</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210928005054070.png" alt="image-20210928005054070"></p>
+<p>参数：</p>
+<ul>
+<li>module：当前网络层</li>
+<li>input：当前网络层输入数据</li>
+</ul>
+<p>前向传播<strong>前</strong>，网络层还没有对数据进行运算。</p>
+<h6 id="Module-register-backward-hook"><a href="#Module-register-backward-hook" class="headerlink" title="Module.register_backward_hook"></a>Module.register_backward_hook</h6><p>注册module反向传播的hook函数</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210928010019514.png" alt="image-20210928010019514"></p>
+<p>参数：</p>
+<ul>
+<li>module：当前网络层</li>
+<li>grad_input：当前网络层输入梯度数据</li>
+<li>grad_output：当前网络层输出梯度数据</li>
+</ul>
+<p>对hook函数设置好功能之后，直接挂在（register）网络上就行。</p>
+<h5 id="2-Hook函数与特征图提取"><a href="#2-Hook函数与特征图提取" class="headerlink" title="2. Hook函数与特征图提取"></a>2. Hook函数与特征图提取</h5><p>代码示例如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">flag = <span class="number">1</span></span><br><span class="line"><span class="keyword">if</span> flag:</span><br><span class="line">    <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">        writer = SummaryWriter(comment=<span class="string">&#x27;test_your_comment&#x27;</span>, filename_suffix=<span class="string">&quot;_test_your_filename_suffix&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 数据</span></span><br><span class="line">        path_img = <span class="string">&quot;./lena.png&quot;</span>     <span class="comment"># your path to image</span></span><br><span class="line">        normMean = [<span class="number">0.49139968</span>, <span class="number">0.48215827</span>, <span class="number">0.44653124</span>]</span><br><span class="line">        normStd = [<span class="number">0.24703233</span>, <span class="number">0.24348505</span>, <span class="number">0.26158768</span>]</span><br><span class="line"></span><br><span class="line">        norm_transform = transforms.Normalize(normMean, normStd)</span><br><span class="line">        img_transforms = transforms.Compose([</span><br><span class="line">            transforms.Resize((<span class="number">224</span>, <span class="number">224</span>)),</span><br><span class="line">            transforms.ToTensor(),</span><br><span class="line">            norm_transform</span><br><span class="line">        ])</span><br><span class="line"></span><br><span class="line">        img_pil = Image.<span class="built_in">open</span>(path_img).convert(<span class="string">&#x27;RGB&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> img_transforms <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            img_tensor = img_transforms(img_pil)</span><br><span class="line">        img_tensor.unsqueeze_(<span class="number">0</span>)    <span class="comment"># chw --&gt; bchw</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 模型</span></span><br><span class="line">        alexnet = models.alexnet(pretrained=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 注册hook</span></span><br><span class="line">        fmap_dict = <span class="built_in">dict</span>()</span><br><span class="line">        <span class="keyword">for</span> name, sub_module <span class="keyword">in</span> alexnet.named_modules():</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(sub_module, nn.Conv2d):</span><br><span class="line">                key_name = <span class="built_in">str</span>(sub_module.weight.shape)</span><br><span class="line">                fmap_dict.setdefault(key_name, <span class="built_in">list</span>())</span><br><span class="line"></span><br><span class="line">                n1, n2 = name.split(<span class="string">&quot;.&quot;</span>)</span><br><span class="line"></span><br><span class="line">                <span class="function"><span class="keyword">def</span> <span class="title">hook_func</span>(<span class="params">m, i, o</span>):</span></span><br><span class="line">                    key_name = <span class="built_in">str</span>(m.weight.shape)</span><br><span class="line">                    fmap_dict[key_name].append(o)</span><br><span class="line"></span><br><span class="line">                alexnet._modules[n1]._modules[n2].register_forward_hook(hook_func)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># forward</span></span><br><span class="line">        output = alexnet(img_tensor)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># add image</span></span><br><span class="line">        <span class="keyword">for</span> layer_name, fmap_list <span class="keyword">in</span> fmap_dict.items():</span><br><span class="line">            fmap = fmap_list[<span class="number">0</span>]</span><br><span class="line">            fmap.transpose_(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">            nrow = <span class="built_in">int</span>(np.sqrt(fmap.shape[<span class="number">0</span>]))</span><br><span class="line">            fmap_grid = vutils.make_grid(fmap, normalize=<span class="literal">True</span>, scale_each=<span class="literal">True</span>, nrow=nrow)</span><br><span class="line">            writer.add_image(<span class="string">&#x27;feature map in &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(layer_name), fmap_grid, global_step=<span class="number">322</span>)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="3-CAM-class-activation-map，类激活图"><a href="#3-CAM-class-activation-map，类激活图" class="headerlink" title="3. CAM (class activation map，类激活图)"></a>3. CAM (class activation map，类激活图)</h5><p>CAM：类激活图，class activation map</p>
+<p>对网络的最后一个特征图进行加权求和，得到网络的注意力放在哪里。</p>
+<p>如何获取Wn的权值才是关键。必须要有GAP（global average pooling）。</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210928012310456.png" alt="image-20210928012310456"></p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210928012408043.png" alt="image-20210928012408043"></p>
+<h5 id="4-Grad-CAM"><a href="#4-Grad-CAM" class="headerlink" title="4. Grad-CAM"></a>4. Grad-CAM</h5><p>Grad-CAM：CAM改进版，利用梯度作为特征图权重</p>
+<p><img src="/2021/09/28/PyTorch-TrainingProcess/image-20210928013456482.png" alt="image-20210928013456482"></p>
+]]></content>
+      <categories>
+        <category>PyTorch框架学习</category>
+      </categories>
+      <tags>
+        <tag>PyTorch</tag>
+      </tags>
+  </entry>
 </search>
