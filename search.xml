@@ -714,6 +714,30 @@
       </tags>
   </entry>
   <entry>
+    <title>PythonLibraries</title>
+    <url>/2021/09/27/PythonLabraries/</url>
+    <content><![CDATA[<h1 id="一些好用且常用的库"><a href="#一些好用且常用的库" class="headerlink" title="一些好用且常用的库"></a>一些好用且常用的库</h1><h2 id="collections"><a href="#collections" class="headerlink" title="collections"></a>collections</h2><h3 id="namedtuple"><a href="#namedtuple" class="headerlink" title="namedtuple()"></a>namedtuple()</h3><p>collections模块的namedtuple子类不仅可以使用索引 (index) 访问item，还可以通过类似字典的方式（key-value）进行访问。在仿真引擎中对机械臂进行控制建模时，需要对同一个关节有多维度的设定，此时namedtuple用起来就很方便。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 适用于仿真中处理描述机器人运动状态和设定的各种参数</span></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"></span><br><span class="line">author = namedtuple(<span class="string">&#x27;author&#x27;</span>, [<span class="string">&#x27;firstname&#x27;</span>, <span class="string">&#x27;lastname&#x27;</span>])</span><br><span class="line">me = author(Yiting, Chen)</span><br><span class="line"><span class="built_in">print</span> me.firstname, me.lastname</span><br><span class="line"><span class="built_in">print</span> me[<span class="number">0</span>], me[<span class="number">1</span>]</span><br><span class="line">me = author._make([Eating, Chen])</span><br><span class="line"><span class="built_in">print</span> me.firstname, me.lastname</span><br><span class="line">me = me._replace(firstname = Eating716)</span><br><span class="line"><span class="built_in">print</span> me.firstname, me.lastname</span><br><span class="line"></span><br><span class="line"><span class="comment"># results</span></span><br><span class="line"><span class="comment"># Yiting Chen</span></span><br><span class="line"><span class="comment"># Yiting Chen</span></span><br><span class="line"><span class="comment"># Eating Chen</span></span><br><span class="line"><span class="comment"># Eating716 Chen</span></span><br><span class="line"> </span><br><span class="line">websites = [</span><br><span class="line">    (<span class="string">&#x27;Sohu&#x27;</span>, <span class="string">&#x27;http://www.sohu.com/&#x27;</span>, <span class="string">u&#x27;张朝阳&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;Baidu&#x27;</span>, <span class="string">&#x27;http://www.baidu.com.cn/&#x27;</span>, <span class="string">u&#x27;李彦宏&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;163&#x27;</span>, <span class="string">&#x27;http://www.163.com/&#x27;</span>, <span class="string">u&#x27;丁磊&#x27;</span>)</span><br><span class="line">]</span><br><span class="line"> </span><br><span class="line">Website = namedtuple(<span class="string">&#x27;Website&#x27;</span>, [<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;url&#x27;</span>, <span class="string">&#x27;founder&#x27;</span>])</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> website <span class="keyword">in</span> websites:</span><br><span class="line">    website = Website._make(website)</span><br><span class="line">    <span class="built_in">print</span> website</span><br><span class="line">    </span><br><span class="line"><span class="comment"># results:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Website(name=&#x27;Sohu&#x27;, url=&#x27;http://www.sohu.com/&#x27;, founder=u&#x27;\u5f20\u671d\u9633&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Website(name=&#x27;Baidu&#x27;, url=&#x27;http://www.baidu.com.cn/&#x27;, founder=u&#x27;\u738b\u5fd7\u4e1c&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Website(name=&#x27;163&#x27;, url=&#x27;http://www.163.com/&#x27;, founder=u&#x27;\u4e01\u78ca&#x27;)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>PythonCoding</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Prologue💬</title>
+    <url>/2021/09/26/SayHi/</url>
+    <content><![CDATA[<p><strong><font size="10">Hi, this is Yiting Chen🚬. </font></strong></p>
+<p><strong><font size="6">I’m an amateur in Robotics &amp; ML🤖. </font></strong></p>
+<p><strong><font size="4">Wishing to make some progress in this area📈 </font></strong></p>
+<p><strong><font size="6">This blog is for recording my daily study📝.</font></strong></p>
+<p><strong><font size="4">Please let me 📬(<a href="mailto:&#99;&#104;&#x65;&#x6e;&#121;&#x69;&#x74;&#x69;&#x6e;&#x67;&#64;&#119;&#104;&#117;&#46;&#101;&#x64;&#117;&#46;&#99;&#x6e;">&#99;&#104;&#x65;&#x6e;&#121;&#x69;&#x74;&#x69;&#x6e;&#x67;&#64;&#119;&#104;&#117;&#46;&#101;&#x64;&#117;&#46;&#99;&#x6e;</a>) know if there is any question. </font></strong></p>
+]]></content>
+  </entry>
+  <entry>
     <title>PyTorch-ModelsConstruction</title>
     <url>/2021/09/26/PyTorch-ModelsConstruction/</url>
     <content><![CDATA[<h2 id="三-PyTorch模型搭建（Models）"><a href="#三-PyTorch模型搭建（Models）" class="headerlink" title="三. PyTorch模型搭建（Models）"></a>三. PyTorch模型搭建（Models）</h2><h3 id="A-模型创建步骤与nn-Module"><a href="#A-模型创建步骤与nn-Module" class="headerlink" title="A. 模型创建步骤与nn.Module"></a>A. 模型创建步骤与nn.Module</h3><h4 id="1-网路模型创建步骤"><a href="#1-网路模型创建步骤" class="headerlink" title="1. 网路模型创建步骤"></a>1. 网路模型创建步骤</h4><p>模型（nn.Module）：</p>
@@ -975,53 +999,6 @@
       </tags>
   </entry>
   <entry>
-    <title>PythonLibraries</title>
-    <url>/2021/09/27/PythonLabraries/</url>
-    <content><![CDATA[<h1 id="一些好用且常用的库"><a href="#一些好用且常用的库" class="headerlink" title="一些好用且常用的库"></a>一些好用且常用的库</h1><h2 id="collections"><a href="#collections" class="headerlink" title="collections"></a>collections</h2><h3 id="namedtuple"><a href="#namedtuple" class="headerlink" title="namedtuple()"></a>namedtuple()</h3><p>collections模块的namedtuple子类不仅可以使用索引 (index) 访问item，还可以通过类似字典的方式（key-value）进行访问。在仿真引擎中对机械臂进行控制建模时，需要对同一个关节有多维度的设定，此时namedtuple用起来就很方便。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 适用于仿真中处理描述机器人运动状态和设定的各种参数</span></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"></span><br><span class="line">author = namedtuple(<span class="string">&#x27;author&#x27;</span>, [<span class="string">&#x27;firstname&#x27;</span>, <span class="string">&#x27;lastname&#x27;</span>])</span><br><span class="line">me = author(Yiting, Chen)</span><br><span class="line"><span class="built_in">print</span> me.firstname, me.lastname</span><br><span class="line"><span class="built_in">print</span> me[<span class="number">0</span>], me[<span class="number">1</span>]</span><br><span class="line">me = author._make([Eating, Chen])</span><br><span class="line"><span class="built_in">print</span> me.firstname, me.lastname</span><br><span class="line">me = me._replace(firstname = Eating716)</span><br><span class="line"><span class="built_in">print</span> me.firstname, me.lastname</span><br><span class="line"></span><br><span class="line"><span class="comment"># results</span></span><br><span class="line"><span class="comment"># Yiting Chen</span></span><br><span class="line"><span class="comment"># Yiting Chen</span></span><br><span class="line"><span class="comment"># Eating Chen</span></span><br><span class="line"><span class="comment"># Eating716 Chen</span></span><br><span class="line"> </span><br><span class="line">websites = [</span><br><span class="line">    (<span class="string">&#x27;Sohu&#x27;</span>, <span class="string">&#x27;http://www.sohu.com/&#x27;</span>, <span class="string">u&#x27;张朝阳&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;Baidu&#x27;</span>, <span class="string">&#x27;http://www.baidu.com.cn/&#x27;</span>, <span class="string">u&#x27;李彦宏&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;163&#x27;</span>, <span class="string">&#x27;http://www.163.com/&#x27;</span>, <span class="string">u&#x27;丁磊&#x27;</span>)</span><br><span class="line">]</span><br><span class="line"> </span><br><span class="line">Website = namedtuple(<span class="string">&#x27;Website&#x27;</span>, [<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;url&#x27;</span>, <span class="string">&#x27;founder&#x27;</span>])</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> website <span class="keyword">in</span> websites:</span><br><span class="line">    website = Website._make(website)</span><br><span class="line">    <span class="built_in">print</span> website</span><br><span class="line">    </span><br><span class="line"><span class="comment"># results:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Website(name=&#x27;Sohu&#x27;, url=&#x27;http://www.sohu.com/&#x27;, founder=u&#x27;\u5f20\u671d\u9633&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Website(name=&#x27;Baidu&#x27;, url=&#x27;http://www.baidu.com.cn/&#x27;, founder=u&#x27;\u738b\u5fd7\u4e1c&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Website(name=&#x27;163&#x27;, url=&#x27;http://www.163.com/&#x27;, founder=u&#x27;\u4e01\u78ca&#x27;)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>PythonCoding</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Prologue💬</title>
-    <url>/2021/09/26/SayHi/</url>
-    <content><![CDATA[<p><strong><font size="10">Hi, this is Yiting Chen🚬. </font></strong></p>
-<p><strong><font size="6">I’m an amateur in Robotics &amp; ML🤖. </font></strong></p>
-<p><strong><font size="4">Wishing to make some progress in this area📈 </font></strong></p>
-<p><strong><font size="6">This blog is for recording my daily study📝.</font></strong></p>
-<p><strong><font size="4">Please let me 📬(<a href="mailto:&#x63;&#x68;&#101;&#x6e;&#121;&#105;&#116;&#105;&#x6e;&#x67;&#64;&#119;&#104;&#117;&#x2e;&#x65;&#100;&#x75;&#46;&#x63;&#x6e;">&#x63;&#x68;&#101;&#x6e;&#121;&#105;&#116;&#105;&#x6e;&#x67;&#64;&#119;&#104;&#117;&#x2e;&#x65;&#100;&#x75;&#46;&#x63;&#x6e;</a>) know if there is any question. </font></strong></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>用随机梯度下降来优化人生</title>
-    <url>/2021/09/27/limu-SGD/</url>
-    <content><![CDATA[<p>作者：李沐 | 来源：知乎</p>
-<p><strong>要有目标</strong>。你需要有目标。短的也好，长的也好。认真定下的也好，别人那里捡的也好。就跟随机梯度下降需要有个目标函数一样。</p>
-<p><strong>目标要大</strong>。不管是人生目标还是目标函数，你最好不要知道最后可以走到哪里。如果你知道，那么你的目标就太简单了，可能是个凸函数。你可以在一开始的时候给自己一些小目标，例如期末考个80分，训练一个线性模型。但接下来得有更大的目标，财富自由也好，100亿参数的变形金刚也好，得足够一颗赛艇。</p>
-<p><strong>坚持走</strong>。不管你的目标多复杂，随机梯度下降都是最简单的。每一次你找一个大概还行的方向（梯度），然后迈一步（下降）。两个核心要素是方向和步子的长短。但最重要的是你得一直走下去，能多走几步就多走几步。</p>
-<p><strong>痛苦的卷</strong>。每一步里你都在试图改变你自己或者你的模型参数。改变带来痛苦。但没有改变就没有进步。你过得很痛苦不代表在朝着目标走，因为你可能走反了。但过得很舒服那一定在原地踏步。需要时刻跟自己作对。</p>
-<p><strong>可以躺平</strong>。你用你内心的激情来迈步子。步子太小走不动，步子太长容易过早消耗掉了激情。周期性的调大调小步长效果挺好。所以你可以时不时休息休息。</p>
-<p><strong>四处看看</strong>。每一步走的方向是你对世界的认识。如果你探索的世界不怎么变化，那么要么你的目标太简单，要么你困在你的舒适区了。随机梯度下降的第一个词是随机，就是你需要四处走走，看过很多地方，做些错误的决定，这样你可以在前期迈过一些不是很好的舒适区。</p>
-<p><strong>快也是慢</strong>。你没有必要特意去追求找到最好的方向和最合适的步子。你身边当然会有幸运之子，他们每一步都在别人前面。但经验告诉我们，随机梯度下降前期进度太快，后期可能乏力。就是说你过早的找到一个舒适区，忘了世界有多大。所以你不要急，前面徘徊一段时间不是坏事。成名无需太早。</p>
-<p><strong>赢在起点</strong>。起点当然重要。如果你在终点附近起步，可以少走很多路。而且终点附近的路都比较平，走着舒服。当你发现别人不如你的时候，看看自己站在哪里。可能你就是运气很好，赢在了起跑线。如果你跟别人在同一起跑线，不见得你能做更好。</p>
-<p><strong>很远也能到达</strong>。如果你是在随机起点，那么做好准备前面的路会非常不平坦。越远离终点，越人迹罕见。四处都是悬崖。但随机梯度下降告诉我们，不管起点在哪里，最后得到的解都差不多。当然这个前提是你得一直按照梯度的方向走下去。如果中间梯度炸掉了，那么你随机一个起点，调整步子节奏，重新来。</p>
-<p><strong>独一无二</strong>。也许大家有着差不多的目标，在差不多的时间毕业买房结婚生娃。但每一步里，每个人内心中看到的世界都不一样，导致走的路不一样。你如果跑多次随机梯度下降，在各个时间点的目标函数值可能都差不多，但每次的参数千差万别。不会有人关心你每次训练出来的模型里面参数具体是什么值，除了你自己。</p>
-<p><strong>简单最好</strong> 。当然有比随机梯度下降更复杂的算法。他们想每一步看想更远更准，想步子迈最大。但如果你的目标很复杂，简单的随机梯度下降反而效果最好。深度学习里大家都用它。关注当前，每次抬头瞄一眼世界，快速做个决定，然后迈一小步。小步快跑。只要你有目标，不要停，就能到达。</p>
-]]></content>
-      <categories>
-        <category>杂文</category>
-      </categories>
-      <tags>
-        <tag>杂文</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>面向对象编程</title>
     <url>/2021/09/27/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<h2 id="面向对象编程"><a href="#面向对象编程" class="headerlink" title="面向对象编程"></a>面向对象编程</h2><h3 id="面向对象的思想"><a href="#面向对象的思想" class="headerlink" title="面向对象的思想"></a>面向对象的思想</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 我们现在先整个类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">human</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, nation</span>):</span></span><br><span class="line">        self.planet = earth</span><br><span class="line">        self.nation = nation</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">whereufrom</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;I come from %s&quot;</span> % self.nation)</span><br><span class="line">        </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Yiting</span>(<span class="params">human</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, age, surname, nation</span>):</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">super</span>(<span class="params">Yiting, self</span>).<span class="title">__init__</span>(<span class="params">nation</span>)</span></span><br><span class="line"><span class="function">        <span class="title">self</span>.<span class="title">age</span> = <span class="title">age</span></span></span><br><span class="line"><span class="function">        <span class="title">self</span>.<span class="title">surname</span> = <span class="title">surname</span></span></span><br><span class="line"><span class="function">    	<span class="title">self</span>.<span class="title">firstname</span> = &#x27;<span class="title">Yiting</span>&#x27;</span></span><br><span class="line"><span class="function">        </span></span><br><span class="line"><span class="function">    <span class="title">def</span> <span class="title">eating</span>(<span class="params">self, food</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Yiting is eating&quot;</span>)</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">whoamI</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;My name is Yiting &#123;&#125;&quot;</span>.<span class="built_in">format</span>(self.surname))</span><br><span class="line">        <span class="keyword">return</span> self.firstname + self.surname</span><br><span class="line">    </span><br><span class="line">me = Yiting(<span class="number">21</span>, Chen, China)</span><br></pre></td></tr></table></figure>
@@ -1078,6 +1055,29 @@
       </categories>
       <tags>
         <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用随机梯度下降来优化人生</title>
+    <url>/2021/09/27/limu-SGD/</url>
+    <content><![CDATA[<p>作者：李沐 | 来源：知乎</p>
+<p><strong>要有目标</strong>。你需要有目标。短的也好，长的也好。认真定下的也好，别人那里捡的也好。就跟随机梯度下降需要有个目标函数一样。</p>
+<p><strong>目标要大</strong>。不管是人生目标还是目标函数，你最好不要知道最后可以走到哪里。如果你知道，那么你的目标就太简单了，可能是个凸函数。你可以在一开始的时候给自己一些小目标，例如期末考个80分，训练一个线性模型。但接下来得有更大的目标，财富自由也好，100亿参数的变形金刚也好，得足够一颗赛艇。</p>
+<p><strong>坚持走</strong>。不管你的目标多复杂，随机梯度下降都是最简单的。每一次你找一个大概还行的方向（梯度），然后迈一步（下降）。两个核心要素是方向和步子的长短。但最重要的是你得一直走下去，能多走几步就多走几步。</p>
+<p><strong>痛苦的卷</strong>。每一步里你都在试图改变你自己或者你的模型参数。改变带来痛苦。但没有改变就没有进步。你过得很痛苦不代表在朝着目标走，因为你可能走反了。但过得很舒服那一定在原地踏步。需要时刻跟自己作对。</p>
+<p><strong>可以躺平</strong>。你用你内心的激情来迈步子。步子太小走不动，步子太长容易过早消耗掉了激情。周期性的调大调小步长效果挺好。所以你可以时不时休息休息。</p>
+<p><strong>四处看看</strong>。每一步走的方向是你对世界的认识。如果你探索的世界不怎么变化，那么要么你的目标太简单，要么你困在你的舒适区了。随机梯度下降的第一个词是随机，就是你需要四处走走，看过很多地方，做些错误的决定，这样你可以在前期迈过一些不是很好的舒适区。</p>
+<p><strong>快也是慢</strong>。你没有必要特意去追求找到最好的方向和最合适的步子。你身边当然会有幸运之子，他们每一步都在别人前面。但经验告诉我们，随机梯度下降前期进度太快，后期可能乏力。就是说你过早的找到一个舒适区，忘了世界有多大。所以你不要急，前面徘徊一段时间不是坏事。成名无需太早。</p>
+<p><strong>赢在起点</strong>。起点当然重要。如果你在终点附近起步，可以少走很多路。而且终点附近的路都比较平，走着舒服。当你发现别人不如你的时候，看看自己站在哪里。可能你就是运气很好，赢在了起跑线。如果你跟别人在同一起跑线，不见得你能做更好。</p>
+<p><strong>很远也能到达</strong>。如果你是在随机起点，那么做好准备前面的路会非常不平坦。越远离终点，越人迹罕见。四处都是悬崖。但随机梯度下降告诉我们，不管起点在哪里，最后得到的解都差不多。当然这个前提是你得一直按照梯度的方向走下去。如果中间梯度炸掉了，那么你随机一个起点，调整步子节奏，重新来。</p>
+<p><strong>独一无二</strong>。也许大家有着差不多的目标，在差不多的时间毕业买房结婚生娃。但每一步里，每个人内心中看到的世界都不一样，导致走的路不一样。你如果跑多次随机梯度下降，在各个时间点的目标函数值可能都差不多，但每次的参数千差万别。不会有人关心你每次训练出来的模型里面参数具体是什么值，除了你自己。</p>
+<p><strong>简单最好</strong> 。当然有比随机梯度下降更复杂的算法。他们想每一步看想更远更准，想步子迈最大。但如果你的目标很复杂，简单的随机梯度下降反而效果最好。深度学习里大家都用它。关注当前，每次抬头瞄一眼世界，快速做个决定，然后迈一小步。小步快跑。只要你有目标，不要停，就能到达。</p>
+]]></content>
+      <categories>
+        <category>杂文</category>
+      </categories>
+      <tags>
+        <tag>杂文</tag>
       </tags>
   </entry>
   <entry>
