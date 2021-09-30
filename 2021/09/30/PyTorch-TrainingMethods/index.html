@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.chen-yiting.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文介绍了PyTorch训练模型时常用的一些技巧，主要包含了模型的存储与加载，finetune，和多GPU使用方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PyTorch-TrainingMethods">
+<meta property="og:url" content="http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/index.html">
+<meta property="og:site_name" content="Robotics, ML &amp; Thug Life">
+<meta property="og:description" content="本文介绍了PyTorch训练模型时常用的一些技巧，主要包含了模型的存储与加载，finetune，和多GPU使用方法。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/image-20210929152702459.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/image-20210929154549808.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/image-20210929173316048.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/image-20210929174534081.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/image-20210930154540194.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/image-20210930155339978.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/image-20210930200724884.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/image-20210930211909204.png">
+<meta property="article:published_time" content="2021-09-30T14:07:51.000Z">
+<meta property="article:modified_time" content="2021-09-30T14:23:58.689Z">
+<meta property="article:author" content="Yiting CHEN">
+<meta property="article:tag" content="PyTorch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/image-20210929152702459.png">
+
+<link rel="canonical" href="http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>PyTorch-TrainingMethods | Robotics, ML & Thug Life</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Robotics, ML & Thug Life</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">今天几号？</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/home/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/projects/" rel="section"><i class="fa fa-flag fa-fw"></i>Projects</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yiting.jpeg">
+      <meta itemprop="name" content="Yiting CHEN">
+      <meta itemprop="description" content="日拱一卒，功不唐捐">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Robotics, ML & Thug Life">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PyTorch-TrainingMethods
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-09-30 22:07:51 / Modified: 22:23:58" itemprop="dateCreated datePublished" datetime="2021-09-30T22:07:51+08:00">2021-09-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PyTorch/" itemprop="url" rel="index"><span itemprop="name">PyTorch</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PyTorch/PyTorch%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">PyTorch框架学习</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/09/30/PyTorch-TrainingMethods/" class="post-meta-item leancloud_visitors" data-flag-title="PyTorch-TrainingMethods" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/09/30/PyTorch-TrainingMethods/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/30/PyTorch-TrainingMethods/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <div class="post-description">本文介绍了PyTorch训练模型时常用的一些技巧，主要包含了模型的存储与加载，finetune，和多GPU使用方法。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="七-PyTorch训练技巧"><a href="#七-PyTorch训练技巧" class="headerlink" title="七. PyTorch训练技巧"></a>七. PyTorch训练技巧</h2><h3 id="A-模型的保存与加载"><a href="#A-模型的保存与加载" class="headerlink" title="A. 模型的保存与加载"></a>A. 模型的保存与加载</h3><h4 id="1-序列化与反序列化"><a href="#1-序列化与反序列化" class="headerlink" title="1. 序列化与反序列化"></a>1. 序列化与反序列化</h4><p>序列化：从内存中将模型保存为二进制文件。</p>
+<p>反序列化：从硬盘中将二进制模型加载到内存里。</p>
+<h4 id="2-模型的保存与加载的两种方式"><a href="#2-模型的保存与加载的两种方式" class="headerlink" title="2. 模型的保存与加载的两种方式"></a>2. 模型的保存与加载的两种方式</h4><h5 id="torch-save"><a href="#torch-save" class="headerlink" title="torch.save"></a>torch.save</h5><p>主要参数：</p>
+<ul>
+<li>obj：对象</li>
+<li>f：输出路径</li>
+</ul>
+<h5 id="torch-load"><a href="#torch-load" class="headerlink" title="torch.load"></a>torch.load</h5><p>主要参数：</p>
+<ul>
+<li>f：输入路径</li>
+<li>map_location：指定存放位置，cpu or gpu</li>
+</ul>
+<img src="/2021/09/30/PyTorch-TrainingMethods/image-20210929152702459.png" alt="image-20210929152702459" style="zoom: 50%;">
+
+<h5 id="方法1：保存整个Module"><a href="#方法1：保存整个Module" class="headerlink" title="方法1：保存整个Module"></a>方法1：保存整个Module</h5><p>torch.save(net, path)</p>
+<p><strong>加载：</strong></p>
+<p>net_load = torch.load(path_model)</p>
+<h5 id="方法2：保存模型参数-官方推荐"><a href="#方法2：保存模型参数-官方推荐" class="headerlink" title="方法2：保存模型参数(官方推荐)"></a>方法2：保存模型参数(官方推荐)</h5><p>state_dict = net.state_dict()</p>
+<p>torch.save(state_dict, path)</p>
+<p><strong>加载：</strong></p>
+<p>state_dict_load = torch.load(path_state_dict)</p>
+<p>net_new = LeNet(classes=2019)</p>
+<p>net_new.load_state_dict(state_dict_load)</p>
+<h4 id="3-模型断点续训练"><a href="#3-模型断点续训练" class="headerlink" title="3.模型断点续训练"></a>3.模型断点续训练</h4><p><img src="/2021/09/30/PyTorch-TrainingMethods/image-20210929154549808.png" alt="image-20210929154549808"></p>
+<p>模型和优化器当中都有需要保存的数据（有时候也会保存loss等，指示当前的训练指标）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 存储checkpoint</span></span><br><span class="line">checkpoint = &#123;<span class="string">&quot;model_state_dict&quot;</span>: net.state_dict(),</span><br><span class="line">	<span class="string">&quot;optimizer_state_dict&quot;</span>: optimizer.state_dict(),						<span class="string">&quot;epoch&quot;</span>: epoch &#125;</span><br><span class="line">path_checkpoint = <span class="string">&quot;./checkpoint_&#123;&#125;_epoch.pkl&quot;</span></span><br><span class="line">torch.save(checkpoint, path_checkpoint)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 加载checkpoint</span></span><br><span class="line">path_checkpoint = <span class="string">&quot;./chechpoint_4_epoch.pkl&quot;</span></span><br><span class="line"></span><br><span class="line">checkpoint = torch.load(path_checkpoint)</span><br><span class="line"></span><br><span class="line">net.load_state_dict(checkpoint[<span class="string">&#x27;model_state_dict&#x27;</span>])</span><br><span class="line">optimizer.load_state_dict(checkpoint[<span class="string">&#x27;optimizer_state_dict&#x27;</span>])</span><br><span class="line">start_epoch = checkpoint[<span class="string">&#x27;epoch&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#学利率也得改哦</span></span><br><span class="line">scheduler.last_epoch = start_epoch</span><br></pre></td></tr></table></figure>
+
+<h3 id="B-Finetune"><a href="#B-Finetune" class="headerlink" title="B. Finetune"></a>B. Finetune</h3><h4 id="Transfer-Learning"><a href="#Transfer-Learning" class="headerlink" title="Transfer Learning"></a>Transfer Learning</h4><p>机器学习的分支，研究源域（source domain）和知识如何应用到目标域（target domain）</p>
+<p>Model Finitune：模型的迁移学习，将原任务的知识放在新任务当中。</p>
+<p><img src="/2021/09/30/PyTorch-TrainingMethods/image-20210929173316048.png" alt="image-20210929173316048"></p>
+<p>通常对最后的classifier层进行修改，保留前面特征提取有共性的地方。</p>
+<p>模型微调步骤：</p>
+<ol>
+<li>获取预训练模型参数</li>
+<li>加载模型（load_state_dict）</li>
+<li>修改输出层</li>
+</ol>
+<p>模型微调训练方法：</p>
+<ol>
+<li>固定预训练参数，(通过两种方法实现：requires_grad=False, lr=0)</li>
+<li>Features Extractor较小学习率（params_group）,对不同的地方设置不同的学习率。</li>
+</ol>
+<h4 id="模型微调"><a href="#模型微调" class="headerlink" title="模型微调"></a>模型微调</h4><p>Finetune Resnet-18用于二分类</p>
+<img src="/2021/09/30/PyTorch-TrainingMethods/image-20210929174534081.png" alt="image-20210929174534081" style="zoom: 50%;">
+
+<p>加载预训练的模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">resnet18_ft = models.resnet18()</span><br><span class="line"></span><br><span class="line">path_pretrained_model = os.path.join(BASEDIR, <span class="string">&quot;..&quot;</span>, <span class="string">&quot;..&quot;</span>, <span class="string">&quot;data/resnet18.pth&quot;</span>)</span><br><span class="line">state_dict_load = torch.load(path_pretrained_model)</span><br><span class="line">resnet18_ft.load_state_dict(state_dict_load)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 替换fc层</span></span><br><span class="line">num_ftrs = resnet18_ft.fc.in_features</span><br><span class="line">resnet18_ft.fc = nn.Linear(num_fts, classes)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 冻结卷积层</span></span><br><span class="line"><span class="keyword">for</span> param <span class="keyword">in</span> resnet18_ft.parameters():</span><br><span class="line">    param.requires_grad = <span class="literal">False</span></span><br><span class="line">    </span><br><span class="line"><span class="comment"># conv小学习率</span></span><br><span class="line">fc_params_id = <span class="built_in">list</span>(<span class="built_in">map</span>(<span class="built_in">id</span>, resnet18_ft.fc.parameters()))</span><br><span class="line">base_params = <span class="built_in">filter</span>(<span class="keyword">lambda</span> p: <span class="built_in">id</span>(p) <span class="keyword">not</span> <span class="keyword">in</span> fc_params_id, resnet18_ft.parameters())</span><br><span class="line">optimizer = optim.SGD([</span><br><span class="line">    &#123;<span class="string">&#x27;params&#x27;</span>: base_params, <span class="string">&#x27;lr&#x27;</span>:LR*<span class="number">0.1</span>&#125;, <span class="comment"># 或者把LR设置为0 </span></span><br><span class="line">    &#123;<span class="string">&#x27;params&#x27;</span>: resnet18_ft.fc.parameters(), <span class="string">&#x27;lr&#x27;</span>:LR&#125;], momentum=<span class="number">0.9</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="C-GPU的使用"><a href="#C-GPU的使用" class="headerlink" title="C. GPU的使用"></a>C. GPU的使用</h3><p>CPU（Central Processing Unit，中央处理器）：主要包括控制器和运算器。</p>
+<p>GPU(Graphics Processing Unit，图形处理器)：处理统一的，无依赖的大规模数据运算。</p>
+<img src="/2021/09/30/PyTorch-TrainingMethods/image-20210930154540194.png" alt="image-20210930154540194" style="zoom:33%;">
+
+<h4 id="to函数"><a href="#to函数" class="headerlink" title="to函数"></a>to函数</h4><p>to：转换数据类型/设备</p>
+<p>1.tensor.to(*args, **kwargs)</p>
+<img src="/2021/09/30/PyTorch-TrainingMethods/image-20210930155339978.png" alt="image-20210930155339978" style="zoom:33%;">
+
+<p>2.module.to(*args, **kwargs)</p>
+<p>区别：张量不执行inplace，模型执行inplace。所以张量需要重新赋值，但是module不需要。</p>
+<p>一般笔记本设置device很简单</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">device = torch.device(<span class="string">&quot;cuda:0&quot;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x_cpu = torch.ones((<span class="number">3</span>, <span class="number">3</span>))</span><br><span class="line">x_gpu = x_cpu.to(device)</span><br><span class="line"><span class="comment"># x_cpu和x_gpu地址是不一样的。</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果模型在CPU上，数据在GPU，那么给模型递入数据后自动会变到GPU上。</li>
+<li>如果模型在GPU上，数据在CPU，那么则会报错。</li>
+</ul>
+<p>torch.cuda常用方法</p>
+<p>torch.cuda.device_count()：计算当前可见可用的GPU数</p>
+<p>torch.cuda.get_device_name()：获取gpu名称</p>
+<p>torch.cuda.manual_seed()：为当前gpu设置随机种子</p>
+<p>torch.cuda.manual_seed_all()：为所有可见可用gpu设置随机种子</p>
+<h4 id="GPU的设置"><a href="#GPU的设置" class="headerlink" title="GPU的设置"></a>GPU的设置</h4><p>torch.cuda.set_device()：设置主gpu为哪一个物理GPU(不推荐)</p>
+<p>推荐：os.environ.setdefault(“CUDA_VISIBLE_DEVICE”,<strong>“2,3”</strong>)</p>
+<p>设置选择哪一个GPU</p>
+<p><img src="/2021/09/30/PyTorch-TrainingMethods/image-20210930200724884.png" alt="image-20210930200724884"></p>
+<p>默认第零个为主GPU。多GPU运算的<strong>分发并行</strong>机制。</p>
+<p>分发——&gt; 并行运算 ——&gt; 结果回收</p>
+<p>torch.nn.DataParallel</p>
+<p>功能：包装模型，实现分发并行机制</p>
+<p><img src="/2021/09/30/PyTorch-TrainingMethods/image-20210930211909204.png" alt="image-20210930211909204"></p>
+<p>主要参数：</p>
+<ul>
+<li>module：需要包装分发的模型</li>
+<li>device_ids：可分发的gpu，默认分发到所有<strong>可用可见</strong>的gpu上</li>
+<li>output_device：结果输出设备</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">net = FooNet(neural_num=<span class="number">3</span>, layers=<span class="number">3</span>)</span><br><span class="line">net = nn.DataParallel(net)</span><br><span class="line">net.to(device)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查询当前gpu内存剩余，可以直接拿来用</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_gpu_memory</span>():</span></span><br><span class="line">    <span class="keyword">import</span> os </span><br><span class="line">    os.system(<span class="string">&#x27;nvidia-smi -q -d Meomory | grep -A4 GPU | grep Free &gt; tmp.txt&#x27;</span>)</span><br><span class="line">    memory_gpu = [<span class="built_in">int</span>(x.split()[<span class="number">2</span>]) <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">open</span>(<span class="string">&#x27;tmp.txt&#x27;</span>, <span class="string">&#x27;r&#x27;</span>).readlines()]</span><br><span class="line">    os.system(<span class="string">&#x27;rm tmp.txt&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> memory_gpu</span><br></pre></td></tr></table></figure>
+
+<p>如何在一个只有CPU的电脑上加载gpu模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.load(path_state_dict, map_location=<span class="string">&#x27;cpu&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Yiting CHEN
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/" title="PyTorch-TrainingMethods">http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/29/PyTorch-NormalizationMethods/" rel="prev" title="PyTorch-NormalizationMethods">
+      <i class="fa fa-chevron-left"></i> PyTorch-NormalizationMethods
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/09/30/PyTorch-CommonErrors/" rel="next" title="PyTorch-CommonErrors">
+      PyTorch-CommonErrors <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83-PyTorch%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7"><span class="nav-text">七. PyTorch训练技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BF%9D%E5%AD%98%E4%B8%8E%E5%8A%A0%E8%BD%BD"><span class="nav-text">A. 模型的保存与加载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="nav-text">1. 序列化与反序列化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BF%9D%E5%AD%98%E4%B8%8E%E5%8A%A0%E8%BD%BD%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="nav-text">2. 模型的保存与加载的两种方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-save"><span class="nav-text">torch.save</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#torch-load"><span class="nav-text">torch.load</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%B9%E6%B3%951%EF%BC%9A%E4%BF%9D%E5%AD%98%E6%95%B4%E4%B8%AAModule"><span class="nav-text">方法1：保存整个Module</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%B9%E6%B3%952%EF%BC%9A%E4%BF%9D%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%8F%82%E6%95%B0-%E5%AE%98%E6%96%B9%E6%8E%A8%E8%8D%90"><span class="nav-text">方法2：保存模型参数(官方推荐)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E6%A8%A1%E5%9E%8B%E6%96%AD%E7%82%B9%E7%BB%AD%E8%AE%AD%E7%BB%83"><span class="nav-text">3.模型断点续训练</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-Finetune"><span class="nav-text">B. Finetune</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Transfer-Learning"><span class="nav-text">Transfer Learning</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83"><span class="nav-text">模型微调</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-GPU%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-text">C. GPU的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#to%E5%87%BD%E6%95%B0"><span class="nav-text">to函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GPU%E7%9A%84%E8%AE%BE%E7%BD%AE"><span class="nav-text">GPU的设置</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yiting CHEN"
+      src="/images/yiting.jpeg">
+  <p class="site-author-name" itemprop="name">Yiting CHEN</p>
+  <div class="site-description" itemprop="description">日拱一卒，功不唐捐</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChenEating716" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChenEating716" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chenyiting@whu.edu.cn" title="E-Mail → mailto:chenyiting@whu.edu.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+
+
+
+
+<script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=UB7V-RAFj6oD9oVSVdeRrdqXwvEf1IElIBBpgDOSJWg&cl=ffffff&w=a"></script>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-bolt"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yiting CHEN</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'wCRLpXPq36WyR2elloFP4fKp-gzGzoHsz',
+      appKey     : 'B7FhAvW8W7lUO2USrKWEoCyb',
+      placeholder: "来都来了",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
