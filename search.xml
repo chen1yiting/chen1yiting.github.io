@@ -1996,7 +1996,7 @@
 <p><img src="/2021/10/02/ObjectDetection/image-20211002180659356.png" alt="image-20211002180659356"></p>
 <h3 id="Faster-RCNN"><a href="#Faster-RCNN" class="headerlink" title="Faster RCNN"></a>Faster RCNN</h3><p>two stage的代表作。</p>
 <p>先通过全卷积backbone进行特征提取，基于feature map，通过RPN网络经过NMS之后生成候选矩形框（通常为2000个），接下来就是对窗口的选择。窗口的大小很随机，这里会用到<strong>自适应池化</strong>层。 </p>
-<p><img src="/2021/10/02/ObjectDetection/image-20211002180722669.png" alt="image-20211002180722669"></p>
+<p><img src="/2021/10/02/ObjectDetection/image-20211002180722669-16331837199742.png" alt="image-20211002180722669"></p>
 <h2 id="PyTorch中的Faster-RCNN训练"><a href="#PyTorch中的Faster-RCNN训练" class="headerlink" title="PyTorch中的Faster RCNN训练"></a>PyTorch中的Faster RCNN训练</h2><p>Faster RCNN数据流：</p>
 <ol>
 <li><p>Feature map [256, h_f, w_f]</p>

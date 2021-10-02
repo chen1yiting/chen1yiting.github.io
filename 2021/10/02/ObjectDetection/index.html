@@ -38,9 +38,9 @@
 <meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/ObjectDetection/image-20211002180111014.png">
 <meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/ObjectDetection/image-20211002180354969.png">
 <meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/ObjectDetection/image-20211002180659356.png">
-<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/ObjectDetection/image-20211002180722669.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/ObjectDetection/image-20211002180722669-16331837199742.png">
 <meta property="article:published_time" content="2021-10-02T09:07:38.000Z">
-<meta property="article:modified_time" content="2021-10-02T13:39:27.342Z">
+<meta property="article:modified_time" content="2021-10-02T14:12:49.754Z">
 <meta property="article:author" content="Yiting CHEN">
 <meta property="article:tag" content="目标检测">
 <meta name="twitter:card" content="summary">
@@ -236,7 +236,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-10-02 17:07:38 / Modified: 21:39:27" itemprop="dateCreated datePublished" datetime="2021-10-02T17:07:38+08:00">2021-10-02</time>
+              <time title="Created: 2021-10-02 17:07:38 / Modified: 22:12:49" itemprop="dateCreated datePublished" datetime="2021-10-02T17:07:38+08:00">2021-10-02</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -339,7 +339,7 @@
 <p><img src="/2021/10/02/ObjectDetection/image-20211002180659356.png" alt="image-20211002180659356"></p>
 <h3 id="Faster-RCNN"><a href="#Faster-RCNN" class="headerlink" title="Faster RCNN"></a>Faster RCNN</h3><p>two stage的代表作。</p>
 <p>先通过全卷积backbone进行特征提取，基于feature map，通过RPN网络经过NMS之后生成候选矩形框（通常为2000个），接下来就是对窗口的选择。窗口的大小很随机，这里会用到<strong>自适应池化</strong>层。 </p>
-<p><img src="/2021/10/02/ObjectDetection/image-20211002180722669.png" alt="image-20211002180722669"></p>
+<p><img src="/2021/10/02/ObjectDetection/image-20211002180722669-16331837199742.png" alt="image-20211002180722669"></p>
 <h2 id="PyTorch中的Faster-RCNN训练"><a href="#PyTorch中的Faster-RCNN训练" class="headerlink" title="PyTorch中的Faster RCNN训练"></a>PyTorch中的Faster RCNN训练</h2><p>Faster RCNN数据流：</p>
 <ol>
 <li><p>Feature map [256, h_f, w_f]</p>
