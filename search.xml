@@ -1861,7 +1861,7 @@
       </tags>
   </entry>
   <entry>
-    <title>图像分割介绍Introduction to Image Segmentation</title>
+    <title>初识图像分割Introduction to Image Segmentation</title>
     <url>/2021/10/02/Image-Segmentation/</url>
     <content><![CDATA[<h1 id="图像分割Image-Segmentation"><a href="#图像分割Image-Segmentation" class="headerlink" title="图像分割Image Segmentation"></a>图像分割Image Segmentation</h1><h2 id="图像分割分类："><a href="#图像分割分类：" class="headerlink" title="图像分割分类："></a>图像分割分类：</h2><ol>
 <li>超像素分割：少量超像素替代大量像素，常用于图像预处理</li>
@@ -1944,6 +1944,97 @@
       </categories>
       <tags>
         <tag>图像分割</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>初识目标检测Intoduction to Objects Detection</title>
+    <url>/2021/10/02/ObjectDetection/</url>
+    <content><![CDATA[<h1 id="Intoduction-to-Objects-Detection"><a href="#Intoduction-to-Objects-Detection" class="headerlink" title="Intoduction to Objects Detection"></a>Intoduction to Objects Detection</h1><h2 id="图像目标检测是什么？"><a href="#图像目标检测是什么？" class="headerlink" title="图像目标检测是什么？"></a>图像目标检测是什么？</h2><p>目标检测：判断图像中目标的位置</p>
+<p>目标检测两要素：</p>
+<ol>
+<li>分类：分类向量[p0,…pn]</li>
+<li>回归：回归边界框[x1, y1,  x2, y2]</li>
+</ol>
+<img src="/2021/10/02/ObjectDetection/image-20211002171720466.png" alt="image-20211002171720466" style="zoom:50%;">
+
+<h2 id="模型是如何完成目标检测的？"><a href="#模型是如何完成目标检测的？" class="headerlink" title="模型是如何完成目标检测的？"></a>模型是如何完成目标检测的？</h2><p>Model接受的通常是一个list，每一个元素是一个3d张量。输出也是一个list，对应的每一个元素的检测结果。 </p>
+<img src="/2021/10/02/ObjectDetection/image-20211002174820078.png" alt="image-20211002174820078" style="zoom:50%;">
+
+<p>将3D张量映射到两个张量：</p>
+<ul>
+<li>分类张量：shape为[N, c+1]</li>
+<li>边界框张量：shape为[N, 4] </li>
+</ul>
+<p>N代表有多少个边界框（很大的问题），传统方法是滑动窗策略。</p>
+<img src="/2021/10/02/ObjectDetection/image-20211002174859352.png" alt="image-20211002174859352" style="zoom:50%;">
+
+<p>还有更换滑动框大小的：</p>
+<img src="/2021/10/02/ObjectDetection/image-20211002175018039.png" alt="image-20211002175018039" style="zoom:50%;">
+
+<p>缺点：</p>
+<ol>
+<li>重复计算量大</li>
+<li>窗口大小难确定</li>
+</ol>
+<p>可以利用<strong>卷积</strong>减少重复计算：</p>
+<img src="/2021/10/02/ObjectDetection/image-20211002175219704.png" alt="image-20211002175219704" style="zoom:33%;">
+
+<p>重要概念：</p>
+<p>特征图<strong>一个像素</strong>对应</p>
+<p>原图<strong>一块区域</strong>。</p>
+<img src="/2021/10/02/ObjectDetection/image-20211002175909456.png" alt="image-20211002175909456" style="zoom:33%;">
+
+<h2 id="深度学习目标检测模型简介"><a href="#深度学习目标检测模型简介" class="headerlink" title="深度学习目标检测模型简介"></a>深度学习目标检测模型简介</h2><img src="/2021/10/02/ObjectDetection/image-20211002180111014.png" alt="image-20211002180111014" style="zoom: 50%;">
+
+<p>《Object Detection in 20 Years- A Survey》-2019</p>
+<p>按流程区分：</p>
+<p><strong>one-stage</strong>和<strong>two-stage</strong>，区别在于是否包含了Proposal Generation这个模块（输出一个个候选矩形框，很多默认为2000）。</p>
+<p>backbone是指全卷积模块，生成一个feature map。</p>
+<img src="/2021/10/02/ObjectDetection/image-20211002180354969.png" alt="image-20211002180354969" style="zoom:50%;">
+
+<h3 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h3><p>one stage的代表网络，直接在feature map上进行操作。</p>
+<p><img src="/2021/10/02/ObjectDetection/image-20211002180659356.png" alt="image-20211002180659356"></p>
+<h3 id="Faster-RCNN"><a href="#Faster-RCNN" class="headerlink" title="Faster RCNN"></a>Faster RCNN</h3><p>two stage的代表作。</p>
+<p>先通过全卷积backbone进行特征提取，基于feature map，通过RPN网络经过NMS之后生成候选矩形框（通常为2000个），接下来就是对窗口的选择。窗口的大小很随机，这里会用到<strong>自适应池化</strong>层。 </p>
+<p><img src="/2021/10/02/ObjectDetection/image-20211002180722669.png" alt="image-20211002180722669"></p>
+<h2 id="PyTorch中的Faster-RCNN训练"><a href="#PyTorch中的Faster-RCNN训练" class="headerlink" title="PyTorch中的Faster RCNN训练"></a>PyTorch中的Faster RCNN训练</h2><p>Faster RCNN数据流：</p>
+<ol>
+<li><p>Feature map [256, h_f, w_f]</p>
+</li>
+<li><p>2 Softmax（RPN网络完成）[num_anchors, h_f, w_f]</p>
+</li>
+<li><p>Regressors（RPN网络完成）[num_anchors*4, h_f, w_f]</p>
+</li>
+<li><p>NMS OUT（数十万个挑选出2000个候选框）[n_proposals=2000, 4]</p>
+</li>
+<li><p>ROI Layer（一系列复杂的操作）[512, 256, 7, 7]</p>
+</li>
+<li><p>FC1 FC2 [512, 1024]</p>
+</li>
+<li><p>c+1 Softmax [512, c+1]</p>
+</li>
+<li><p>Regressors [512, (c+1)*4]</p>
+</li>
+<li><p>torchvision.models.detection.fasterrcnn_resnet50_fpn()返回FasterRCNN实例</p>
+</li>
+<li><p>class FasterRCNN(GeneralizedRCNN)</p>
+</li>
+<li><p>class GeneralizedRCNN(nn.Module)</p>
+<p>forward():</p>
+<ol>
+<li>features = self.backbone(images.tensors)</li>
+<li>proposals, proposal_losses = self.rpn(images, features, targets)</li>
+<li>detections, detector_losses = self.roi_heads(features, proposals, images.image_sizes, targets)</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>ComputerVision-2D</category>
+        <category>图像检测Objects Detection</category>
+      </categories>
+      <tags>
+        <tag>目标检测</tag>
       </tags>
   </entry>
 </search>
