@@ -22,30 +22,47 @@
     var CONFIG = {"hostname":"www.chen-yiting.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="日拱一卒，功不唐捐">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Robotics, ML &amp; Thug Life">
-<meta property="og:url" content="http://www.chen-yiting.com/page/2/index.html">
+  <meta name="description" content="本文初步介绍了图像分割。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像分割介绍Introduction to Image Segmentation">
+<meta property="og:url" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/index.html">
 <meta property="og:site_name" content="Robotics, ML &amp; Thug Life">
-<meta property="og:description" content="日拱一卒，功不唐捐">
+<meta property="og:description" content="本文初步介绍了图像分割。">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/image-20211002151058870.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/image-20211002151523567.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/image-20211002160709312.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/image-20211002160722002.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/image-20211002161657143.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/image-20211002161821514.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/image-20211002162222586.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/image-20211002162526373.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/image-20211002162627727.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/image-20211002162813137.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/image-20211002162831108.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/image-20211002163001486.png">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/image-20211002163431055.png">
+<meta property="article:published_time" content="2021-10-02T06:59:14.000Z">
+<meta property="article:modified_time" content="2021-10-02T08:52:28.021Z">
 <meta property="article:author" content="Yiting CHEN">
+<meta property="article:tag" content="图像分割">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/image-20211002151058870.png">
 
-<link rel="canonical" href="http://www.chen-yiting.com/page/2/">
+<link rel="canonical" href="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Robotics, ML & Thug Life</title>
+  <title>图像分割介绍Introduction to Image Segmentation | Robotics, ML & Thug Life</title>
   
 
 
@@ -191,13 +208,14 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/26/PyTorch-ModelsConstruction/">
+    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/yiting.jpeg">
@@ -209,10 +227,9 @@
       <meta itemprop="name" content="Robotics, ML & Thug Life">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/26/PyTorch-ModelsConstruction/" class="post-title-link" itemprop="url">PyTorch-ModelsConstruction</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          图像分割介绍Introduction to Image Segmentation
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -220,37 +237,38 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2021-09-26 19:50:05" itemprop="dateCreated datePublished" datetime="2021-09-26T19:50:05+08:00">2021-09-26</time>
+              <time title="Created: 2021-10-02 14:59:14 / Modified: 16:52:28" itemprop="dateCreated datePublished" datetime="2021-10-02T14:59:14+08:00">2021-10-02</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-30 22:24:13" itemprop="dateModified" datetime="2021-09-30T22:24:13+08:00">2021-09-30</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PyTorch/" itemprop="url" rel="index"><span itemprop="name">PyTorch</span></a>
+                  <a href="/categories/ComputerVision-2D/" itemprop="url" rel="index"><span itemprop="name">ComputerVision-2D</span></a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PyTorch/PyTorch%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">PyTorch框架学习</span></a>
+                  <a href="/categories/ComputerVision-2D/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2Image-Segmentation/" itemprop="url" rel="index"><span itemprop="name">图像分割Image Segmentation</span></a>
                 </span>
             </span>
 
           
-            <span id="/2021/09/26/PyTorch-ModelsConstruction/" class="post-meta-item leancloud_visitors" data-flag-title="PyTorch-ModelsConstruction" title="Views">
+            <span id="/2021/10/02/Image-Segmentation/" class="post-meta-item leancloud_visitors" data-flag-title="图像分割介绍Introduction to Image Segmentation" title="Views">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
               <span class="post-meta-item-text">Views: </span>
               <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
             </span>
   
   <span class="post-meta-item">
@@ -260,12 +278,13 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/2021/09/26/PyTorch-ModelsConstruction/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/26/PyTorch-ModelsConstruction/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/10/02/Image-Segmentation/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/10/02/Image-Segmentation/" itemprop="commentCount"></span>
     </a>
   </span>
   
   
+            <div class="post-description">本文初步介绍了图像分割。</div>
 
         </div>
       </header>
@@ -276,341 +295,132 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>文章介绍了PyTorch当中搭建模型的基础方法。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/09/26/PyTorch-ModelsConstruction/">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
+        <h1 id="图像分割Image-Segmentation"><a href="#图像分割Image-Segmentation" class="headerlink" title="图像分割Image Segmentation"></a>图像分割Image Segmentation</h1><h2 id="图像分割分类："><a href="#图像分割分类：" class="headerlink" title="图像分割分类："></a>图像分割分类：</h2><ol>
+<li>超像素分割：少量超像素替代大量像素，常用于图像预处理</li>
+<li>语义分割：逐像素分类，无法区分个体</li>
+<li>实例分割：对个体目标进行分割，像素级目标检测</li>
+<li>全景分割：语义分割结合实例分割</li>
+</ol>
+<img src="/2021/10/02/Image-Segmentation/image-20211002151058870.png" alt="image-20211002151058870" style="zoom:50%;">
+
+<h2 id="模型如何完成图像分割？"><a href="#模型如何完成图像分割？" class="headerlink" title="模型如何完成图像分割？"></a>模型如何完成图像分割？</h2><p><img src="/2021/10/02/Image-Segmentation/image-20211002151523567.png" alt="image-20211002151523567"></p>
+<p>计算机：图片 –&gt; 3d张量（3，224，224）                                       ——————————&gt;                                        计算机：3-d张量（类别数，224，224 ）</p>
+<ul>
+<li>模型：将数据映射到特征</li>
+<li>人类：定义特征的物理意义，解决实际问题</li>
+</ul>
+<h2 id="PyTorch-Hub"><a href="#PyTorch-Hub" class="headerlink" title="PyTorch-Hub"></a>PyTorch-Hub</h2><p>PyTorch-Hub是PyTorch模型库，有大量模型供开发者调用</p>
+<ol>
+<li><p>torch.hub.load(‘pytorch/vision’,’deeplabv3_resnet101, pretrained=True’)</p>
+<p>model = torch.hub.load(github, model, *args, **kwargs)</p>
+<p>功能：加载模型</p>
+<p>主要参数：</p>
+<p>github：str，项目名，eg：pytorch/vision, &lt; repo_owner/repo_name[:tag_name] &gt;</p>
+<p>model: str, 模型名</p>
+</li>
+<li><p>torch.hub.list(github, force_reload=False)’</p>
+</li>
+<li><p>torch.hub.help(github,model,force_reload=False)</p>
+</li>
+</ol>
+<h2 id="图像分割的思考"><a href="#图像分割的思考" class="headerlink" title="图像分割的思考"></a>图像分割的思考</h2><p><img src="/2021/10/02/Image-Segmentation/image-20211002160709312.png" alt="image-20211002160709312" style="zoom:33%;"><img src="/2021/10/02/Image-Segmentation/image-20211002160722002.png" alt="image-20211002160722002" style="zoom:33%;"></p>
+<p>蓝色为猫，绿色为狗。说明模型只关注了头部。</p>
+<h2 id="深度学习中的经典分割模型"><a href="#深度学习中的经典分割模型" class="headerlink" title="深度学习中的经典分割模型"></a>深度学习中的经典分割模型</h2><p>最主要贡献：</p>
+<h3 id="FCN："><a href="#FCN：" class="headerlink" title="FCN："></a>FCN：</h3><p>利用<strong>全卷积</strong>完成pixelwise prediction。</p>
+<img src="/2021/10/02/Image-Segmentation/image-20211002161657143.png" alt="image-20211002161657143" style="zoom:33%;">
+
+<p>《Fully Convolutional Networks for Semantic Segmentation》</p>
+<h3 id="U-Net："><a href="#U-Net：" class="headerlink" title="U-Net："></a>U-Net：</h3><p>奠定Unet系列分割模型的</p>
+<p>基本结构——编码器与解码器<strong>特征耦合</strong></p>
+<p>《U-Net：Convolutional Networks for Biomedical Image Segmentation》</p>
+<img src="/2021/10/02/Image-Segmentation/image-20211002161821514.png" alt="image-20211002161821514" style="zoom:50%;">
+
+<h3 id="DeepLab系列——V1"><a href="#DeepLab系列——V1" class="headerlink" title="DeepLab系列——V1"></a>DeepLab系列——V1</h3><p>主要特点：</p>
+<ol>
+<li>空洞卷积：借助空洞卷积，增加感受野</li>
+<li>CRF：采用CRF进行mask后处理</li>
+</ol>
+<img src="/2021/10/02/Image-Segmentation/image-20211002162222586.png" alt="image-20211002162222586" style="zoom:50%;">
+
+<p>《DeeplabV1 Semantic Image segmentation with deep convolutional nets and fully connected CRFs》</p>
+<h3 id="DeepLab系列——V2"><a href="#DeepLab系列——V2" class="headerlink" title="DeepLab系列——V2"></a>DeepLab系列——V2</h3><img src="/2021/10/02/Image-Segmentation/image-20211002162526373.png" alt="image-20211002162526373" style="zoom:50%;">
+
+<p>主要特点：</p>
+<ol>
+<li>ASPP（Atrous spatial pyramid pooling）：解决多尺度问题</li>
+</ol>
+<h3 id="Deeplab系列——V3"><a href="#Deeplab系列——V3" class="headerlink" title="Deeplab系列——V3"></a>Deeplab系列——V3</h3><img src="/2021/10/02/Image-Segmentation/image-20211002162627727.png" alt="image-20211002162627727" style="zoom:50%;">
+
+<p>主要特点：</p>
+<ol>
+<li>空洞卷积的串行</li>
+<li>ASPP的并行</li>
+</ol>
+<img src="/2021/10/02/Image-Segmentation/image-20211002162813137.png" alt="image-20211002162813137" style="zoom:50%;">
+
+<img src="/2021/10/02/Image-Segmentation/image-20211002162831108.png" alt="image-20211002162831108" style="zoom:50%;">
+
+<h3 id="Deeplab系列——V3-1"><a href="#Deeplab系列——V3-1" class="headerlink" title="Deeplab系列——V3+"></a>Deeplab系列——V3+</h3><img src="/2021/10/02/Image-Segmentation/image-20211002163001486.png" alt="image-20211002163001486" style="zoom:50%;">
+
+<p>主要特点：deeplab3基础上加上了Encoder-Decoder思想。</p>
+<h3 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h3><p>《Deep Semantic Segmentation of Natural and Medical Images：A Review》</p>
+<p>图像分割资源：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/shawnbit/unet-family">https://github.com/shawnbit/unet-family</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/yassouali/pytorch_segmentation">https://github.com/yassouali/pytorch_segmentation</a></p>
+<img src="/2021/10/02/Image-Segmentation/image-20211002163431055.png" alt="image-20211002163431055" style="zoom:50%;">
+
+
+    </div>
+
+    
+    
+    
         
-      
-    </div>
 
-    
-    
-    
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Yiting CHEN
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/" title="图像分割介绍Introduction to Image Segmentation">http://www.chen-yiting.com/2021/10/02/Image-Segmentation/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" rel="tag"># 图像分割</a>
+          </div>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/26/PyTorch-DataProcess-Dataset/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/yiting.jpeg">
-      <meta itemprop="name" content="Yiting CHEN">
-      <meta itemprop="description" content="日拱一卒，功不唐捐">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Robotics, ML & Thug Life">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/26/PyTorch-DataProcess-Dataset/" class="post-title-link" itemprop="url">PyTorch-DataProcess&Dataset</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-09-26 19:48:00" itemprop="dateCreated datePublished" datetime="2021-09-26T19:48:00+08:00">2021-09-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-30 22:24:32" itemprop="dateModified" datetime="2021-09-30T22:24:32+08:00">2021-09-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PyTorch/" itemprop="url" rel="index"><span itemprop="name">PyTorch</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PyTorch/PyTorch%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">PyTorch框架学习</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/09/26/PyTorch-DataProcess-Dataset/" class="post-meta-item leancloud_visitors" data-flag-title="PyTorch-DataProcess&Dataset" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/09/26/PyTorch-DataProcess-Dataset/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/26/PyTorch-DataProcess-Dataset/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>文章中介绍了基本的训练数据预处理，以及Dataset类的构建方法。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/09/26/PyTorch-DataProcess-Dataset/">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/26/PyTorch-EnvSetup-BasicConcept/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/yiting.jpeg">
-      <meta itemprop="name" content="Yiting CHEN">
-      <meta itemprop="description" content="日拱一卒，功不唐捐">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Robotics, ML & Thug Life">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/26/PyTorch-EnvSetup-BasicConcept/" class="post-title-link" itemprop="url">PyTorch-EnvSetup&BasicConcept</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-09-26 19:32:20" itemprop="dateCreated datePublished" datetime="2021-09-26T19:32:20+08:00">2021-09-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-30 22:24:26" itemprop="dateModified" datetime="2021-09-30T22:24:26+08:00">2021-09-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PyTorch/" itemprop="url" rel="index"><span itemprop="name">PyTorch</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PyTorch/PyTorch%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">PyTorch框架学习</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/09/26/PyTorch-EnvSetup-BasicConcept/" class="post-meta-item leancloud_visitors" data-flag-title="PyTorch-EnvSetup&BasicConcept" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/09/26/PyTorch-EnvSetup-BasicConcept/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/26/PyTorch-EnvSetup-BasicConcept/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>文章介绍了PyTorch在win10+i7+3070配置电脑上的环境配置，以及关于PyTorch的一些基础概念。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/09/26/PyTorch-EnvSetup-BasicConcept/">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/30/ResNet18/" rel="prev" title="ResNet18">
+      <i class="fa fa-chevron-left"></i> ResNet18
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
   
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/26/SayHi/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/yiting.jpeg">
-      <meta itemprop="name" content="Yiting CHEN">
-      <meta itemprop="description" content="日拱一卒，功不唐捐">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Robotics, ML & Thug Life">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/26/SayHi/" class="post-title-link" itemprop="url">Prologue💬</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-09-26 02:11:35" itemprop="dateCreated datePublished" datetime="2021-09-26T02:11:35+08:00">2021-09-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-27 20:23:08" itemprop="dateModified" datetime="2021-09-27T20:23:08+08:00">2021-09-27</time>
-              </span>
-
-          
-            <span id="/2021/09/26/SayHi/" class="post-meta-item leancloud_visitors" data-flag-title="Prologue💬" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/09/26/SayHi/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/26/SayHi/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong><font size="10">Hi, this is Yiting Chen🚬. </font></strong></p>
-<p><strong><font size="6">I’m an amateur in Robotics &amp; ML🤖. </font></strong></p>
-<p><strong><font size="4">Wishing to make some progress in this area📈 </font></strong></p>
-<p><strong><font size="6">This blog is for recording my daily study📝.</font></strong></p>
-<p><strong><font size="4">Please let me 📬(<a href="mailto:&#x63;&#x68;&#x65;&#x6e;&#121;&#x69;&#x74;&#105;&#110;&#x67;&#64;&#119;&#104;&#117;&#46;&#101;&#x64;&#x75;&#x2e;&#x63;&#110;">&#x63;&#x68;&#x65;&#x6e;&#121;&#x69;&#x74;&#105;&#110;&#x67;&#64;&#119;&#104;&#117;&#46;&#101;&#x64;&#x75;&#x2e;&#x63;&#110;</a>) know if there is any question. </font></strong></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-  </nav>
 
 
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -657,6 +467,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2Image-Segmentation"><span class="nav-text">图像分割Image Segmentation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E5%88%86%E7%B1%BB%EF%BC%9A"><span class="nav-text">图像分割分类：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E5%AE%8C%E6%88%90%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%EF%BC%9F"><span class="nav-text">模型如何完成图像分割？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PyTorch-Hub"><span class="nav-text">PyTorch-Hub</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E7%9A%84%E6%80%9D%E8%80%83"><span class="nav-text">图像分割的思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E7%BB%8F%E5%85%B8%E5%88%86%E5%89%B2%E6%A8%A1%E5%9E%8B"><span class="nav-text">深度学习中的经典分割模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FCN%EF%BC%9A"><span class="nav-text">FCN：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#U-Net%EF%BC%9A"><span class="nav-text">U-Net：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DeepLab%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94V1"><span class="nav-text">DeepLab系列——V1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DeepLab%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94V2"><span class="nav-text">DeepLab系列——V2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deeplab%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94V3"><span class="nav-text">Deeplab系列——V3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deeplab%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94V3-1"><span class="nav-text">Deeplab系列——V3+</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%BC%E8%BF%B0"><span class="nav-text">综述</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

@@ -1824,13 +1824,126 @@
   <entry>
     <title>ResNet18</title>
     <url>/2021/09/30/ResNet18/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h1 id="Image-Classification"><a href="#Image-Classification" class="headerlink" title="Image Classification"></a>Image Classification</h1><h2 id="模型如何完成图像分类？"><a href="#模型如何完成图像分类？" class="headerlink" title="模型如何完成图像分类？"></a>模型如何完成图像分类？</h2><p>从3-d张量 ——&gt; 模型f(x) ——&gt; 向量 ——&gt;人类 ——&gt; 物理意义</p>
+<ul>
+<li>类别名与标签的转换     label_name = {“ants”: 0, “bees”:1}</li>
+<li>取输出向量最大值的标号       _, predicted = torch.max(outputs.data, 1)</li>
+<li>复杂运算                                outputs = resnet18(img_tensor)</li>
+</ul>
+<p>步骤从下至上</p>
+<p>模型：将数据<strong>映射</strong>到特征</p>
+<h2 id="图像分类的Inference（推理）"><a href="#图像分类的Inference（推理）" class="headerlink" title="图像分类的Inference（推理）"></a>图像分类的Inference（推理）</h2><p>步骤：</p>
+<ol>
+<li>获取数据与标签</li>
+<li>选择模型，损失函数，优化器</li>
+<li>写训练代码</li>
+<li>写inference代码:<ol>
+<li>获取模型与数据</li>
+<li>数据变换，如RGB——&gt;4D-Tensor</li>
+<li>前向传播</li>
+<li>输出保存预测结果</li>
+</ol>
+</li>
+</ol>
+<p>Inference阶段注意事项：</p>
+<ol>
+<li>确保model处于eval状态而非training</li>
+<li>设置torch.no_grad()，减少内存消耗</li>
+<li>数据预处理需保持一致，RGB or BGR</li>
+</ol>
+]]></content>
       <categories>
         <category>ComputerVision-2D</category>
         <category>图像分类Image Classification</category>
       </categories>
       <tags>
         <tag>图像分类</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>图像分割介绍Introduction to Image Segmentation</title>
+    <url>/2021/10/02/Image-Segmentation/</url>
+    <content><![CDATA[<h1 id="图像分割Image-Segmentation"><a href="#图像分割Image-Segmentation" class="headerlink" title="图像分割Image Segmentation"></a>图像分割Image Segmentation</h1><h2 id="图像分割分类："><a href="#图像分割分类：" class="headerlink" title="图像分割分类："></a>图像分割分类：</h2><ol>
+<li>超像素分割：少量超像素替代大量像素，常用于图像预处理</li>
+<li>语义分割：逐像素分类，无法区分个体</li>
+<li>实例分割：对个体目标进行分割，像素级目标检测</li>
+<li>全景分割：语义分割结合实例分割</li>
+</ol>
+<img src="/2021/10/02/Image-Segmentation/image-20211002151058870.png" alt="image-20211002151058870" style="zoom:50%;">
+
+<h2 id="模型如何完成图像分割？"><a href="#模型如何完成图像分割？" class="headerlink" title="模型如何完成图像分割？"></a>模型如何完成图像分割？</h2><p><img src="/2021/10/02/Image-Segmentation/image-20211002151523567.png" alt="image-20211002151523567"></p>
+<p>计算机：图片 –&gt; 3d张量（3，224，224）                                       ——————————&gt;                                        计算机：3-d张量（类别数，224，224 ）</p>
+<ul>
+<li>模型：将数据映射到特征</li>
+<li>人类：定义特征的物理意义，解决实际问题</li>
+</ul>
+<h2 id="PyTorch-Hub"><a href="#PyTorch-Hub" class="headerlink" title="PyTorch-Hub"></a>PyTorch-Hub</h2><p>PyTorch-Hub是PyTorch模型库，有大量模型供开发者调用</p>
+<ol>
+<li><p>torch.hub.load(‘pytorch/vision’,’deeplabv3_resnet101, pretrained=True’)</p>
+<p>model = torch.hub.load(github, model, *args, **kwargs)</p>
+<p>功能：加载模型</p>
+<p>主要参数：</p>
+<p>github：str，项目名，eg：pytorch/vision, &lt; repo_owner/repo_name[:tag_name] &gt;</p>
+<p>model: str, 模型名</p>
+</li>
+<li><p>torch.hub.list(github, force_reload=False)’</p>
+</li>
+<li><p>torch.hub.help(github,model,force_reload=False)</p>
+</li>
+</ol>
+<h2 id="图像分割的思考"><a href="#图像分割的思考" class="headerlink" title="图像分割的思考"></a>图像分割的思考</h2><p><img src="/2021/10/02/Image-Segmentation/image-20211002160709312.png" alt="image-20211002160709312" style="zoom:33%;"><img src="/2021/10/02/Image-Segmentation/image-20211002160722002.png" alt="image-20211002160722002" style="zoom:33%;"></p>
+<p>蓝色为猫，绿色为狗。说明模型只关注了头部。</p>
+<h2 id="深度学习中的经典分割模型"><a href="#深度学习中的经典分割模型" class="headerlink" title="深度学习中的经典分割模型"></a>深度学习中的经典分割模型</h2><p>最主要贡献：</p>
+<h3 id="FCN："><a href="#FCN：" class="headerlink" title="FCN："></a>FCN：</h3><p>利用<strong>全卷积</strong>完成pixelwise prediction。</p>
+<img src="/2021/10/02/Image-Segmentation/image-20211002161657143.png" alt="image-20211002161657143" style="zoom:33%;">
+
+<p>《Fully Convolutional Networks for Semantic Segmentation》</p>
+<h3 id="U-Net："><a href="#U-Net：" class="headerlink" title="U-Net："></a>U-Net：</h3><p>奠定Unet系列分割模型的</p>
+<p>基本结构——编码器与解码器<strong>特征耦合</strong></p>
+<p>《U-Net：Convolutional Networks for Biomedical Image Segmentation》</p>
+<img src="/2021/10/02/Image-Segmentation/image-20211002161821514.png" alt="image-20211002161821514" style="zoom:50%;">
+
+<h3 id="DeepLab系列——V1"><a href="#DeepLab系列——V1" class="headerlink" title="DeepLab系列——V1"></a>DeepLab系列——V1</h3><p>主要特点：</p>
+<ol>
+<li>空洞卷积：借助空洞卷积，增加感受野</li>
+<li>CRF：采用CRF进行mask后处理</li>
+</ol>
+<img src="/2021/10/02/Image-Segmentation/image-20211002162222586.png" alt="image-20211002162222586" style="zoom:50%;">
+
+<p>《DeeplabV1 Semantic Image segmentation with deep convolutional nets and fully connected CRFs》</p>
+<h3 id="DeepLab系列——V2"><a href="#DeepLab系列——V2" class="headerlink" title="DeepLab系列——V2"></a>DeepLab系列——V2</h3><img src="/2021/10/02/Image-Segmentation/image-20211002162526373.png" alt="image-20211002162526373" style="zoom:50%;">
+
+<p>主要特点：</p>
+<ol>
+<li>ASPP（Atrous spatial pyramid pooling）：解决多尺度问题</li>
+</ol>
+<h3 id="Deeplab系列——V3"><a href="#Deeplab系列——V3" class="headerlink" title="Deeplab系列——V3"></a>Deeplab系列——V3</h3><img src="/2021/10/02/Image-Segmentation/image-20211002162627727.png" alt="image-20211002162627727" style="zoom:50%;">
+
+<p>主要特点：</p>
+<ol>
+<li>空洞卷积的串行</li>
+<li>ASPP的并行</li>
+</ol>
+<img src="/2021/10/02/Image-Segmentation/image-20211002162813137.png" alt="image-20211002162813137" style="zoom:50%;">
+
+<img src="/2021/10/02/Image-Segmentation/image-20211002162831108.png" alt="image-20211002162831108" style="zoom:50%;">
+
+<h3 id="Deeplab系列——V3-1"><a href="#Deeplab系列——V3-1" class="headerlink" title="Deeplab系列——V3+"></a>Deeplab系列——V3+</h3><img src="/2021/10/02/Image-Segmentation/image-20211002163001486.png" alt="image-20211002163001486" style="zoom:50%;">
+
+<p>主要特点：deeplab3基础上加上了Encoder-Decoder思想。</p>
+<h3 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h3><p>《Deep Semantic Segmentation of Natural and Medical Images：A Review》</p>
+<p>图像分割资源：</p>
+<p><a href="https://github.com/shawnbit/unet-family">https://github.com/shawnbit/unet-family</a></p>
+<p><a href="https://github.com/yassouali/pytorch_segmentation">https://github.com/yassouali/pytorch_segmentation</a></p>
+<img src="/2021/10/02/Image-Segmentation/image-20211002163431055.png" alt="image-20211002163431055" style="zoom:50%;">
+
+]]></content>
+      <categories>
+        <category>ComputerVision-2D</category>
+        <category>图像分割Image Segmentation</category>
+      </categories>
+      <tags>
+        <tag>图像分割</tag>
       </tags>
   </entry>
 </search>
