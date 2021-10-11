@@ -2037,4 +2037,65 @@
         <tag>目标检测</tag>
       </tags>
   </entry>
+  <entry>
+    <title>How to use Git properly</title>
+    <url>/2021/10/11/git-documentation/</url>
+    <content><![CDATA[<p>整理转载自廖雪峰网站</p>
+<h1 id="Proper-Way-to-use-Git"><a href="#Proper-Way-to-use-Git" class="headerlink" title="Proper  Way to use Git"></a>Proper  Way to use Git</h1><p>Git是目前世界上最先进的分布式版本控制系统（没有之一）。</p>
+<h2 id="什么是版本控制？"><a href="#什么是版本控制？" class="headerlink" title="什么是版本控制？"></a>什么是版本控制？</h2><p>如果你用Microsoft Word写过长篇大论，那你一定有这样的经历：</p>
+<p>想删除一个段落，又怕将来想恢复找不回来怎么办？有办法，先把当前文件“另存为……”一个新的Word文件，再接着改，改到一定程度，再“另存为……”一个新文件，这样一直改下去，最后你的Word文档变成了这样：</p>
+<p><img src="/2021/10/11/git-documentation/lizi.jpg" alt="lizi"></p>
+<p>过了一周，你想找回被删除的文字，但是已经记不清删除前保存在哪个文件里了，只好一个一个文件去找，真麻烦。</p>
+<p>看着一堆乱七八糟的文件，想保留最新的一个，然后把其他的删掉，又怕哪天会用上，还不敢删，真郁闷。</p>
+<p>更要命的是，有些部分需要你的财务同事帮助填写，于是你把文件Copy到U盘里给她（也可能通过Email发送一份给她），然后，你继续修改Word文件。一天后，同事再把Word文件传给你，此时，你必须想想，发给她之后到你收到她的文件期间，你作了哪些改动，得把你的改动和她的部分合并，真困难。</p>
+<p>于是你想，如果有一个软件，不但能自动帮我记录每次文件的改动，还可以让同事协作编辑，这样就不用自己管理一堆类似的文件了，也不需要把文件传来传去。如果想查看某次改动，只需要在软件里瞄一眼就可以，岂不是很方便？</p>
+<p>这个软件用起来就应该像这个样子，能记录每次文件的改动：</p>
+<p><img src="/2021/10/11/git-documentation/image-20211011195433895.png" alt="image-20211011195433895"></p>
+<p>这样，你就结束了手动管理多个“版本”的史前时代，进入到版本控制的20世纪。</p>
+<h2 id="基本使用步骤"><a href="#基本使用步骤" class="headerlink" title="基本使用步骤"></a>基本使用步骤</h2><h3 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 初始化仓库</span></span><br><span class="line">git init</span><br><span class="line"><span class="meta">#</span><span class="bash"> 添加到版本库</span></span><br><span class="line">git add readme.txt</span><br><span class="line">git commit -m &lt;message&gt;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 现在已经成功的添加并提交了一个read.txt文件，现在继续工作</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看结果</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> git status让我们时刻掌握仓库当前的状态（本地仓库，尚未提交），哪个文件被修改了，这个指令可以看出变化</span></span><br><span class="line">git status</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 当你休假两周从国外回来，第一天上班时，已经记不清上次怎么修改的readme.txt，所以，需要用git diff这个命令看看：</span></span><br><span class="line">git diff readme.txt</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看difference之后，再提交心里就踏实多了</span></span><br><span class="line">git add readme.txt</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 此时如果不进行commit，先运行git status</span></span><br><span class="line">git status</span><br><span class="line"><span class="meta">#</span><span class="bash"> 则会提醒：</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> On branch master</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Changes to be commited：</span></span><br><span class="line"><span class="meta">#</span><span class="bash">        xxxxx</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> git status告诉我们，将要被提交的修改包括readme.txt，下一步，就可以放心地提交了：</span></span><br><span class="line"></span><br><span class="line">git commit -m &quot;add new readme&quot;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 运行git之后，再使用git status命令查看仓库的当前状态</span></span><br><span class="line"></span><br><span class="line">git status</span><br><span class="line"><span class="meta">#</span><span class="bash"> On branch master</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> nothing to commit，working tree clean</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 我们在开发中，可以循环使用</span></span><br><span class="line">git add readme.txt</span><br><span class="line">git commit -m &quot;xxx&quot;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 最后使用</span></span><br><span class="line">git log查看提交日志</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果我们想要退回到上一个版本</span></span><br><span class="line">git reset --hard HEAD^</span><br><span class="line"><span class="meta">#</span><span class="bash"> 退回到上很多个版本可以改成HEAD~n,n为向前退回版本数</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果又想回去，就得找到退回之前版本的commit id，然后</span></span><br><span class="line">git reset --hard xxxx</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Git的版本回退速度非常快，因为Git在内部有个指向当前版本的HEAD指针，当你回退版本的时候，Git仅仅是把HEAD从指向append GPL.</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Git提供了一个命令用来记录你的每一次命令：</span></span><br><span class="line">git reflog</span><br><span class="line"><span class="meta">#</span><span class="bash"> 可以用这条指令来查看不同版本之间的切换记录，以及其对应的commit id</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 小结：</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令git reset --hard commit_id</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 穿梭前，可以用git <span class="built_in">log</span>查看提交历史，以便退回到哪个版本</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 穿梭后，可以用git reflog查看命令历史，以便确定回到未来哪个版本</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="工作区和暂缓区"><a href="#工作区和暂缓区" class="headerlink" title="工作区和暂缓区"></a>工作区和暂缓区</h3><h4 id="工作区（Working-Directory）"><a href="#工作区（Working-Directory）" class="headerlink" title="工作区（Working Directory）"></a>工作区（Working Directory）</h4><p>就是你在电脑里能看到的目录，即你代码所在的文件夹。</p>
+<h4 id="版本库（Repository）"><a href="#版本库（Repository）" class="headerlink" title="版本库（Repository）"></a>版本库（Repository）</h4><p>工作区有一个隐藏目录<code>.git</code>，这个不算工作区，而是Git的<strong>版本库</strong>。</p>
+<p>Git的版本库里存了很多东西，其中<strong>最重要的就是称为stage（或者叫index）的暂存区</strong>，还有Git为我们自动创建的第一个分支<code>master</code>，以及指向<code>master</code>的一个指针叫<code>HEAD</code>。</p>
+<p><img src="/2021/10/11/git-documentation/image-20211011222155090.png" alt="image-20211011222155090"></p>
+<p>第一步是用<code>git add</code>把文件添加进去，实际上就是把文件修改添加到暂存区；</p>
+<p>第二步是用<code>git commit</code>提交更改，实际上就是把暂存区的所有内容提交到当前分支。</p>
+<p>因为我们创建Git版本库时，Git自动为我们创建了唯一一个<code>master</code>分支，所以，现在，<code>git commit</code>就是往<code>master</code>分支上提交更改。</p>
+<p>可以简单理解为，需要提交的文件修改通通放到暂存区，然后，一次性提交暂存区的所有修改。</p>
+<p>每次commit之后，暂缓区（stage）就是干净的。</p>
+<p><img src="/2021/10/11/git-documentation/image-20211011222305247.png" alt="image-20211011222305247"></p>
+<h4 id="管理修改"><a href="#管理修改" class="headerlink" title="管理修改"></a>管理修改</h4><p>为什么Git比其他版本控制系统设计得优秀，因为Git跟踪并管理的是修改，而非文件。</p>
+<p>什么是修改？比如你新增了一行，这就是一个修改，删除了一行，也是一个修改，更改了某些字符，也是一个修改，删了一些又加了一些，也是一个修改，甚至创建一个新文件，也算一个修改。</p>
+<p>假设在第一次修改之后进行了git add，第二修改之后没有进行。</p>
+<p>Git管理的是修改，当你用<code>git add</code>命令后，在工作区的第一次修改被放入暂存区，准备提交，但是，在工作区的第二次修改并没有放入暂存区，所以，<code>git commit</code>只负责把暂存区的修改提交了，也就是第一次的修改被提交了，第二次的修改不会被提交。</p>
+<h4 id="撤销修改"><a href="#撤销修改" class="headerlink" title="撤销修改"></a>撤销修改</h4><p> 如果想要撤销修改，则需要使用</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git checkout -- readme.txt</span><br></pre></td></tr></table></figure>
+
+<p>一种是<code>readme.txt</code>自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；</p>
+<p>一种是<code>readme.txt</code>已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。</p>
+<p>总之，就是让这个文件回到最近一次<code>git commit</code>或<code>git add</code>时的状态。</p>
+<p><strong>这个–很重要，否则就成了切换分支。</strong></p>
+<p>假设一些错误被git add到暂缓区了，我们在commit之前发现了这个错误。</p>
+<p>庆幸的是在commit之前，我们发现了这个问题。用git status查看一下， 发现只是添加到了缓存区，并未提交。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> git reset命令既可以回退版本，也可以把暂存区的修改回退到工作区。当我们用HEAD时，表示最新的版本。</span></span><br><span class="line">git reset HEAD readme.txt</span><br><span class="line"><span class="meta">#</span><span class="bash"> 如何丢弃工作区的修改？</span></span><br><span class="line">git checkout -- readme.txt</span><br></pre></td></tr></table></figure>
+
+<p>又到了小结时间。</p>
+<p>场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令<code>git checkout -- file</code>。</p>
+<p>场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令<code>git reset HEAD &lt;file&gt;</code>，就回到了场景1，第二步按场景1操作。</p>
+<p>场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考<strong>版本退回</strong>一节，不过前提是没有推送到远程库。</p>
+<h4 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 先删掉文件</span></span><br><span class="line">rm readme.txt</span><br><span class="line"><span class="meta">#</span><span class="bash"> 再从版本库中删掉</span></span><br><span class="line">git rm readme.txt</span><br><span class="line"><span class="meta">#</span><span class="bash"> 再commit</span></span><br><span class="line">git commit -m &quot;remove test.txt&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 另一种情况是删错了，但是版本库里面还有，可以很轻松的回复到本地文件里面</span></span><br><span class="line">git checkout --test.txt</span><br></pre></td></tr></table></figure>
+
+<p><code>git checkout</code>其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”。</p>
+<p> <strong>注意：从来没有被添加到版本库就被删除的文件，是无法恢复的！</strong></p>
+<p>命令<code>git rm</code>用于删除一个文件。如果一个文件已经被提交到版本库，那么你永远不用担心误删，但是要小心，你只能恢复文件到最新版本，你会丢失<strong>最近一次提交后你修改的内容</strong>。</p>
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
 </search>
