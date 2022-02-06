@@ -22,30 +22,34 @@
     var CONFIG = {"hostname":"www.chen-yiting.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="日拱一卒，功不唐捐">
-<meta property="og:type" content="website">
+  <meta name="description" content="线性代数 Linear Algebra基础知识矩阵乘法可以考虑成矩阵与各个列向量相乘，行各个行向量对矩阵相乘：  通过右乘对矩阵的列（column）进行操作 通过左乘对矩阵的行（row）进行操作  如何理解矩阵的乘法：  矩阵A与矩阵B相乘时：AB，B可以看作多个列向量（column vector）的线性组合（linear combination），B中每个单独的列向量对A中不同的列进行操作。 矩">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Robotics, ML &amp; Thug Life">
-<meta property="og:url" content="http://www.chen-yiting.com/index.html">
+<meta property="og:url" content="http://www.chen-yiting.com/2021/12/10/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%20Linear%20Algebra/index.html">
 <meta property="og:site_name" content="Robotics, ML &amp; Thug Life">
-<meta property="og:description" content="日拱一卒，功不唐捐">
+<meta property="og:description" content="线性代数 Linear Algebra基础知识矩阵乘法可以考虑成矩阵与各个列向量相乘，行各个行向量对矩阵相乘：  通过右乘对矩阵的列（column）进行操作 通过左乘对矩阵的行（row）进行操作  如何理解矩阵的乘法：  矩阵A与矩阵B相乘时：AB，B可以看作多个列向量（column vector）的线性组合（linear combination），B中每个单独的列向量对A中不同的列进行操作。 矩">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.chen-yiting.com/2021/12/10/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%20Linear%20Algebra/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyODk4Mjk5,size_16,color_FFFFFF,t_70.png">
+<meta property="article:published_time" content="2021-12-10T02:27:49.006Z">
+<meta property="article:modified_time" content="2022-01-12T07:44:44.932Z">
 <meta property="article:author" content="Yiting CHEN">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.chen-yiting.com/2021/12/10/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%20Linear%20Algebra/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyODk4Mjk5,size_16,color_FFFFFF,t_70.png">
 
-<link rel="canonical" href="http://www.chen-yiting.com/">
+<link rel="canonical" href="http://www.chen-yiting.com/2021/12/10/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%20Linear%20Algebra/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Robotics, ML & Thug Life</title>
+  <title> | Robotics, ML & Thug Life</title>
   
 
 
@@ -191,9 +195,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
@@ -209,10 +214,9 @@
       <meta itemprop="name" content="Robotics, ML & Thug Life">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
+        <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2021/12/10/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%20Linear%20Algebra/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -239,6 +243,13 @@
               <span class="post-meta-item-text">Views: </span>
               <span class="leancloud-visitors-count"></span>
             </span>
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
   
   <span class="post-meta-item">
     
@@ -263,7 +274,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="线性代数-Linear-Algebra"><a href="#线性代数-Linear-Algebra" class="headerlink" title="线性代数 Linear Algebra"></a>线性代数 Linear Algebra</h1><h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>矩阵乘法可以考虑成矩阵与各个列向量相乘，行各个行向量对矩阵相乘：</p>
+        <h1 id="线性代数-Linear-Algebra"><a href="#线性代数-Linear-Algebra" class="headerlink" title="线性代数 Linear Algebra"></a>线性代数 Linear Algebra</h1><h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>矩阵乘法可以考虑成矩阵与各个列向量相乘，行各个行向量对矩阵相乘：</p>
 <ul>
 <li>通过右乘对矩阵的列（column）进行操作</li>
 <li>通过左乘对矩阵的行（row）进行操作</li>
@@ -446,940 +457,54 @@
 <p>描述图（node和edge）的矩阵的零空间代表什么？ </p>
 <p>#node - #edges + #loops = 1</p>
 <h2 id="第一阶段复习（Ax-b）"><a href="#第一阶段复习（Ax-b）" class="headerlink" title="第一阶段复习（Ax=b）"></a>第一阶段复习（Ax=b）</h2>
-      
     </div>
 
     
     
     
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/10/11/git-documentation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/yiting.jpeg">
-      <meta itemprop="name" content="Yiting CHEN">
-      <meta itemprop="description" content="日拱一卒，功不唐捐">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Robotics, ML & Thug Life">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/11/git-documentation/" class="post-title-link" itemprop="url">How to use Git properly</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-11 19:43:08 / Modified: 23:32:49" itemprop="dateCreated datePublished" datetime="2021-10-11T19:43:08+08:00">2021-10-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/10/11/git-documentation/" class="post-meta-item leancloud_visitors" data-flag-title="How to use Git properly" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/10/11/git-documentation/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/10/11/git-documentation/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文初步介绍了Git的正确使用姿势, 例如如何在开发时进行版本管理。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/11/git-documentation/">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Yiting CHEN
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://www.chen-yiting.com/2021/12/10/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%20Linear%20Algebra/" title="">http://www.chen-yiting.com/2021/12/10/线性代数 Linear Algebra/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/10/02/ObjectDetection/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/yiting.jpeg">
-      <meta itemprop="name" content="Yiting CHEN">
-      <meta itemprop="description" content="日拱一卒，功不唐捐">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Robotics, ML & Thug Life">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/02/ObjectDetection/" class="post-title-link" itemprop="url">初识目标检测Intoduction to Objects Detection</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-02 17:07:38 / Modified: 22:12:49" itemprop="dateCreated datePublished" datetime="2021-10-02T17:07:38+08:00">2021-10-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ComputerVision-2D/" itemprop="url" rel="index"><span itemprop="name">ComputerVision-2D</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ComputerVision-2D/%E5%9B%BE%E5%83%8F%E6%A3%80%E6%B5%8BObjects-Detection/" itemprop="url" rel="index"><span itemprop="name">图像检测Objects Detection</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/10/02/ObjectDetection/" class="post-meta-item leancloud_visitors" data-flag-title="初识目标检测Intoduction to Objects Detection" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/10/02/ObjectDetection/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/10/02/ObjectDetection/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文初步介绍了目标检测。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/02/ObjectDetection/">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/10/02/Image-Segmentation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/yiting.jpeg">
-      <meta itemprop="name" content="Yiting CHEN">
-      <meta itemprop="description" content="日拱一卒，功不唐捐">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Robotics, ML & Thug Life">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/02/Image-Segmentation/" class="post-title-link" itemprop="url">初识图像分割Introduction to Image Segmentation</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-10-02 14:59:14 / Modified: 17:11:26" itemprop="dateCreated datePublished" datetime="2021-10-02T14:59:14+08:00">2021-10-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ComputerVision-2D/" itemprop="url" rel="index"><span itemprop="name">ComputerVision-2D</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ComputerVision-2D/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2Image-Segmentation/" itemprop="url" rel="index"><span itemprop="name">图像分割Image Segmentation</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/10/02/Image-Segmentation/" class="post-meta-item leancloud_visitors" data-flag-title="初识图像分割Introduction to Image Segmentation" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/10/02/Image-Segmentation/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/10/02/Image-Segmentation/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文初步介绍了图像分割。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/10/02/Image-Segmentation/">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/11/git-documentation/" rel="prev" title="How to use Git properly">
+      <i class="fa fa-chevron-left"></i> How to use Git properly
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
   
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/30/ResNet18/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/yiting.jpeg">
-      <meta itemprop="name" content="Yiting CHEN">
-      <meta itemprop="description" content="日拱一卒，功不唐捐">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Robotics, ML & Thug Life">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/30/ResNet18/" class="post-title-link" itemprop="url">ResNet18</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-09-30 22:19:53" itemprop="dateCreated datePublished" datetime="2021-09-30T22:19:53+08:00">2021-09-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-10-02 14:56:23" itemprop="dateModified" datetime="2021-10-02T14:56:23+08:00">2021-10-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ComputerVision-2D/" itemprop="url" rel="index"><span itemprop="name">ComputerVision-2D</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ComputerVision-2D/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BBImage-Classification/" itemprop="url" rel="index"><span itemprop="name">图像分类Image Classification</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/09/30/ResNet18/" class="post-meta-item leancloud_visitors" data-flag-title="ResNet18" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/09/30/ResNet18/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/30/ResNet18/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文介绍了resnet18。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/09/30/ResNet18/">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/30/PyTorch-CommonErrors/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/yiting.jpeg">
-      <meta itemprop="name" content="Yiting CHEN">
-      <meta itemprop="description" content="日拱一卒，功不唐捐">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Robotics, ML & Thug Life">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/30/PyTorch-CommonErrors/" class="post-title-link" itemprop="url">PyTorch-CommonErrors</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-09-30 22:12:59 / Modified: 22:24:56" itemprop="dateCreated datePublished" datetime="2021-09-30T22:12:59+08:00">2021-09-30</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PyTorch/" itemprop="url" rel="index"><span itemprop="name">PyTorch</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PyTorch/PyTorch%E5%AE%9E%E8%B7%B5/" itemprop="url" rel="index"><span itemprop="name">PyTorch实践</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/09/30/PyTorch-CommonErrors/" class="post-meta-item leancloud_visitors" data-flag-title="PyTorch-CommonErrors" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/09/30/PyTorch-CommonErrors/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/30/PyTorch-CommonErrors/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文介绍了一些使用pytorch时常见的报错（转载）。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/09/30/PyTorch-CommonErrors/">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/30/PyTorch-TrainingMethods/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/yiting.jpeg">
-      <meta itemprop="name" content="Yiting CHEN">
-      <meta itemprop="description" content="日拱一卒，功不唐捐">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Robotics, ML & Thug Life">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/30/PyTorch-TrainingMethods/" class="post-title-link" itemprop="url">PyTorch-TrainingMethods</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-09-30 22:07:51 / Modified: 22:23:58" itemprop="dateCreated datePublished" datetime="2021-09-30T22:07:51+08:00">2021-09-30</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PyTorch/" itemprop="url" rel="index"><span itemprop="name">PyTorch</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PyTorch/PyTorch%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">PyTorch框架学习</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/09/30/PyTorch-TrainingMethods/" class="post-meta-item leancloud_visitors" data-flag-title="PyTorch-TrainingMethods" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/09/30/PyTorch-TrainingMethods/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/30/PyTorch-TrainingMethods/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文介绍了PyTorch训练模型时常用的一些技巧，主要包含了模型的存储与加载，finetune，和多GPU使用方法。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/09/30/PyTorch-TrainingMethods/">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/29/PyTorch-NormalizationMethods/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/yiting.jpeg">
-      <meta itemprop="name" content="Yiting CHEN">
-      <meta itemprop="description" content="日拱一卒，功不唐捐">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Robotics, ML & Thug Life">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/29/PyTorch-NormalizationMethods/" class="post-title-link" itemprop="url">PyTorch-NormalizationMethods</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-09-29 02:07:48" itemprop="dateCreated datePublished" datetime="2021-09-29T02:07:48+08:00">2021-09-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-30 22:24:05" itemprop="dateModified" datetime="2021-09-30T22:24:05+08:00">2021-09-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PyTorch/" itemprop="url" rel="index"><span itemprop="name">PyTorch</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PyTorch/PyTorch%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">PyTorch框架学习</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/09/29/PyTorch-NormalizationMethods/" class="post-meta-item leancloud_visitors" data-flag-title="PyTorch-NormalizationMethods" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/09/29/PyTorch-NormalizationMethods/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/29/PyTorch-NormalizationMethods/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文介绍了PyTorch当中对模型参数各种正则化的方法。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/09/29/PyTorch-NormalizationMethods/">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/28/PyTorch-TrainingProcess/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/yiting.jpeg">
-      <meta itemprop="name" content="Yiting CHEN">
-      <meta itemprop="description" content="日拱一卒，功不唐捐">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Robotics, ML & Thug Life">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/28/PyTorch-TrainingProcess/" class="post-title-link" itemprop="url">PyTorch-TrainingProcess</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-09-28 01:48:00" itemprop="dateCreated datePublished" datetime="2021-09-28T01:48:00+08:00">2021-09-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-30 22:23:52" itemprop="dateModified" datetime="2021-09-30T22:23:52+08:00">2021-09-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PyTorch/" itemprop="url" rel="index"><span itemprop="name">PyTorch</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PyTorch/PyTorch%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">PyTorch框架学习</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/09/28/PyTorch-TrainingProcess/" class="post-meta-item leancloud_visitors" data-flag-title="PyTorch-TrainingProcess" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/09/28/PyTorch-TrainingProcess/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/28/PyTorch-TrainingProcess/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文介绍了PyTorch模型训练时的一些学习率优化方法以及可视化技巧。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/09/28/PyTorch-TrainingProcess/">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://www.chen-yiting.com/2021/09/27/limu-SGD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/yiting.jpeg">
-      <meta itemprop="name" content="Yiting CHEN">
-      <meta itemprop="description" content="日拱一卒，功不唐捐">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Robotics, ML & Thug Life">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/27/limu-SGD/" class="post-title-link" itemprop="url">用随机梯度下降来优化人生</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-09-27 20:05:17 / Modified: 20:20:26" itemprop="dateCreated datePublished" datetime="2021-09-27T20:05:17+08:00">2021-09-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%9D%82%E6%96%87/" itemprop="url" rel="index"><span itemprop="name">杂文</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/09/27/limu-SGD/" class="post-meta-item leancloud_visitors" data-flag-title="用随机梯度下降来优化人生" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2021/09/27/limu-SGD/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/27/limu-SGD/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>李沐大神的随笔。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/09/27/limu-SGD/">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
-  </nav>
 
 
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -1426,6 +551,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0-Linear-Algebra"><span class="nav-text">线性代数 Linear Algebra</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E7%9A%84%E9%80%86"><span class="nav-text">矩阵的逆</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#singular-case%EF%BC%8Cno-inverse"><span class="nav-text">singular case，no inverse</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#inverse"><span class="nav-text">inverse</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5A%E7%9A%84LU%E5%88%86%E8%A7%A3"><span class="nav-text">矩阵A的LU分解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E7%BD%AE%E5%92%8C%E7%BD%AE%E6%8D%A2Transposes-and-Permutations"><span class="nav-text">转置和置换Transposes and Permutations</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E7%A9%BA%E9%97%B4Vector-Space"><span class="nav-text">向量空间Vector Space</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E7%BD%AETranspose"><span class="nav-text">转置Transpose</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E7%A7%B0%E7%9F%A9%E9%98%B5Symmetric-Matrices"><span class="nav-text">对称矩阵Symmetric Matrices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Vector-Space"><span class="nav-text">Vector Space</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#subspace"><span class="nav-text">subspace</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E5%88%97%E7%A9%BA%E9%97%B4Column-Space"><span class="nav-text">矩阵列空间Column Space</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Null-Space"><span class="nav-text">Null Space</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Null-Space-Matrix-%EF%BC%88%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD%EF%BC%89%E5%A4%8D%E4%B9%A0P7"><span class="nav-text">Null Space Matrix （未完待续）复习P7</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%A7%A3%E6%80%A7%E5%92%8C%E8%A7%A3%E7%9A%84%E6%9E%84%E5%BB%BA"><span class="nav-text">可解性和解的构建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E7%9B%B8%E5%85%B3%E6%80%A7"><span class="nav-text">线性相关性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9B%9B%E4%B8%AA%E5%9F%BA%E6%9C%AC%E5%AD%90%E7%A9%BA%E9%97%B4"><span class="nav-text">矩阵的四个基本子空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E7%A9%BA%E9%97%B4%EF%BC%8C%E7%A7%A91%E7%9F%A9%E9%98%B5%E5%92%8C%E5%B0%8F%E4%B8%96%E7%95%8C%E5%9B%BE"><span class="nav-text">矩阵空间，秩1矩阵和小世界图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%A91%E7%9F%A9%E9%98%B5"><span class="nav-text">秩1矩阵</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%92%8C%E7%BD%91%E7%BB%9C"><span class="nav-text">图和网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%E5%A4%8D%E4%B9%A0%EF%BC%88Ax-b%EF%BC%89"><span class="nav-text">第一阶段复习（Ax&#x3D;b）</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

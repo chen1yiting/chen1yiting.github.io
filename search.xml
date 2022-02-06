@@ -2098,4 +2098,191 @@
         <tag>Git</tag>
       </tags>
   </entry>
+  <entry>
+    <title></title>
+    <url>/2021/12/10/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%20Linear%20Algebra/</url>
+    <content><![CDATA[<h1 id="线性代数-Linear-Algebra"><a href="#线性代数-Linear-Algebra" class="headerlink" title="线性代数 Linear Algebra"></a>线性代数 Linear Algebra</h1><h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>矩阵乘法可以考虑成矩阵与各个列向量相乘，行各个行向量对矩阵相乘：</p>
+<ul>
+<li>通过右乘对矩阵的列（column）进行操作</li>
+<li>通过左乘对矩阵的行（row）进行操作</li>
+</ul>
+<p>如何理解矩阵的乘法：</p>
+<ul>
+<li>矩阵A与矩阵B相乘时：AB，B可以看作多个列向量（column vector）的线性组合（linear combination），B中每个单独的列向量对A中不同的列进行操作。</li>
+<li>矩阵A与矩阵B相乘时：AB，A可以看作多个行向量（row vector）的线性组合（linear combination），A中每个单独的行向量对B中不同的行进行操作。</li>
+</ul>
+<p>矩阵 * Column Vector</p>
+<p>Row Vector * 矩阵</p>
+<p>常规方法，列方法，行方法，列乘以行的和，矩阵分块相乘</p>
+<p>row space 和 column space</p>
+<p>单位阵Identity（对角线为1，其余为0）</p>
+<h3 id="矩阵的逆"><a href="#矩阵的逆" class="headerlink" title="矩阵的逆"></a>矩阵的逆</h3><p>不是所有的矩阵都有逆，什么时候存在逆？如果存在该如何求解？</p>
+<p><em>I</em> 单位阵，identity</p>
+<p>A<sup>-1</sup> A = <em>I</em></p>
+<p>对于方阵（square matrix），其左逆矩阵等于右逆矩阵</p>
+<p>对于非方阵（rectangular matrix），其左逆矩阵不等于右逆矩阵</p>
+<p>存在的逆的叫做invertible（可逆的）和nonsingular（非奇异的），这是好情况。</p>
+<h4 id="singular-case，no-inverse"><a href="#singular-case，no-inverse" class="headerlink" title="singular case，no inverse"></a>singular case，no inverse</h4><p>$$<br>A = \begin{bmatrix}<br>1 &amp; 3 \<br>2 &amp; 6<br>\end{bmatrix}<br>$$</p>
+<p>determinant（行列式）为0。</p>
+<p>若存在矩阵使得A X = 0 （X不为0），则A为不可逆矩阵。</p>
+<p>如果矩阵中其中一列对线性组合毫无贡献，矩阵不可能有逆。</p>
+<p>证明：<br>$$<br>由AX = 0 \<br>可得 X = \begin{bmatrix} 3 \-1 \end{bmatrix}\<br>A^{-1}AX=0,矩阵和其逆相乘为单位矩阵\<br>IX=0，则X=0\<br>但是X= \begin{bmatrix} 3 \-1 \end{bmatrix} \neq 0\<br>故可得，若AX=0，则A为不可逆矩阵<br>$$</p>
+<h4 id="inverse"><a href="#inverse" class="headerlink" title="inverse"></a>inverse</h4><p>$$<br>A = \begin{bmatrix}<br>1 &amp; 3 \<br>2 &amp; 7<br>\end{bmatrix}<br>$$</p>
+<p>A乘以其逆的第j列，等于单位矩阵的第j列</p>
+<p>Gauss-Jordan （solve 2 equations at once）<br>$$<br>\begin{bmatrix}1 &amp; 3 \2 &amp; 7 \end{bmatrix}\begin{bmatrix}a\b\end{bmatrix}=\begin{bmatrix}1\0\end{bmatrix}<br>$$</p>
+<p>$$<br>\begin{bmatrix}1 &amp; 3 \2 &amp; 7 \end{bmatrix}\begin{bmatrix}c\d\end{bmatrix}=\begin{bmatrix}0\1\end{bmatrix}<br>$$</p>
+<p>将单位矩阵接到后面（增广矩阵），一次求解两个方程<br>$$<br>\begin{bmatrix}A &amp; I  \end{bmatrix} = \begin{bmatrix}1 &amp; 3 &amp; 1 &amp; 0 \2 &amp; 7 &amp; 0 &amp; 1  \end{bmatrix}<br>$$</p>
+<p>$$<br>\begin{bmatrix}1 &amp; 3 &amp; 1 &amp; 0 \0 &amp; 1 &amp; -2 &amp; 1  \end{bmatrix}<br>$$</p>
+<p>$$<br>\begin{bmatrix}1 &amp; 0 &amp; 7 &amp; -3 \0 &amp; 1 &amp; -2 &amp; 1  \end{bmatrix}=\begin{bmatrix}I &amp; A^{-1}  \end{bmatrix}<br>$$</p>
+<p>通过消元法（elimination）将左边的变成单位阵之后，右边的方针则为矩阵的逆。这是Gauss-Jordan Idea。</p>
+<h3 id="矩阵A的LU分解"><a href="#矩阵A的LU分解" class="headerlink" title="矩阵A的LU分解"></a>矩阵A的LU分解</h3><p>A=LU是基础的矩阵分解，U是upper triangle matrix，左下角全部为0的矩阵。<br>$$<br>ABB^{-1}A^{-1}=I<br>$$<br>已知可逆矩阵AB，则其逆为B<sup>-1</sup>A<sup>-1</sup>。<br>$$<br>AA^-1=I\<br>(A^{-1})^TA^T=I=(A^{T})^{-1}A^{T}<br>$$<br>举例：<br>$$<br>已知矩阵A，A\begin{bmatrix}2 &amp; 1\8 &amp; 7\end{bmatrix}\<br>E_{21}A = U, 角标_{21}代表这一步需要在行2列1的位置得到0\<br>\begin{bmatrix}1 &amp; 0\-4 &amp; 1\end{bmatrix}\begin{bmatrix}2 &amp; 1\8 &amp; 7\end{bmatrix}=\begin{bmatrix}2 &amp; 1\0 &amp; 3\end{bmatrix}\<br>E_{21}=\begin{bmatrix}1 &amp; 0\-4 &amp; 1\end{bmatrix}\<br>A = LU (矩阵分解)\<br>\begin{bmatrix}2 &amp; 1\8 &amp; 7\end{bmatrix}=\begin{bmatrix}\space &amp; \space\\space &amp; \space\end{bmatrix}\begin{bmatrix}2 &amp; 1\0 &amp; 3\end{bmatrix}\<br>L = E_{21}^{-1}, L为E_{21}的逆\<br>L = \begin{bmatrix}1 &amp; 0\4 &amp; 1\end{bmatrix}\<br>\begin{bmatrix}2 &amp; 1\8 &amp; 7\end{bmatrix}=\begin{bmatrix}1 &amp; 0\4 &amp; 1\end{bmatrix}\begin{bmatrix}2 &amp; 1\0 &amp; 3\end{bmatrix}<br>$$<br>U表示上三角（upper triangular），L表示下三角（lower triangular）<br>$$<br>上面的是LU，现在转换成LDU，左右个一个三角阵，中间一个对角阵\<br>\begin{bmatrix}2 &amp; 1\8 &amp; 7\end{bmatrix}=\begin{bmatrix}1 &amp; 0\4 &amp; 1\end{bmatrix}\begin{bmatrix}2 &amp; 0\0 &amp; 3\end{bmatrix}\begin{bmatrix}1 &amp; \frac{1}{2}\0 &amp; 1\end{bmatrix}<br>$$<br>对于3×3的矩阵，E<sub>32</sub>E<sub>31</sub>E<sub>21</sub> A = U (no row exchange, only elimination)</p>
+<p>转成A = LU形式，L = E<sub>21</sub><sup>-1</sup>E<sub>31</sub><sup>-1</sup>E<sub>32</sub><sup>-1</sup> </p>
+<p>EA = U， A = LU</p>
+<p>如果不存在行互换，消元乘数可以直接写入L中。LU可以得到对矩阵消元更深刻的认识。</p>
+<ul>
+<li>L矩阵的对角线为1，upper triangular里面都是0（zeros above），lower triangular里面由各种消元乘数组成（multipliers below）。</li>
+<li>U矩阵对角线也为1，upper triangular里不为零，lower triangular由0组成。</li>
+</ul>
+<p>一个n×n的矩阵，需要进行多少次消元？</p>
+<p>正比（proportional）？平方（square）？立方（cube）？n的阶乘（n factorial）？</p>
+<p>什么时候需要row exchange？那就是pivot位置出现0的时候，也就是对角线上有0。</p>
+<h3 id="转置和置换Transposes-and-Permutations"><a href="#转置和置换Transposes-and-Permutations" class="headerlink" title="转置和置换Transposes and Permutations"></a>转置和置换Transposes and Permutations</h3><p>置换矩阵可以拿来矩阵的行转换。</p>
+<p>3×3的矩阵有6（1×2×3）种置换矩阵，4×4有24（1×2×3×4）种。</p>
+<p>P<sup>-1</sup>=P<sup>T</sup>, 置换矩阵的逆等于其转置。</p>
+<h2 id="向量空间Vector-Space"><a href="#向量空间Vector-Space" class="headerlink" title="向量空间Vector Space"></a>向量空间Vector Space</h2><p>现在才开始真正的线性代数</p>
+<p>Permutations P: Identity Matrix with reordered rows. Execute row exchanges.</p>
+<p>Identity是毫无作为的Permutation。</p>
+<p>当pivot上面有0时，我们直接用P移走。</p>
+<ol>
+<li>matrix A</li>
+<li>elimination (might need P to row exchange)</li>
+<li>get the result</li>
+</ol>
+<p>之前的 A = LU没有P，现在我们是 PA = LU，该描述概括了包含行互换的消元。有了P，pivot不会再有0。</p>
+<ul>
+<li>对于任意可逆矩阵，我们都有 PA = LU。</li>
+<li>n×n矩阵的所有置换矩阵的个数为 n!。</li>
+<li>所有的置换矩阵都可逆，其逆矩阵P<sup>-1</sup>等于其转置矩阵P<sup>T</sup>。</li>
+</ul>
+<h3 id="转置Transpose"><a href="#转置Transpose" class="headerlink" title="转置Transpose"></a>转置Transpose</h3><p>$$<br>\begin{bmatrix}1 &amp; 3\ 2 &amp; 3 \ 4 &amp; 1\end{bmatrix}^T=\begin{bmatrix}1 &amp; 2 &amp; 4\ 3 &amp; 3 &amp; 1\end{bmatrix}<br>$$</p>
+<p>$$<br>(A^T)<em>{ij} = A</em>{ji}<br>$$</p>
+<h3 id="对称矩阵Symmetric-Matrices"><a href="#对称矩阵Symmetric-Matrices" class="headerlink" title="对称矩阵Symmetric Matrices"></a>对称矩阵Symmetric Matrices</h3><p>矩阵转置之后没有变化<br>$$<br>A^T = A<br>$$<br>R<sup>T</sup> R is always symmetric.<br>$$<br>(R^TR)^T=R^TR^{TT}=R^TR \<br>即证，R^TR结果永远是对称矩阵。\<br>这里需要改变乘法的顺序，就像逆inverse一样。<br>$$<br>矩阵和其转置矩阵相乘的结果永远是对称矩阵。<br>$$<br>\begin{bmatrix}1 &amp; 3\ 2 &amp; 3 \ 4 &amp; 1\end{bmatrix}\begin{bmatrix}1 &amp; 2 &amp; 4\ 3 &amp; 3 &amp; 1\end{bmatrix} = \begin{bmatrix}10 &amp; 11 &amp; 7\ 11 &amp; 13 &amp; 11\ 7 &amp; 11 &amp; 18\end{bmatrix}<br>$$</p>
+<h3 id="Vector-Space"><a href="#Vector-Space" class="headerlink" title="Vector Space"></a>Vector Space</h3><p>一个向量集合，对这个集合中的任何向量进行线性运算，其结果任然属于该集合。</p>
+<p>Examples: R<sup>2</sup> = all 2-dim real vectors = x-y plane<br>$$<br>\begin{bmatrix}3 \ 2\end{bmatrix},\begin{bmatrix}0 \ 0\end{bmatrix},\begin{bmatrix}\pi \e \end{bmatrix}<br>$$<br>R<sup>3</sup> = all vectors with 3 components.</p>
+<p>R<sup>n</sup> = all column vector with n real components.</p>
+<p>这些都是vector space，可以承载所有运算，结果都在这个space里面。</p>
+<h4 id="subspace"><a href="#subspace" class="headerlink" title="subspace"></a>subspace</h4><p>一条在R<sup>2</sup>穿过原点的直线是在R<sup>2</sup>的subspace。<br>$$<br>subspaces\space of\space R^2:\</p>
+<p>R^2\space itself\</p>
+<p>any\space line\space through \begin{bmatrix}0\0\end{bmatrix}\<br>zero\space vector\space only<br>$$<br>由此可以推断，R<sup>3</sup>的subspace有：1.R<sup>3</sup> 自己；2. 过原点的平面；3. 过原点的直线；4.原点本身<br>$$<br>A = \begin{bmatrix}1&amp;3\2&amp;3\4&amp;1\end{bmatrix}\<br>\begin{bmatrix}1\2\4\end{bmatrix}, \begin{bmatrix}3\3\1\end{bmatrix}columns\space in\space R^3\<br>all\space there\space linear\space combinations\space form\space a\space subspace\<br>this\space subspace\space called\space column\space space\space C(A)\<br>列空间的由来<br>$$<br>如果这些向量位于R<sup>3</sup>内，那么这些向量构成的空间也在R<sup>3</sup>内，对其进行线性组合之后仍然在子空间内。</p>
+<p>如何构建矩阵的列空间：</p>
+<ol>
+<li>取出各列</li>
+<li>进行线性组合</li>
+</ol>
+<p>概念梳理，假设现有两个subspace P 和L：</p>
+<ul>
+<li>P是过原点的平面</li>
+<li>L是过原点的直线，且不属于P</li>
+<li>P∪L不属于subspace；P∩L仍属于subspace</li>
+</ul>
+<p>满足subspace的两个条件：</p>
+<ul>
+<li>加法封闭</li>
+<li>乘法封闭</li>
+</ul>
+<h3 id="矩阵列空间Column-Space"><a href="#矩阵列空间Column-Space" class="headerlink" title="矩阵列空间Column Space"></a>矩阵列空间Column Space</h3><p>$$<br>A = \begin{bmatrix}1 &amp; 1 &amp; 2\ 2 &amp; 1 &amp; 3\3 &amp; 1 &amp; 4\4 &amp; 1 &amp; 5\end{bmatrix}<br>$$</p>
+<p>A的列空间是R<sup>4</sup>的subspace，因为A是4×3的矩阵，其列向量有四维。</p>
+<p>其列空间为C(A)，我们如何通过三个column vector得到一个subspace？</p>
+<p>Does Ax = b always have a solution for every b？ NO！</p>
+<p>因为Ax=b有四个方程，却只有三个未知数。<br>$$<br>Ax= \begin{bmatrix}1 &amp; 1 &amp; 2\ 2 &amp; 1 &amp; 3\3 &amp; 1 &amp; 4\4 &amp; 1 &amp; 5\end{bmatrix}\begin{bmatrix}x_1\ x_2\x_3\end{bmatrix}= \begin{bmatrix}b_1\ b_2\b_3\b_4\end{bmatrix}<br>$$<br>这个方程不总是有解，因为三个列向量的线性组合无法充满整个R<sup>4</sup>（有时是有解的）。</p>
+<p><strong>那么，什么样的vector b会让这个system有解？</strong></p>
+<p>只有当b属于矩阵A的column space时，这个等式会存在解。</p>
+<p>对于矩阵A，column 3 由column 1和column 2相加得到。column 1和column 2线性无关。所以矩阵A的列空间时R<sup>4</sup>中的二维子空间（2-dimensional subspace）。</p>
+<p>关于pivot列的选取，优先考虑靠前的线性无关向量。</p>
+<h3 id="Null-Space"><a href="#Null-Space" class="headerlink" title="Null Space"></a>Null Space</h3><p>$$<br>A= \begin{bmatrix}1 &amp; 1 &amp; 2\ 2 &amp; 1 &amp; 3\3 &amp; 1 &amp; 4\4 &amp; 1 &amp; 5\end{bmatrix}<br>$$</p>
+<p>继续延用矩阵A。</p>
+<p>全新的子空间，null space，N (A)。<br>$$<br>Ax= \begin{bmatrix}1 &amp; 1 &amp; 2\ 2 &amp; 1 &amp; 3\3 &amp; 1 &amp; 4\4 &amp; 1 &amp; 5\end{bmatrix}\begin{bmatrix}x_1\ x_2\x_3\end{bmatrix}= \begin{bmatrix}0\ 0\0\0\end{bmatrix}<br>$$<br>对于3*4的矩阵A，上式中x是R<sup>3</sup>的子空间，column space是R<sup>4</sup>的子空间。<br>$$<br>Ax = 0, \space always \space give \space a \space subspace<br>$$<br>elimination无法改变null space但是会改变column space。</p>
+<p>现在有一个特殊的矩阵A：<br>$$<br>\begin{bmatrix}1&amp;2&amp;2&amp;2\2&amp;4&amp;6&amp;8\3&amp;6&amp;8&amp;10\end{bmatrix}<br>$$<br>现在对这个rectangular matrix进行elimination，即使在pivot位置上出现0也继续。<br>$$<br>\begin{bmatrix}1&amp;2&amp;2&amp;2\0&amp;0&amp;2&amp;4\0&amp;0&amp;2&amp;4\end{bmatrix}<br>$$</p>
+<p>$$<br>\begin{bmatrix}1&amp;2&amp;2&amp;2\0&amp;0&amp;2&amp;4\0&amp;0&amp;0&amp;0\end{bmatrix}=U<br>$$</p>
+<p>可以看见，该矩阵消元之后只有两个pivot（只有11，23不为零），主元（pivot）的数量是2。2是矩阵的秩（rank）。秩就是矩阵的number of pivot。</p>
+<p>对于矩阵U，column 1和column 3是pivot column，column 2和column 4是free column。</p>
+<p>当求解Ux=0时，<br>$$<br>\begin{bmatrix}1&amp;2&amp;2&amp;2\0&amp;0&amp;2&amp;4\0&amp;0&amp;0&amp;0\end{bmatrix}\begin{bmatrix}x_1\x_2\x_3\x_4\end{bmatrix}=0<br>$$<br>因为矩阵U中的column 2和column 4是free column，所以我们可以freely assign x<sub>2</sub>和x<sub>4</sub>的值。赋值x<sub>2</sub>和x<sub>4</sub>之后，解得的x为一组特解。</p>
+<p>新算法：</p>
+<ol>
+<li>elimination，遇到零也continue</li>
+<li>find pivot column and free column</li>
+<li>find pivot variable and free variable</li>
+<li>assign freely the free variable with values we like</li>
+</ol>
+<p>矩阵A的零空间（null space）包含了所有特解的线性组合。</p>
+<p>假设m×n矩阵的秩为r，其free variable的数量为n-r。矩阵的质为r，说明实际上只有r个互相独立的方程。剩下的n-r个free variable可以随意设计。<br>$$<br>这是矩阵的echelon\space form\space \<br>U =\begin{bmatrix}1&amp;2&amp;2&amp;2\0&amp;0&amp;2&amp;4\0&amp;0&amp;0&amp;0\end{bmatrix}<br>$$<br>现在来求得R，R=reduced row echelon form。<br>$$<br>\begin{bmatrix}1&amp;2&amp;2&amp;2\0&amp;0&amp;2&amp;4\0&amp;0&amp;0&amp;0\end{bmatrix}<br>$$</p>
+<p>$$<br>\begin{bmatrix}1&amp;2&amp;0&amp;-2\0&amp;0&amp;2&amp;4\0&amp;0&amp;0&amp;0\end{bmatrix}<br>$$</p>
+<p>$$<br>R = \begin{bmatrix}1&amp;2&amp;0&amp;-2\0&amp;0&amp;1&amp;2\0&amp;0&amp;0&amp;0\end{bmatrix}<br>$$</p>
+<p>以最简形式包含了所有信息。对于这个R，有一个Identity matrix在pivot row和pivot column里面。</p>
+<h3 id="Null-Space-Matrix-（未完待续）复习P7"><a href="#Null-Space-Matrix-（未完待续）复习P7" class="headerlink" title="Null Space Matrix （未完待续）复习P7"></a>Null Space Matrix （未完待续）复习P7</h3><p><img src="/2021/12/10/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%20Linear%20Algebra/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyODk4Mjk5,size_16,color_FFFFFF,t_70.png" alt="img"></p>
+<h2 id="可解性和解的构建"><a href="#可解性和解的构建" class="headerlink" title="可解性和解的构建"></a>可解性和解的构建</h2><p>$$<br>Ax=0 \space 国内往往称为齐次方程组\<br>Ax=b\space 国内往往称为导出组<br>$$</p>
+<p>使用消元法解增广矩阵：<br>$$<br>\begin{bmatrix}1&amp;2&amp;2&amp;2&amp;b_1\2&amp;4&amp;6&amp;8&amp;b_2\3&amp;6&amp;8&amp;10&amp;b_3\end{bmatrix}=\begin{bmatrix}A&amp;b\end{bmatrix}<br>$$<br>消元之后：<br>$$<br>\begin{bmatrix}1&amp;2&amp;2&amp;2&amp;b_1\0&amp;0&amp;2&amp;4&amp;b_2-2b_1\0&amp;0&amp;0&amp;0&amp;b_3-b_2-b_1\end{bmatrix}<br>$$<br>Ax = b有解时右侧必须满足的条件：</p>
+<ul>
+<li>b必须属于矩阵A的列空间，b is in C(A)；</li>
+<li>如果A各行的线性组合得到零行，b端分量的同样组合必然也是零；</li>
+</ul>
+<p>如何求矩阵Ax=b的所有特解？</p>
+<ul>
+<li>X<sub>particular</sub>: set all free variable to zero, solve Ax=b for the pivot variable。</li>
+<li>Add X<sub>n</sub> from X<sub>nullspace</sub> on the particular X，X=X<sub>p</sub>+X<sub>n</sub></li>
+</ul>
+<p>咱就是说，特解加上零空间中的任意向量，组成了Ax=b的所有解。</p>
+<p>m×n的矩阵A，秩为r。r一定&lt;=m,&lt;=n。</p>
+<p>当r=n时，意味着矩阵的每一列都有一个pivot。Ax=b中，x则不含有free variable，矩阵的零空间N(A)为0。此时矩阵有0或者1个解。</p>
+<p>当r=m&lt;n时，意味着矩阵的每一行都有一个pivot。Ax=b中，对任意b都会存在解。自由变量的个数为n-r（n-m）。</p>
+<ul>
+<li>当r=n=m时，意味着这是一个方阵。R（reduced echelon form）=I，N(A)=0，会存在一个解。</li>
+<li>当r=n&lt;m时，R（reduced echelon form)为I和零上下拼接。此时Ax=b存在0或1个解。</li>
+<li>当r=m&lt;n时，R=[I F]，行满秩，F和I可能混合。Ax=b有一个或者无穷多个解。</li>
+<li>当r&lt;m,r&lt;n，R的第一行为I F，第二行为0 0，Ax=b有0或者无穷多的解。</li>
+</ul>
+<p>矩阵的秩r包含了所有有关于矩阵解的数量的信息，除了具体解的值。</p>
+<h2 id="线性相关性"><a href="#线性相关性" class="headerlink" title="线性相关性"></a>线性相关性</h2><p>现有一个m×n的矩阵，m小于n。m个equations，n个未知数。方程组的未知数多于方程数。more unknown xs than equations。也就意味着至少会有一个free variable。</p>
+<p>线性相关性是拿来描述vectors（向量组），而不是matrix（矩阵）。对于Vectors x1，x2，x3，x4，…，xn等一系列向量，不存在c1，c2，c3，c4，…，cn（不全为0）的线性组合使其结果为零，则这一组vectors线性无关。</p>
+<ul>
+<li>当这个的向量组的矩阵A的零空间只包含zero vectors时，这个向量组线性无关。</li>
+<li>当这个向量组对应的矩阵A，存在非零向量C，使得AC=0时，这个向量组线性相关</li>
+</ul>
+<p>线性无关的时候，所有列都是pivot column，rank=列数，无free variables；线性有关时，rank&lt;列数，有free variables。</p>
+<p>将vectors看作columns放入矩阵当中。vectors span a space。</p>
+<p>spanning a space means </p>
+<p>V1，V2，…，Vl span a space means: The space S consists of all combinations of those vectors. </p>
+<p>S是包含这个向量组的最小空间。</p>
+<p>无论向量组是否线性相关，都可以span出来一个space。</p>
+<p>Basis for a space is a sequence of Vectors, V1, V2, …, Vd. (Enough Vectors but not too many):</p>
+<ol>
+<li>They are independent</li>
+<li>Span the space</li>
+</ol>
+<p>Basis 足以描述一个space。Everything we need。</p>
+<p>R<sup>n</sup>中n个向量要构成基，则n×n的矩阵需要满足是可逆矩阵。</p>
+<ul>
+<li>Given a space，every basis for the space，has the same number of vector. The number represent the dimension of this space. </li>
+</ul>
+<p>The rank of A, is the number of pivot columns, also the dimension of the column space.</p>
+<p>如果我们知道空间的维数，那么这个空间中与维数相同数量的线性无关向量就可以span这个空间。</p>
+<p>两个Ax=0的特解可以span出A的整个零空间。</p>
+<p>零空间的维数是free variables的个数，等于n-r，列数减去秩。</p>
+<h2 id="矩阵的四个基本子空间"><a href="#矩阵的四个基本子空间" class="headerlink" title="矩阵的四个基本子空间"></a>矩阵的四个基本子空间</h2><p>列空间column space C(A)；零空间null space N(A)；行空间row space R(A) = C(A<sup>T</sup>): all combinations of the columns of the transpose.；Null space of A<sup>T</sup>，N(A<sup>T</sup>)</p>
+<p>现在我们假设一个矩阵A，是一个m×n维的矩阵：</p>
+<p>矩阵A的零空间和转置的列空间是在R<sup>n</sup>里面的，列空间和转置的零空间是在R<sup>m</sup>里面的。</p>
+<p>一个矩阵的C(A)和R(A)具有相同的维数，就是矩阵的秩。A转置的零空间是m-r维的，A的零空间是n-r维的。</p>
+<p>行变换不会改变行空间，但是会改变列空间。</p>
+<p>Basis for row space is the first r rows of R。</p>
+<h2 id="矩阵空间，秩1矩阵和小世界图"><a href="#矩阵空间，秩1矩阵和小世界图" class="headerlink" title="矩阵空间，秩1矩阵和小世界图"></a>矩阵空间，秩1矩阵和小世界图</h2><p>3×3对称矩阵的维度是6，因为只需要用六个数字就可以确定一个3×3的对称矩阵。</p>
+<p>3×3对称矩阵和上三角矩阵的交集，S∩U的维度是3。</p>
+<p>3×3对称矩阵与上三角矩阵的和，包含了所有矩阵。</p>
+<p>dim S = 6，dim U = 6，S ∩ U = 3，S + U = 9，由此可得两个子空间维度相加的和等于其两个子空间的交集维度加上其和的维度。</p>
+<h3 id="秩1矩阵"><a href="#秩1矩阵" class="headerlink" title="秩1矩阵"></a>秩1矩阵</h3><p>秩为1的矩阵很简单。秩为n的矩阵可以分解为n个秩为1的矩阵相乘。秩1矩阵就像building blocks。</p>
+<p>所有秩n矩阵无法组成一个子空间。因为线性变换会改变秩。</p>
+<h2 id="图和网络"><a href="#图和网络" class="headerlink" title="图和网络"></a>图和网络</h2><p>loop与相关dependent对应。</p>
+<p>描述图（node和edge）的矩阵的零空间代表什么？ </p>
+<p>#node - #edges + #loops = 1</p>
+<h2 id="第一阶段复习（Ax-b）"><a href="#第一阶段复习（Ax-b）" class="headerlink" title="第一阶段复习（Ax=b）"></a>第一阶段复习（Ax=b）</h2>]]></content>
+  </entry>
 </search>
